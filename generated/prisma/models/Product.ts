@@ -28,10 +28,12 @@ export type AggregateProduct = {
 
 export type ProductAvgAggregateOutputType = {
   id: number | null
+  shotWeight: runtime.Decimal | null
 }
 
 export type ProductSumAggregateOutputType = {
   id: number | null
+  shotWeight: runtime.Decimal | null
 }
 
 export type ProductMinAggregateOutputType = {
@@ -39,6 +41,9 @@ export type ProductMinAggregateOutputType = {
   productCode: string | null
   productName: string | null
   description: string | null
+  shotWeight: runtime.Decimal | null
+  shotWeightUnit: string | null
+  quantityUnit: $Enums.QuantityUnit | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -49,6 +54,9 @@ export type ProductMaxAggregateOutputType = {
   productCode: string | null
   productName: string | null
   description: string | null
+  shotWeight: runtime.Decimal | null
+  shotWeightUnit: string | null
+  quantityUnit: $Enums.QuantityUnit | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -59,6 +67,9 @@ export type ProductCountAggregateOutputType = {
   productCode: number
   productName: number
   description: number
+  shotWeight: number
+  shotWeightUnit: number
+  quantityUnit: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -68,10 +79,12 @@ export type ProductCountAggregateOutputType = {
 
 export type ProductAvgAggregateInputType = {
   id?: true
+  shotWeight?: true
 }
 
 export type ProductSumAggregateInputType = {
   id?: true
+  shotWeight?: true
 }
 
 export type ProductMinAggregateInputType = {
@@ -79,6 +92,9 @@ export type ProductMinAggregateInputType = {
   productCode?: true
   productName?: true
   description?: true
+  shotWeight?: true
+  shotWeightUnit?: true
+  quantityUnit?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -89,6 +105,9 @@ export type ProductMaxAggregateInputType = {
   productCode?: true
   productName?: true
   description?: true
+  shotWeight?: true
+  shotWeightUnit?: true
+  quantityUnit?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -99,6 +118,9 @@ export type ProductCountAggregateInputType = {
   productCode?: true
   productName?: true
   description?: true
+  shotWeight?: true
+  shotWeightUnit?: true
+  quantityUnit?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -196,6 +218,9 @@ export type ProductGroupByOutputType = {
   productCode: string
   productName: string
   description: string | null
+  shotWeight: runtime.Decimal
+  shotWeightUnit: string
+  quantityUnit: $Enums.QuantityUnit
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -229,11 +254,16 @@ export type ProductWhereInput = {
   productCode?: Prisma.StringFilter<"Product"> | string
   productName?: Prisma.StringFilter<"Product"> | string
   description?: Prisma.StringNullableFilter<"Product"> | string | null
+  shotWeight?: Prisma.DecimalFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFilter<"Product"> | string
+  quantityUnit?: Prisma.EnumQuantityUnitFilter<"Product"> | $Enums.QuantityUnit
   isActive?: Prisma.BoolFilter<"Product"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   productionTargets?: Prisma.ProductionTargetListRelationFilter
   productionRecords?: Prisma.ProductionRecordListRelationFilter
+  productMaterials?: Prisma.ProductMaterialListRelationFilter
+  computers?: Prisma.ComputerListRelationFilter
 }
 
 export type ProductOrderByWithRelationInput = {
@@ -241,11 +271,16 @@ export type ProductOrderByWithRelationInput = {
   productCode?: Prisma.SortOrder
   productName?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  shotWeightUnit?: Prisma.SortOrder
+  quantityUnit?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   productionTargets?: Prisma.ProductionTargetOrderByRelationAggregateInput
   productionRecords?: Prisma.ProductionRecordOrderByRelationAggregateInput
+  productMaterials?: Prisma.ProductMaterialOrderByRelationAggregateInput
+  computers?: Prisma.ComputerOrderByRelationAggregateInput
   _relevance?: Prisma.ProductOrderByRelevanceInput
 }
 
@@ -257,11 +292,16 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
   productName?: Prisma.StringFilter<"Product"> | string
   description?: Prisma.StringNullableFilter<"Product"> | string | null
+  shotWeight?: Prisma.DecimalFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFilter<"Product"> | string
+  quantityUnit?: Prisma.EnumQuantityUnitFilter<"Product"> | $Enums.QuantityUnit
   isActive?: Prisma.BoolFilter<"Product"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   productionTargets?: Prisma.ProductionTargetListRelationFilter
   productionRecords?: Prisma.ProductionRecordListRelationFilter
+  productMaterials?: Prisma.ProductMaterialListRelationFilter
+  computers?: Prisma.ComputerListRelationFilter
 }, "id" | "productCode">
 
 export type ProductOrderByWithAggregationInput = {
@@ -269,6 +309,9 @@ export type ProductOrderByWithAggregationInput = {
   productCode?: Prisma.SortOrder
   productName?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  shotWeightUnit?: Prisma.SortOrder
+  quantityUnit?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -287,6 +330,9 @@ export type ProductScalarWhereWithAggregatesInput = {
   productCode?: Prisma.StringWithAggregatesFilter<"Product"> | string
   productName?: Prisma.StringWithAggregatesFilter<"Product"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
+  shotWeight?: Prisma.DecimalWithAggregatesFilter<"Product"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringWithAggregatesFilter<"Product"> | string
+  quantityUnit?: Prisma.EnumQuantityUnitWithAggregatesFilter<"Product"> | $Enums.QuantityUnit
   isActive?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
@@ -296,11 +342,16 @@ export type ProductCreateInput = {
   productCode: string
   productName: string
   description?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: string
+  quantityUnit?: $Enums.QuantityUnit
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   productionTargets?: Prisma.ProductionTargetCreateNestedManyWithoutProductInput
   productionRecords?: Prisma.ProductionRecordCreateNestedManyWithoutProductInput
+  productMaterials?: Prisma.ProductMaterialCreateNestedManyWithoutProductInput
+  computers?: Prisma.ComputerCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateInput = {
@@ -308,22 +359,32 @@ export type ProductUncheckedCreateInput = {
   productCode: string
   productName: string
   description?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: string
+  quantityUnit?: $Enums.QuantityUnit
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   productionTargets?: Prisma.ProductionTargetUncheckedCreateNestedManyWithoutProductInput
   productionRecords?: Prisma.ProductionRecordUncheckedCreateNestedManyWithoutProductInput
+  productMaterials?: Prisma.ProductMaterialUncheckedCreateNestedManyWithoutProductInput
+  computers?: Prisma.ComputerUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductUpdateInput = {
   productCode?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionTargets?: Prisma.ProductionTargetUpdateManyWithoutProductNestedInput
   productionRecords?: Prisma.ProductionRecordUpdateManyWithoutProductNestedInput
+  productMaterials?: Prisma.ProductMaterialUpdateManyWithoutProductNestedInput
+  computers?: Prisma.ComputerUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateInput = {
@@ -331,11 +392,16 @@ export type ProductUncheckedUpdateInput = {
   productCode?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionTargets?: Prisma.ProductionTargetUncheckedUpdateManyWithoutProductNestedInput
   productionRecords?: Prisma.ProductionRecordUncheckedUpdateManyWithoutProductNestedInput
+  productMaterials?: Prisma.ProductMaterialUncheckedUpdateManyWithoutProductNestedInput
+  computers?: Prisma.ComputerUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateManyInput = {
@@ -343,6 +409,9 @@ export type ProductCreateManyInput = {
   productCode: string
   productName: string
   description?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: string
+  quantityUnit?: $Enums.QuantityUnit
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -352,6 +421,9 @@ export type ProductUpdateManyMutationInput = {
   productCode?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -362,9 +434,17 @@ export type ProductUncheckedUpdateManyInput = {
   productCode?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProductNullableScalarRelationFilter = {
+  is?: Prisma.ProductWhereInput | null
+  isNot?: Prisma.ProductWhereInput | null
 }
 
 export type ProductOrderByRelevanceInput = {
@@ -378,6 +458,9 @@ export type ProductCountOrderByAggregateInput = {
   productCode?: Prisma.SortOrder
   productName?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  shotWeightUnit?: Prisma.SortOrder
+  quantityUnit?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -385,6 +468,7 @@ export type ProductCountOrderByAggregateInput = {
 
 export type ProductAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
 }
 
 export type ProductMaxOrderByAggregateInput = {
@@ -392,6 +476,9 @@ export type ProductMaxOrderByAggregateInput = {
   productCode?: Prisma.SortOrder
   productName?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  shotWeightUnit?: Prisma.SortOrder
+  quantityUnit?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -402,6 +489,9 @@ export type ProductMinOrderByAggregateInput = {
   productCode?: Prisma.SortOrder
   productName?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  shotWeightUnit?: Prisma.SortOrder
+  quantityUnit?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -409,6 +499,7 @@ export type ProductMinOrderByAggregateInput = {
 
 export type ProductSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
 }
 
 export type ProductScalarRelationFilter = {
@@ -416,8 +507,46 @@ export type ProductScalarRelationFilter = {
   isNot?: Prisma.ProductWhereInput
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type ProductCreateNestedOneWithoutComputersInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutComputersInput, Prisma.ProductUncheckedCreateWithoutComputersInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutComputersInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneWithoutComputersNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutComputersInput, Prisma.ProductUncheckedCreateWithoutComputersInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutComputersInput
+  upsert?: Prisma.ProductUpsertWithoutComputersInput
+  disconnect?: Prisma.ProductWhereInput | boolean
+  delete?: Prisma.ProductWhereInput | boolean
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutComputersInput, Prisma.ProductUpdateWithoutComputersInput>, Prisma.ProductUncheckedUpdateWithoutComputersInput>
+}
+
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type EnumQuantityUnitFieldUpdateOperationsInput = {
+  set?: $Enums.QuantityUnit
+}
+
+export type ProductCreateNestedOneWithoutProductMaterialsInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutProductMaterialsInput, Prisma.ProductUncheckedCreateWithoutProductMaterialsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutProductMaterialsInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneRequiredWithoutProductMaterialsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutProductMaterialsInput, Prisma.ProductUncheckedCreateWithoutProductMaterialsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutProductMaterialsInput
+  upsert?: Prisma.ProductUpsertWithoutProductMaterialsInput
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutProductMaterialsInput, Prisma.ProductUpdateWithoutProductMaterialsInput>, Prisma.ProductUncheckedUpdateWithoutProductMaterialsInput>
 }
 
 export type ProductCreateNestedOneWithoutProductionTargetsInput = {
@@ -448,14 +577,175 @@ export type ProductUpdateOneRequiredWithoutProductionRecordsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutProductionRecordsInput, Prisma.ProductUpdateWithoutProductionRecordsInput>, Prisma.ProductUncheckedUpdateWithoutProductionRecordsInput>
 }
 
+export type ProductCreateWithoutComputersInput = {
+  productCode: string
+  productName: string
+  description?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: string
+  quantityUnit?: $Enums.QuantityUnit
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  productionTargets?: Prisma.ProductionTargetCreateNestedManyWithoutProductInput
+  productionRecords?: Prisma.ProductionRecordCreateNestedManyWithoutProductInput
+  productMaterials?: Prisma.ProductMaterialCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutComputersInput = {
+  id?: number
+  productCode: string
+  productName: string
+  description?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: string
+  quantityUnit?: $Enums.QuantityUnit
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  productionTargets?: Prisma.ProductionTargetUncheckedCreateNestedManyWithoutProductInput
+  productionRecords?: Prisma.ProductionRecordUncheckedCreateNestedManyWithoutProductInput
+  productMaterials?: Prisma.ProductMaterialUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutComputersInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutComputersInput, Prisma.ProductUncheckedCreateWithoutComputersInput>
+}
+
+export type ProductUpsertWithoutComputersInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutComputersInput, Prisma.ProductUncheckedUpdateWithoutComputersInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutComputersInput, Prisma.ProductUncheckedCreateWithoutComputersInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutComputersInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutComputersInput, Prisma.ProductUncheckedUpdateWithoutComputersInput>
+}
+
+export type ProductUpdateWithoutComputersInput = {
+  productCode?: Prisma.StringFieldUpdateOperationsInput | string
+  productName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionTargets?: Prisma.ProductionTargetUpdateManyWithoutProductNestedInput
+  productionRecords?: Prisma.ProductionRecordUpdateManyWithoutProductNestedInput
+  productMaterials?: Prisma.ProductMaterialUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutComputersInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  productCode?: Prisma.StringFieldUpdateOperationsInput | string
+  productName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionTargets?: Prisma.ProductionTargetUncheckedUpdateManyWithoutProductNestedInput
+  productionRecords?: Prisma.ProductionRecordUncheckedUpdateManyWithoutProductNestedInput
+  productMaterials?: Prisma.ProductMaterialUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutProductMaterialsInput = {
+  productCode: string
+  productName: string
+  description?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: string
+  quantityUnit?: $Enums.QuantityUnit
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  productionTargets?: Prisma.ProductionTargetCreateNestedManyWithoutProductInput
+  productionRecords?: Prisma.ProductionRecordCreateNestedManyWithoutProductInput
+  computers?: Prisma.ComputerCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutProductMaterialsInput = {
+  id?: number
+  productCode: string
+  productName: string
+  description?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: string
+  quantityUnit?: $Enums.QuantityUnit
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  productionTargets?: Prisma.ProductionTargetUncheckedCreateNestedManyWithoutProductInput
+  productionRecords?: Prisma.ProductionRecordUncheckedCreateNestedManyWithoutProductInput
+  computers?: Prisma.ComputerUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutProductMaterialsInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutProductMaterialsInput, Prisma.ProductUncheckedCreateWithoutProductMaterialsInput>
+}
+
+export type ProductUpsertWithoutProductMaterialsInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutProductMaterialsInput, Prisma.ProductUncheckedUpdateWithoutProductMaterialsInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutProductMaterialsInput, Prisma.ProductUncheckedCreateWithoutProductMaterialsInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutProductMaterialsInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutProductMaterialsInput, Prisma.ProductUncheckedUpdateWithoutProductMaterialsInput>
+}
+
+export type ProductUpdateWithoutProductMaterialsInput = {
+  productCode?: Prisma.StringFieldUpdateOperationsInput | string
+  productName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionTargets?: Prisma.ProductionTargetUpdateManyWithoutProductNestedInput
+  productionRecords?: Prisma.ProductionRecordUpdateManyWithoutProductNestedInput
+  computers?: Prisma.ComputerUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutProductMaterialsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  productCode?: Prisma.StringFieldUpdateOperationsInput | string
+  productName?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionTargets?: Prisma.ProductionTargetUncheckedUpdateManyWithoutProductNestedInput
+  productionRecords?: Prisma.ProductionRecordUncheckedUpdateManyWithoutProductNestedInput
+  computers?: Prisma.ComputerUncheckedUpdateManyWithoutProductNestedInput
+}
+
 export type ProductCreateWithoutProductionTargetsInput = {
   productCode: string
   productName: string
   description?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: string
+  quantityUnit?: $Enums.QuantityUnit
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   productionRecords?: Prisma.ProductionRecordCreateNestedManyWithoutProductInput
+  productMaterials?: Prisma.ProductMaterialCreateNestedManyWithoutProductInput
+  computers?: Prisma.ComputerCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutProductionTargetsInput = {
@@ -463,10 +753,15 @@ export type ProductUncheckedCreateWithoutProductionTargetsInput = {
   productCode: string
   productName: string
   description?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: string
+  quantityUnit?: $Enums.QuantityUnit
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   productionRecords?: Prisma.ProductionRecordUncheckedCreateNestedManyWithoutProductInput
+  productMaterials?: Prisma.ProductMaterialUncheckedCreateNestedManyWithoutProductInput
+  computers?: Prisma.ComputerUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutProductionTargetsInput = {
@@ -489,10 +784,15 @@ export type ProductUpdateWithoutProductionTargetsInput = {
   productCode?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionRecords?: Prisma.ProductionRecordUpdateManyWithoutProductNestedInput
+  productMaterials?: Prisma.ProductMaterialUpdateManyWithoutProductNestedInput
+  computers?: Prisma.ComputerUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutProductionTargetsInput = {
@@ -500,20 +800,30 @@ export type ProductUncheckedUpdateWithoutProductionTargetsInput = {
   productCode?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionRecords?: Prisma.ProductionRecordUncheckedUpdateManyWithoutProductNestedInput
+  productMaterials?: Prisma.ProductMaterialUncheckedUpdateManyWithoutProductNestedInput
+  computers?: Prisma.ComputerUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateWithoutProductionRecordsInput = {
   productCode: string
   productName: string
   description?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: string
+  quantityUnit?: $Enums.QuantityUnit
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   productionTargets?: Prisma.ProductionTargetCreateNestedManyWithoutProductInput
+  productMaterials?: Prisma.ProductMaterialCreateNestedManyWithoutProductInput
+  computers?: Prisma.ComputerCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutProductionRecordsInput = {
@@ -521,10 +831,15 @@ export type ProductUncheckedCreateWithoutProductionRecordsInput = {
   productCode: string
   productName: string
   description?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: string
+  quantityUnit?: $Enums.QuantityUnit
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   productionTargets?: Prisma.ProductionTargetUncheckedCreateNestedManyWithoutProductInput
+  productMaterials?: Prisma.ProductMaterialUncheckedCreateNestedManyWithoutProductInput
+  computers?: Prisma.ComputerUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutProductionRecordsInput = {
@@ -547,10 +862,15 @@ export type ProductUpdateWithoutProductionRecordsInput = {
   productCode?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionTargets?: Prisma.ProductionTargetUpdateManyWithoutProductNestedInput
+  productMaterials?: Prisma.ProductMaterialUpdateManyWithoutProductNestedInput
+  computers?: Prisma.ComputerUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutProductionRecordsInput = {
@@ -558,10 +878,15 @@ export type ProductUncheckedUpdateWithoutProductionRecordsInput = {
   productCode?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeightUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  quantityUnit?: Prisma.EnumQuantityUnitFieldUpdateOperationsInput | $Enums.QuantityUnit
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionTargets?: Prisma.ProductionTargetUncheckedUpdateManyWithoutProductNestedInput
+  productMaterials?: Prisma.ProductMaterialUncheckedUpdateManyWithoutProductNestedInput
+  computers?: Prisma.ComputerUncheckedUpdateManyWithoutProductNestedInput
 }
 
 
@@ -572,11 +897,15 @@ export type ProductUncheckedUpdateWithoutProductionRecordsInput = {
 export type ProductCountOutputType = {
   productionTargets: number
   productionRecords: number
+  productMaterials: number
+  computers: number
 }
 
 export type ProductCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   productionTargets?: boolean | ProductCountOutputTypeCountProductionTargetsArgs
   productionRecords?: boolean | ProductCountOutputTypeCountProductionRecordsArgs
+  productMaterials?: boolean | ProductCountOutputTypeCountProductMaterialsArgs
+  computers?: boolean | ProductCountOutputTypeCountComputersArgs
 }
 
 /**
@@ -603,17 +932,36 @@ export type ProductCountOutputTypeCountProductionRecordsArgs<ExtArgs extends run
   where?: Prisma.ProductionRecordWhereInput
 }
 
+/**
+ * ProductCountOutputType without action
+ */
+export type ProductCountOutputTypeCountProductMaterialsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProductMaterialWhereInput
+}
+
+/**
+ * ProductCountOutputType without action
+ */
+export type ProductCountOutputTypeCountComputersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ComputerWhereInput
+}
+
 
 export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   productCode?: boolean
   productName?: boolean
   description?: boolean
+  shotWeight?: boolean
+  shotWeightUnit?: boolean
+  quantityUnit?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   productionTargets?: boolean | Prisma.Product$productionTargetsArgs<ExtArgs>
   productionRecords?: boolean | Prisma.Product$productionRecordsArgs<ExtArgs>
+  productMaterials?: boolean | Prisma.Product$productMaterialsArgs<ExtArgs>
+  computers?: boolean | Prisma.Product$computersArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["product"]>
 
@@ -624,15 +972,20 @@ export type ProductSelectScalar = {
   productCode?: boolean
   productName?: boolean
   description?: boolean
+  shotWeight?: boolean
+  shotWeightUnit?: boolean
+  quantityUnit?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productCode" | "productName" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productCode" | "productName" | "description" | "shotWeight" | "shotWeightUnit" | "quantityUnit" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   productionTargets?: boolean | Prisma.Product$productionTargetsArgs<ExtArgs>
   productionRecords?: boolean | Prisma.Product$productionRecordsArgs<ExtArgs>
+  productMaterials?: boolean | Prisma.Product$productMaterialsArgs<ExtArgs>
+  computers?: boolean | Prisma.Product$computersArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -641,12 +994,17 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     productionTargets: Prisma.$ProductionTargetPayload<ExtArgs>[]
     productionRecords: Prisma.$ProductionRecordPayload<ExtArgs>[]
+    productMaterials: Prisma.$ProductMaterialPayload<ExtArgs>[]
+    computers: Prisma.$ComputerPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     productCode: string
     productName: string
     description: string | null
+    shotWeight: runtime.Decimal
+    shotWeightUnit: string
+    quantityUnit: $Enums.QuantityUnit
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -992,6 +1350,8 @@ export interface Prisma__ProductClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   productionTargets<T extends Prisma.Product$productionTargetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$productionTargetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductionTargetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   productionRecords<T extends Prisma.Product$productionRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$productionRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductionRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  productMaterials<T extends Prisma.Product$productMaterialsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$productMaterialsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductMaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  computers<T extends Prisma.Product$computersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$computersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComputerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1025,6 +1385,9 @@ export interface ProductFieldRefs {
   readonly productCode: Prisma.FieldRef<"Product", 'String'>
   readonly productName: Prisma.FieldRef<"Product", 'String'>
   readonly description: Prisma.FieldRef<"Product", 'String'>
+  readonly shotWeight: Prisma.FieldRef<"Product", 'Decimal'>
+  readonly shotWeightUnit: Prisma.FieldRef<"Product", 'String'>
+  readonly quantityUnit: Prisma.FieldRef<"Product", 'QuantityUnit'>
   readonly isActive: Prisma.FieldRef<"Product", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Product", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Product", 'DateTime'>
@@ -1421,6 +1784,54 @@ export type Product$productionRecordsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.ProductionRecordScalarFieldEnum | Prisma.ProductionRecordScalarFieldEnum[]
+}
+
+/**
+ * Product.productMaterials
+ */
+export type Product$productMaterialsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProductMaterial
+   */
+  select?: Prisma.ProductMaterialSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProductMaterial
+   */
+  omit?: Prisma.ProductMaterialOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductMaterialInclude<ExtArgs> | null
+  where?: Prisma.ProductMaterialWhereInput
+  orderBy?: Prisma.ProductMaterialOrderByWithRelationInput | Prisma.ProductMaterialOrderByWithRelationInput[]
+  cursor?: Prisma.ProductMaterialWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProductMaterialScalarFieldEnum | Prisma.ProductMaterialScalarFieldEnum[]
+}
+
+/**
+ * Product.computers
+ */
+export type Product$computersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Computer
+   */
+  select?: Prisma.ComputerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Computer
+   */
+  omit?: Prisma.ComputerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ComputerInclude<ExtArgs> | null
+  where?: Prisma.ComputerWhereInput
+  orderBy?: Prisma.ComputerOrderByWithRelationInput | Prisma.ComputerOrderByWithRelationInput[]
+  cursor?: Prisma.ComputerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ComputerScalarFieldEnum | Prisma.ComputerScalarFieldEnum[]
 }
 
 /**

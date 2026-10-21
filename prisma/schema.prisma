@@ -7,7 +7,6 @@ datasource db {
   provider = "mysql"
 }
 
-
 // =====================================================
 // ENUM
 // =====================================================
@@ -17,6 +16,20 @@ enum UserRole {
   USER
 }
 
+enum WeightUnit {
+  GRAM
+  KG
+}
+
+enum QuantityUnit {
+  PCS
+  METER
+}
+
+enum ProductionStatus {
+  COMPLETED
+  CANCELLED
+}
 
 // =====================================================
 // USER
@@ -39,7 +52,6 @@ model User {
   @@index([isActive])
 }
 
-
 // =====================================================
 // AREA
 // =====================================================
@@ -52,29 +64,153 @@ model Area {
 
   productionRecords ProductionRecord[]
 
+  // Computer Master
+  computers Computer[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
 
+  @@index([isActive])
+}
 
 // =====================================================
 // SHIFT
 // =====================================================
 
 model Shift {
-  id        Int     @id @default(autoincrement())
-  code      String  @unique
-  name      String
-  startTime String
-  endTime   String
-  isActive  Boolean @default(true)
+  id       Int     @id @default(autoincrement())
+  code     String  @unique
+  name     String
+  isActive Boolean @default(true)
 
   productionRecords ProductionRecord[]
 
+  // Computer Master
+  computers Computer[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([isActive])
 }
 
+// =====================================================
+// MACHINE
+// =====================================================
+
+model Machine {
+  id          Int     @id @default(autoincrement())
+  machineCode String  @unique
+  machineName String
+  description String?
+  isActive    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+}
+
+// =====================================================
+// COMPUTER MASTER
+// =====================================================
+// Computer Code diketik manual di Production Page.
+//
+// Contoh:
+//
+// Computer Code : HTM-PC-001
+// Product       : Product A
+// Operator/PIC  : Jonathan
+// Area          : Molding
+// Shift         : A
+//
+// Computer Code akan digunakan untuk mencari
+// data Product, Operator, Area dan Shift.
+// =====================================================
+
+model Computer {
+  id Int @id @default(autoincrement())
+
+  // ===================================================
+  // COMPUTER CODE
+  // ===================================================
+
+  computerCode String @unique
+
+  // ===================================================
+  // OPERATOR / PIC
+  // ===================================================
+
+  operatorName String?
+
+  // ===================================================
+  // PRODUCT
+  // ===================================================
+
+  productId Int?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  // ===================================================
+  // AREA
+  // ===================================================
+
+  areaId Int?
+  area   Area? @relation(fields: [areaId], references: [id], onDelete: SetNull)
+
+  // ===================================================
+  // SHIFT
+  // ===================================================
+
+  shiftId Int?
+  shift   Shift? @relation(fields: [shiftId], references: [id], onDelete: SetNull)
+
+  // ===================================================
+  // STATUS
+  // ===================================================
+
+  isActive Boolean @default(true)
+
+  // ===================================================
+  // TIMESTAMP
+  // ===================================================
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ===================================================
+  // INDEX
+  // ===================================================
+
+  @@index([productId])
+  @@index([areaId])
+  @@index([shiftId])
+  @@index([operatorName])
+  @@index([isActive])
+}
+
+// =====================================================
+// RAW MATERIAL MASTER
+// =====================================================
+
+model RawMaterial {
+  id           Int     @id @default(autoincrement())
+  materialCode String  @unique
+  materialName String
+  description  String?
+
+  unit WeightUnit @default(GRAM)
+
+  isActive Boolean @default(true)
+
+  productMaterials         ProductMaterial[]
+  productionMaterialUsages ProductionMaterialUsage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([materialName])
+  @@index([isActive])
+}
 
 // =====================================================
 // PRODUCT
@@ -85,17 +221,102 @@ model Product {
   productCode String  @unique
   productName String
   description String?
-  isActive    Boolean @default(true)
+
+  // ===================================================
+  // SHOT WEIGHT
+  // ===================================================
+  // Disimpan dalam KG.
+  //
+  // Contoh:
+  // 14.5 gram = 0.0145 KG
+  // ===================================================
+
+  shotWeight     Decimal @db.Decimal(12, 6)
+  shotWeightUnit String  @default("KG")
+
+  // ===================================================
+  // QUANTITY UNIT
+  // ===================================================
+
+  quantityUnit QuantityUnit @default(PCS)
+
+  // ===================================================
+  // STATUS
+  // ===================================================
+
+  isActive Boolean @default(true)
+
+  // ===================================================
+  // RELATION
+  // ===================================================
 
   productionTargets ProductionTarget[]
+
   productionRecords ProductionRecord[]
+
+  productMaterials ProductMaterial[]
+
+  // Computer yang menggunakan product ini
+  computers Computer[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([productName])
   @@index([isActive])
 }
 
+// =====================================================
+// PRODUCT MATERIAL
+// =====================================================
+
+model ProductMaterial {
+  id Int @id @default(autoincrement())
+
+  // ===================================================
+  // PRODUCT
+  // ===================================================
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // ===================================================
+  // RAW MATERIAL
+  // ===================================================
+
+  rawMaterialId Int
+  rawMaterial   RawMaterial @relation(fields: [rawMaterialId], references: [id], onDelete: Restrict)
+
+  // ===================================================
+  // SHOT WEIGHT
+  // ===================================================
+
+  shotWeight Decimal @db.Decimal(12, 3)
+
+  shotWeightUnit WeightUnit @default(GRAM)
+
+  // ===================================================
+  // STATUS
+  // ===================================================
+
+  isActive Boolean @default(true)
+
+  // ===================================================
+  // TIMESTAMP
+  // ===================================================
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ===================================================
+  // UNIQUE
+  // ===================================================
+
+  @@unique([productId, rawMaterialId])
+  @@index([productId])
+  @@index([rawMaterialId])
+  @@index([isActive])
+}
 
 // =====================================================
 // PRODUCTION TARGET
@@ -104,24 +325,49 @@ model Product {
 model ProductionTarget {
   id Int @id @default(autoincrement())
 
+  // ===================================================
+  // PRODUCT
+  // ===================================================
+
   productId Int
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
+  // ===================================================
+  // TARGET 8 JAM
+  // ===================================================
+
   target8H Decimal @db.Decimal(12, 2)
+
+  // ===================================================
+  // PERIODE BERLAKU
+  // ===================================================
 
   effectiveFrom DateTime
   effectiveTo   DateTime?
 
+  // ===================================================
+  // STATUS
+  // ===================================================
+
   isActive Boolean @default(true)
+
+  // ===================================================
+  // TIMESTAMP
+  // ===================================================
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // ===================================================
+  // INDEX
+  // ===================================================
+
   @@index([productId])
   @@index([effectiveFrom])
   @@index([effectiveTo])
+  @@index([isActive])
+  @@index([productId, effectiveFrom])
 }
-
 
 // =====================================================
 // PRODUCTION RECORD
@@ -130,36 +376,160 @@ model ProductionTarget {
 model ProductionRecord {
   id Int @id @default(autoincrement())
 
+  // ===================================================
+  // PRODUCTION DATE
+  // ===================================================
+
   productionDate DateTime
+
+  // ===================================================
+  // MACHINE
+  // ===================================================
+
+  machineNo String?
+
+  // ===================================================
+  // AREA
+  // ===================================================
 
   areaId Int
   area   Area @relation(fields: [areaId], references: [id])
 
+  // ===================================================
+  // SHIFT
+  // ===================================================
+
   shiftId Int
   shift   Shift @relation(fields: [shiftId], references: [id])
+
+  // ===================================================
+  // PRODUCT
+  // ===================================================
 
   productId Int
   product   Product @relation(fields: [productId], references: [id])
 
-  operatorName String?
+  // ===================================================
+  // COMPUTER CODE
+  // ===================================================
+  // Diisi dari Computer Code yang diketik user.
+  // ===================================================
+
   computerCode String?
 
+  // ===================================================
+  // OPERATOR / PIC
+  // ===================================================
+
+  operatorName String?
+
+  // ===================================================
+  // PRODUCTION INPUT
+  // ===================================================
+
   outputQty Decimal @db.Decimal(12, 2)
-  okQty     Decimal @db.Decimal(12, 2)
-  actualRm  Decimal @db.Decimal(12, 3)
+
+  okQty Decimal @db.Decimal(12, 2)
+
+  // Actual raw material dalam KG
+  actualRm Decimal @db.Decimal(12, 3)
+
+  // ===================================================
+  // OTHER
+  // ===================================================
 
   otReplace String?
-  remarks   String?
+
+  remarks String?
+
+  // ===================================================
+  // STATUS
+  // ===================================================
+
+  status ProductionStatus @default(COMPLETED)
+
+  // ===================================================
+  // INPUT USER
+  // ===================================================
 
   inputById Int
   inputBy   User @relation(fields: [inputById], references: [id])
 
+  // ===================================================
+  // MATERIAL USAGE
+  // ===================================================
+
+  materialUsages ProductionMaterialUsage[]
+
+  // ===================================================
+  // TIMESTAMP
+  // ===================================================
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // ===================================================
+  // INDEX
+  // ===================================================
+
   @@index([productionDate])
+  @@index([machineNo])
   @@index([areaId])
   @@index([shiftId])
   @@index([productId])
+  @@index([computerCode])
   @@index([inputById])
+  @@index([status])
+  @@index([productionDate, productId])
+  @@index([productionDate, areaId])
+  @@index([productionDate, shiftId])
+  @@index([productionDate, machineNo])
+  @@index([productionDate, computerCode])
+}
+
+// =====================================================
+// PRODUCTION MATERIAL USAGE
+// =====================================================
+
+model ProductionMaterialUsage {
+  id Int @id @default(autoincrement())
+
+  // ===================================================
+  // PRODUCTION RECORD
+  // ===================================================
+
+  productionRecordId Int
+  productionRecord   ProductionRecord @relation(fields: [productionRecordId], references: [id], onDelete: Cascade)
+
+  // ===================================================
+  // RAW MATERIAL
+  // ===================================================
+
+  rawMaterialId Int
+  rawMaterial   RawMaterial @relation(fields: [rawMaterialId], references: [id], onDelete: Restrict)
+
+  // ===================================================
+  // ACTUAL USAGE
+  // ===================================================
+
+  actualUsage Decimal @db.Decimal(12, 3)
+
+  usageUnit WeightUnit @default(GRAM)
+
+  remarks String?
+
+  // ===================================================
+  // TIMESTAMP
+  // ===================================================
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ===================================================
+  // UNIQUE
+  // ===================================================
+
+  @@unique([productionRecordId, rawMaterialId])
+  @@index([productionRecordId])
+  @@index([rawMaterialId])
 }

@@ -54,9 +54,14 @@ export const ModelName = {
   User: 'User',
   Area: 'Area',
   Shift: 'Shift',
+  Machine: 'Machine',
+  Computer: 'Computer',
+  RawMaterial: 'RawMaterial',
   Product: 'Product',
+  ProductMaterial: 'ProductMaterial',
   ProductionTarget: 'ProductionTarget',
-  ProductionRecord: 'ProductionRecord'
+  ProductionRecord: 'ProductionRecord',
+  ProductionMaterialUsage: 'ProductionMaterialUsage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -105,8 +110,6 @@ export const ShiftScalarFieldEnum = {
   id: 'id',
   code: 'code',
   name: 'name',
-  startTime: 'startTime',
-  endTime: 'endTime',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -115,17 +118,76 @@ export const ShiftScalarFieldEnum = {
 export type ShiftScalarFieldEnum = (typeof ShiftScalarFieldEnum)[keyof typeof ShiftScalarFieldEnum]
 
 
-export const ProductScalarFieldEnum = {
+export const MachineScalarFieldEnum = {
   id: 'id',
-  productCode: 'productCode',
-  productName: 'productName',
+  machineCode: 'machineCode',
+  machineName: 'machineName',
   description: 'description',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
+export type MachineScalarFieldEnum = (typeof MachineScalarFieldEnum)[keyof typeof MachineScalarFieldEnum]
+
+
+export const ComputerScalarFieldEnum = {
+  id: 'id',
+  computerCode: 'computerCode',
+  operatorName: 'operatorName',
+  productId: 'productId',
+  areaId: 'areaId',
+  shiftId: 'shiftId',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ComputerScalarFieldEnum = (typeof ComputerScalarFieldEnum)[keyof typeof ComputerScalarFieldEnum]
+
+
+export const RawMaterialScalarFieldEnum = {
+  id: 'id',
+  materialCode: 'materialCode',
+  materialName: 'materialName',
+  description: 'description',
+  unit: 'unit',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RawMaterialScalarFieldEnum = (typeof RawMaterialScalarFieldEnum)[keyof typeof RawMaterialScalarFieldEnum]
+
+
+export const ProductScalarFieldEnum = {
+  id: 'id',
+  productCode: 'productCode',
+  productName: 'productName',
+  description: 'description',
+  shotWeight: 'shotWeight',
+  shotWeightUnit: 'shotWeightUnit',
+  quantityUnit: 'quantityUnit',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ProductMaterialScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  rawMaterialId: 'rawMaterialId',
+  shotWeight: 'shotWeight',
+  shotWeightUnit: 'shotWeightUnit',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductMaterialScalarFieldEnum = (typeof ProductMaterialScalarFieldEnum)[keyof typeof ProductMaterialScalarFieldEnum]
 
 
 export const ProductionTargetScalarFieldEnum = {
@@ -145,22 +207,38 @@ export type ProductionTargetScalarFieldEnum = (typeof ProductionTargetScalarFiel
 export const ProductionRecordScalarFieldEnum = {
   id: 'id',
   productionDate: 'productionDate',
+  machineNo: 'machineNo',
   areaId: 'areaId',
   shiftId: 'shiftId',
   productId: 'productId',
-  operatorName: 'operatorName',
   computerCode: 'computerCode',
+  operatorName: 'operatorName',
   outputQty: 'outputQty',
   okQty: 'okQty',
   actualRm: 'actualRm',
   otReplace: 'otReplace',
   remarks: 'remarks',
+  status: 'status',
   inputById: 'inputById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ProductionRecordScalarFieldEnum = (typeof ProductionRecordScalarFieldEnum)[keyof typeof ProductionRecordScalarFieldEnum]
+
+
+export const ProductionMaterialUsageScalarFieldEnum = {
+  id: 'id',
+  productionRecordId: 'productionRecordId',
+  rawMaterialId: 'rawMaterialId',
+  actualUsage: 'actualUsage',
+  usageUnit: 'usageUnit',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductionMaterialUsageScalarFieldEnum = (typeof ProductionMaterialUsageScalarFieldEnum)[keyof typeof ProductionMaterialUsageScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -190,9 +268,7 @@ export type AreaOrderByRelevanceFieldEnum = (typeof AreaOrderByRelevanceFieldEnu
 
 export const ShiftOrderByRelevanceFieldEnum = {
   code: 'code',
-  name: 'name',
-  startTime: 'startTime',
-  endTime: 'endTime'
+  name: 'name'
 } as const
 
 export type ShiftOrderByRelevanceFieldEnum = (typeof ShiftOrderByRelevanceFieldEnum)[keyof typeof ShiftOrderByRelevanceFieldEnum]
@@ -206,21 +282,56 @@ export const NullsOrder = {
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
+export const MachineOrderByRelevanceFieldEnum = {
+  machineCode: 'machineCode',
+  machineName: 'machineName',
+  description: 'description'
+} as const
+
+export type MachineOrderByRelevanceFieldEnum = (typeof MachineOrderByRelevanceFieldEnum)[keyof typeof MachineOrderByRelevanceFieldEnum]
+
+
+export const ComputerOrderByRelevanceFieldEnum = {
+  computerCode: 'computerCode',
+  operatorName: 'operatorName'
+} as const
+
+export type ComputerOrderByRelevanceFieldEnum = (typeof ComputerOrderByRelevanceFieldEnum)[keyof typeof ComputerOrderByRelevanceFieldEnum]
+
+
+export const RawMaterialOrderByRelevanceFieldEnum = {
+  materialCode: 'materialCode',
+  materialName: 'materialName',
+  description: 'description'
+} as const
+
+export type RawMaterialOrderByRelevanceFieldEnum = (typeof RawMaterialOrderByRelevanceFieldEnum)[keyof typeof RawMaterialOrderByRelevanceFieldEnum]
+
+
 export const ProductOrderByRelevanceFieldEnum = {
   productCode: 'productCode',
   productName: 'productName',
-  description: 'description'
+  description: 'description',
+  shotWeightUnit: 'shotWeightUnit'
 } as const
 
 export type ProductOrderByRelevanceFieldEnum = (typeof ProductOrderByRelevanceFieldEnum)[keyof typeof ProductOrderByRelevanceFieldEnum]
 
 
 export const ProductionRecordOrderByRelevanceFieldEnum = {
-  operatorName: 'operatorName',
+  machineNo: 'machineNo',
   computerCode: 'computerCode',
+  operatorName: 'operatorName',
   otReplace: 'otReplace',
   remarks: 'remarks'
 } as const
 
 export type ProductionRecordOrderByRelevanceFieldEnum = (typeof ProductionRecordOrderByRelevanceFieldEnum)[keyof typeof ProductionRecordOrderByRelevanceFieldEnum]
+
+
+export const ProductionMaterialUsageOrderByRelevanceFieldEnum = {
+  remarks: 'remarks'
+} as const
+
+export type ProductionMaterialUsageOrderByRelevanceFieldEnum = (typeof ProductionMaterialUsageOrderByRelevanceFieldEnum)[keyof typeof ProductionMaterialUsageOrderByRelevanceFieldEnum]
 

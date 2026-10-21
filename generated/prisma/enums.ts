@@ -15,3 +15,27 @@ export const UserRole = {
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const WeightUnit = {
+  GRAM: 'GRAM',
+  KG: 'KG'
+} as const
+
+export type WeightUnit = (typeof WeightUnit)[keyof typeof WeightUnit]
+
+
+export const QuantityUnit = {
+  PCS: 'PCS',
+  METER: 'METER'
+} as const
+
+export type QuantityUnit = (typeof QuantityUnit)[keyof typeof QuantityUnit]
+
+
+export const ProductionStatus = {
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ProductionStatus = (typeof ProductionStatus)[keyof typeof ProductionStatus]

@@ -400,9 +400,14 @@ export const ModelName = {
   User: 'User',
   Area: 'Area',
   Shift: 'Shift',
+  Machine: 'Machine',
+  Computer: 'Computer',
+  RawMaterial: 'RawMaterial',
   Product: 'Product',
+  ProductMaterial: 'ProductMaterial',
   ProductionTarget: 'ProductionTarget',
-  ProductionRecord: 'ProductionRecord'
+  ProductionRecord: 'ProductionRecord',
+  ProductionMaterialUsage: 'ProductionMaterialUsage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -418,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "area" | "shift" | "product" | "productionTarget" | "productionRecord"
+    modelProps: "user" | "area" | "shift" | "machine" | "computer" | "rawMaterial" | "product" | "productMaterial" | "productionTarget" | "productionRecord" | "productionMaterialUsage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -620,6 +625,204 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Machine: {
+      payload: Prisma.$MachinePayload<ExtArgs>
+      fields: Prisma.MachineFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MachineFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MachinePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MachineFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MachinePayload>
+        }
+        findFirst: {
+          args: Prisma.MachineFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MachinePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MachineFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MachinePayload>
+        }
+        findMany: {
+          args: Prisma.MachineFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MachinePayload>[]
+        }
+        create: {
+          args: Prisma.MachineCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MachinePayload>
+        }
+        createMany: {
+          args: Prisma.MachineCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.MachineDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MachinePayload>
+        }
+        update: {
+          args: Prisma.MachineUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MachinePayload>
+        }
+        deleteMany: {
+          args: Prisma.MachineDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MachineUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.MachineUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MachinePayload>
+        }
+        aggregate: {
+          args: Prisma.MachineAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMachine>
+        }
+        groupBy: {
+          args: Prisma.MachineGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MachineGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MachineCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MachineCountAggregateOutputType> | number
+        }
+      }
+    }
+    Computer: {
+      payload: Prisma.$ComputerPayload<ExtArgs>
+      fields: Prisma.ComputerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ComputerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComputerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ComputerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComputerPayload>
+        }
+        findFirst: {
+          args: Prisma.ComputerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComputerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ComputerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComputerPayload>
+        }
+        findMany: {
+          args: Prisma.ComputerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComputerPayload>[]
+        }
+        create: {
+          args: Prisma.ComputerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComputerPayload>
+        }
+        createMany: {
+          args: Prisma.ComputerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ComputerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComputerPayload>
+        }
+        update: {
+          args: Prisma.ComputerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComputerPayload>
+        }
+        deleteMany: {
+          args: Prisma.ComputerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ComputerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ComputerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComputerPayload>
+        }
+        aggregate: {
+          args: Prisma.ComputerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateComputer>
+        }
+        groupBy: {
+          args: Prisma.ComputerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ComputerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ComputerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ComputerCountAggregateOutputType> | number
+        }
+      }
+    }
+    RawMaterial: {
+      payload: Prisma.$RawMaterialPayload<ExtArgs>
+      fields: Prisma.RawMaterialFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RawMaterialFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RawMaterialPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RawMaterialFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RawMaterialPayload>
+        }
+        findFirst: {
+          args: Prisma.RawMaterialFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RawMaterialPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RawMaterialFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RawMaterialPayload>
+        }
+        findMany: {
+          args: Prisma.RawMaterialFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RawMaterialPayload>[]
+        }
+        create: {
+          args: Prisma.RawMaterialCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RawMaterialPayload>
+        }
+        createMany: {
+          args: Prisma.RawMaterialCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.RawMaterialDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RawMaterialPayload>
+        }
+        update: {
+          args: Prisma.RawMaterialUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RawMaterialPayload>
+        }
+        deleteMany: {
+          args: Prisma.RawMaterialDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RawMaterialUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.RawMaterialUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RawMaterialPayload>
+        }
+        aggregate: {
+          args: Prisma.RawMaterialAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRawMaterial>
+        }
+        groupBy: {
+          args: Prisma.RawMaterialGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RawMaterialGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RawMaterialCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RawMaterialCountAggregateOutputType> | number
+        }
+      }
+    }
     Product: {
       payload: Prisma.$ProductPayload<ExtArgs>
       fields: Prisma.ProductFieldRefs
@@ -683,6 +886,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ProductCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProductCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProductMaterial: {
+      payload: Prisma.$ProductMaterialPayload<ExtArgs>
+      fields: Prisma.ProductMaterialFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProductMaterialFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductMaterialPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProductMaterialFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductMaterialPayload>
+        }
+        findFirst: {
+          args: Prisma.ProductMaterialFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductMaterialPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProductMaterialFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductMaterialPayload>
+        }
+        findMany: {
+          args: Prisma.ProductMaterialFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductMaterialPayload>[]
+        }
+        create: {
+          args: Prisma.ProductMaterialCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductMaterialPayload>
+        }
+        createMany: {
+          args: Prisma.ProductMaterialCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ProductMaterialDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductMaterialPayload>
+        }
+        update: {
+          args: Prisma.ProductMaterialUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductMaterialPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProductMaterialDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProductMaterialUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ProductMaterialUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductMaterialPayload>
+        }
+        aggregate: {
+          args: Prisma.ProductMaterialAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProductMaterial>
+        }
+        groupBy: {
+          args: Prisma.ProductMaterialGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductMaterialGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProductMaterialCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductMaterialCountAggregateOutputType> | number
         }
       }
     }
@@ -818,6 +1087,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProductionMaterialUsage: {
+      payload: Prisma.$ProductionMaterialUsagePayload<ExtArgs>
+      fields: Prisma.ProductionMaterialUsageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProductionMaterialUsageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionMaterialUsagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProductionMaterialUsageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionMaterialUsagePayload>
+        }
+        findFirst: {
+          args: Prisma.ProductionMaterialUsageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionMaterialUsagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProductionMaterialUsageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionMaterialUsagePayload>
+        }
+        findMany: {
+          args: Prisma.ProductionMaterialUsageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionMaterialUsagePayload>[]
+        }
+        create: {
+          args: Prisma.ProductionMaterialUsageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionMaterialUsagePayload>
+        }
+        createMany: {
+          args: Prisma.ProductionMaterialUsageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ProductionMaterialUsageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionMaterialUsagePayload>
+        }
+        update: {
+          args: Prisma.ProductionMaterialUsageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionMaterialUsagePayload>
+        }
+        deleteMany: {
+          args: Prisma.ProductionMaterialUsageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProductionMaterialUsageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ProductionMaterialUsageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionMaterialUsagePayload>
+        }
+        aggregate: {
+          args: Prisma.ProductionMaterialUsageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProductionMaterialUsage>
+        }
+        groupBy: {
+          args: Prisma.ProductionMaterialUsageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductionMaterialUsageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProductionMaterialUsageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductionMaterialUsageCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -887,8 +1222,6 @@ export const ShiftScalarFieldEnum = {
   id: 'id',
   code: 'code',
   name: 'name',
-  startTime: 'startTime',
-  endTime: 'endTime',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -897,17 +1230,76 @@ export const ShiftScalarFieldEnum = {
 export type ShiftScalarFieldEnum = (typeof ShiftScalarFieldEnum)[keyof typeof ShiftScalarFieldEnum]
 
 
-export const ProductScalarFieldEnum = {
+export const MachineScalarFieldEnum = {
   id: 'id',
-  productCode: 'productCode',
-  productName: 'productName',
+  machineCode: 'machineCode',
+  machineName: 'machineName',
   description: 'description',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
+export type MachineScalarFieldEnum = (typeof MachineScalarFieldEnum)[keyof typeof MachineScalarFieldEnum]
+
+
+export const ComputerScalarFieldEnum = {
+  id: 'id',
+  computerCode: 'computerCode',
+  operatorName: 'operatorName',
+  productId: 'productId',
+  areaId: 'areaId',
+  shiftId: 'shiftId',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ComputerScalarFieldEnum = (typeof ComputerScalarFieldEnum)[keyof typeof ComputerScalarFieldEnum]
+
+
+export const RawMaterialScalarFieldEnum = {
+  id: 'id',
+  materialCode: 'materialCode',
+  materialName: 'materialName',
+  description: 'description',
+  unit: 'unit',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RawMaterialScalarFieldEnum = (typeof RawMaterialScalarFieldEnum)[keyof typeof RawMaterialScalarFieldEnum]
+
+
+export const ProductScalarFieldEnum = {
+  id: 'id',
+  productCode: 'productCode',
+  productName: 'productName',
+  description: 'description',
+  shotWeight: 'shotWeight',
+  shotWeightUnit: 'shotWeightUnit',
+  quantityUnit: 'quantityUnit',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ProductMaterialScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  rawMaterialId: 'rawMaterialId',
+  shotWeight: 'shotWeight',
+  shotWeightUnit: 'shotWeightUnit',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductMaterialScalarFieldEnum = (typeof ProductMaterialScalarFieldEnum)[keyof typeof ProductMaterialScalarFieldEnum]
 
 
 export const ProductionTargetScalarFieldEnum = {
@@ -927,22 +1319,38 @@ export type ProductionTargetScalarFieldEnum = (typeof ProductionTargetScalarFiel
 export const ProductionRecordScalarFieldEnum = {
   id: 'id',
   productionDate: 'productionDate',
+  machineNo: 'machineNo',
   areaId: 'areaId',
   shiftId: 'shiftId',
   productId: 'productId',
-  operatorName: 'operatorName',
   computerCode: 'computerCode',
+  operatorName: 'operatorName',
   outputQty: 'outputQty',
   okQty: 'okQty',
   actualRm: 'actualRm',
   otReplace: 'otReplace',
   remarks: 'remarks',
+  status: 'status',
   inputById: 'inputById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ProductionRecordScalarFieldEnum = (typeof ProductionRecordScalarFieldEnum)[keyof typeof ProductionRecordScalarFieldEnum]
+
+
+export const ProductionMaterialUsageScalarFieldEnum = {
+  id: 'id',
+  productionRecordId: 'productionRecordId',
+  rawMaterialId: 'rawMaterialId',
+  actualUsage: 'actualUsage',
+  usageUnit: 'usageUnit',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductionMaterialUsageScalarFieldEnum = (typeof ProductionMaterialUsageScalarFieldEnum)[keyof typeof ProductionMaterialUsageScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -972,9 +1380,7 @@ export type AreaOrderByRelevanceFieldEnum = (typeof AreaOrderByRelevanceFieldEnu
 
 export const ShiftOrderByRelevanceFieldEnum = {
   code: 'code',
-  name: 'name',
-  startTime: 'startTime',
-  endTime: 'endTime'
+  name: 'name'
 } as const
 
 export type ShiftOrderByRelevanceFieldEnum = (typeof ShiftOrderByRelevanceFieldEnum)[keyof typeof ShiftOrderByRelevanceFieldEnum]
@@ -988,23 +1394,58 @@ export const NullsOrder = {
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
+export const MachineOrderByRelevanceFieldEnum = {
+  machineCode: 'machineCode',
+  machineName: 'machineName',
+  description: 'description'
+} as const
+
+export type MachineOrderByRelevanceFieldEnum = (typeof MachineOrderByRelevanceFieldEnum)[keyof typeof MachineOrderByRelevanceFieldEnum]
+
+
+export const ComputerOrderByRelevanceFieldEnum = {
+  computerCode: 'computerCode',
+  operatorName: 'operatorName'
+} as const
+
+export type ComputerOrderByRelevanceFieldEnum = (typeof ComputerOrderByRelevanceFieldEnum)[keyof typeof ComputerOrderByRelevanceFieldEnum]
+
+
+export const RawMaterialOrderByRelevanceFieldEnum = {
+  materialCode: 'materialCode',
+  materialName: 'materialName',
+  description: 'description'
+} as const
+
+export type RawMaterialOrderByRelevanceFieldEnum = (typeof RawMaterialOrderByRelevanceFieldEnum)[keyof typeof RawMaterialOrderByRelevanceFieldEnum]
+
+
 export const ProductOrderByRelevanceFieldEnum = {
   productCode: 'productCode',
   productName: 'productName',
-  description: 'description'
+  description: 'description',
+  shotWeightUnit: 'shotWeightUnit'
 } as const
 
 export type ProductOrderByRelevanceFieldEnum = (typeof ProductOrderByRelevanceFieldEnum)[keyof typeof ProductOrderByRelevanceFieldEnum]
 
 
 export const ProductionRecordOrderByRelevanceFieldEnum = {
-  operatorName: 'operatorName',
+  machineNo: 'machineNo',
   computerCode: 'computerCode',
+  operatorName: 'operatorName',
   otReplace: 'otReplace',
   remarks: 'remarks'
 } as const
 
 export type ProductionRecordOrderByRelevanceFieldEnum = (typeof ProductionRecordOrderByRelevanceFieldEnum)[keyof typeof ProductionRecordOrderByRelevanceFieldEnum]
+
+
+export const ProductionMaterialUsageOrderByRelevanceFieldEnum = {
+  remarks: 'remarks'
+} as const
+
+export type ProductionMaterialUsageOrderByRelevanceFieldEnum = (typeof ProductionMaterialUsageOrderByRelevanceFieldEnum)[keyof typeof ProductionMaterialUsageOrderByRelevanceFieldEnum]
 
 
 
@@ -1049,9 +1490,30 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
 
 
 /**
+ * Reference to a field of type 'WeightUnit'
+ */
+export type EnumWeightUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WeightUnit'>
+    
+
+
+/**
  * Reference to a field of type 'Decimal'
  */
 export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'QuantityUnit'
+ */
+export type EnumQuantityUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuantityUnit'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductionStatus'
+ */
+export type EnumProductionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductionStatus'>
     
 
 
@@ -1215,9 +1677,14 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   area?: Prisma.AreaOmit
   shift?: Prisma.ShiftOmit
+  machine?: Prisma.MachineOmit
+  computer?: Prisma.ComputerOmit
+  rawMaterial?: Prisma.RawMaterialOmit
   product?: Prisma.ProductOmit
+  productMaterial?: Prisma.ProductMaterialOmit
   productionTarget?: Prisma.ProductionTargetOmit
   productionRecord?: Prisma.ProductionRecordOmit
+  productionMaterialUsage?: Prisma.ProductionMaterialUsageOmit
 }
 
 /* Types for Logging */

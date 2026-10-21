@@ -33,10 +33,30 @@ export type Area = Prisma.AreaModel
  */
 export type Shift = Prisma.ShiftModel
 /**
+ * Model Machine
+ * 
+ */
+export type Machine = Prisma.MachineModel
+/**
+ * Model Computer
+ * 
+ */
+export type Computer = Prisma.ComputerModel
+/**
+ * Model RawMaterial
+ * 
+ */
+export type RawMaterial = Prisma.RawMaterialModel
+/**
  * Model Product
  * 
  */
 export type Product = Prisma.ProductModel
+/**
+ * Model ProductMaterial
+ * 
+ */
+export type ProductMaterial = Prisma.ProductMaterialModel
 /**
  * Model ProductionTarget
  * 
@@ -47,3 +67,8 @@ export type ProductionTarget = Prisma.ProductionTargetModel
  * 
  */
 export type ProductionRecord = Prisma.ProductionRecordModel
+/**
+ * Model ProductionMaterialUsage
+ * 
+ */
+export type ProductionMaterialUsage = Prisma.ProductionMaterialUsageModel

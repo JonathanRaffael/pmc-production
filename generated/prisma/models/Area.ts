@@ -225,6 +225,7 @@ export type AreaWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Area"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Area"> | Date | string
   productionRecords?: Prisma.ProductionRecordListRelationFilter
+  computers?: Prisma.ComputerListRelationFilter
 }
 
 export type AreaOrderByWithRelationInput = {
@@ -235,6 +236,7 @@ export type AreaOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   productionRecords?: Prisma.ProductionRecordOrderByRelationAggregateInput
+  computers?: Prisma.ComputerOrderByRelationAggregateInput
   _relevance?: Prisma.AreaOrderByRelevanceInput
 }
 
@@ -249,6 +251,7 @@ export type AreaWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Area"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Area"> | Date | string
   productionRecords?: Prisma.ProductionRecordListRelationFilter
+  computers?: Prisma.ComputerListRelationFilter
 }, "id" | "code">
 
 export type AreaOrderByWithAggregationInput = {
@@ -284,6 +287,7 @@ export type AreaCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   productionRecords?: Prisma.ProductionRecordCreateNestedManyWithoutAreaInput
+  computers?: Prisma.ComputerCreateNestedManyWithoutAreaInput
 }
 
 export type AreaUncheckedCreateInput = {
@@ -294,6 +298,7 @@ export type AreaUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   productionRecords?: Prisma.ProductionRecordUncheckedCreateNestedManyWithoutAreaInput
+  computers?: Prisma.ComputerUncheckedCreateNestedManyWithoutAreaInput
 }
 
 export type AreaUpdateInput = {
@@ -303,6 +308,7 @@ export type AreaUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionRecords?: Prisma.ProductionRecordUpdateManyWithoutAreaNestedInput
+  computers?: Prisma.ComputerUpdateManyWithoutAreaNestedInput
 }
 
 export type AreaUncheckedUpdateInput = {
@@ -313,6 +319,7 @@ export type AreaUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionRecords?: Prisma.ProductionRecordUncheckedUpdateManyWithoutAreaNestedInput
+  computers?: Prisma.ComputerUncheckedUpdateManyWithoutAreaNestedInput
 }
 
 export type AreaCreateManyInput = {
@@ -382,9 +389,30 @@ export type AreaSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type AreaNullableScalarRelationFilter = {
+  is?: Prisma.AreaWhereInput | null
+  isNot?: Prisma.AreaWhereInput | null
+}
+
 export type AreaScalarRelationFilter = {
   is?: Prisma.AreaWhereInput
   isNot?: Prisma.AreaWhereInput
+}
+
+export type AreaCreateNestedOneWithoutComputersInput = {
+  create?: Prisma.XOR<Prisma.AreaCreateWithoutComputersInput, Prisma.AreaUncheckedCreateWithoutComputersInput>
+  connectOrCreate?: Prisma.AreaCreateOrConnectWithoutComputersInput
+  connect?: Prisma.AreaWhereUniqueInput
+}
+
+export type AreaUpdateOneWithoutComputersNestedInput = {
+  create?: Prisma.XOR<Prisma.AreaCreateWithoutComputersInput, Prisma.AreaUncheckedCreateWithoutComputersInput>
+  connectOrCreate?: Prisma.AreaCreateOrConnectWithoutComputersInput
+  upsert?: Prisma.AreaUpsertWithoutComputersInput
+  disconnect?: Prisma.AreaWhereInput | boolean
+  delete?: Prisma.AreaWhereInput | boolean
+  connect?: Prisma.AreaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AreaUpdateToOneWithWhereWithoutComputersInput, Prisma.AreaUpdateWithoutComputersInput>, Prisma.AreaUncheckedUpdateWithoutComputersInput>
 }
 
 export type AreaCreateNestedOneWithoutProductionRecordsInput = {
@@ -401,12 +429,67 @@ export type AreaUpdateOneRequiredWithoutProductionRecordsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AreaUpdateToOneWithWhereWithoutProductionRecordsInput, Prisma.AreaUpdateWithoutProductionRecordsInput>, Prisma.AreaUncheckedUpdateWithoutProductionRecordsInput>
 }
 
+export type AreaCreateWithoutComputersInput = {
+  code: string
+  name: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  productionRecords?: Prisma.ProductionRecordCreateNestedManyWithoutAreaInput
+}
+
+export type AreaUncheckedCreateWithoutComputersInput = {
+  id?: number
+  code: string
+  name: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  productionRecords?: Prisma.ProductionRecordUncheckedCreateNestedManyWithoutAreaInput
+}
+
+export type AreaCreateOrConnectWithoutComputersInput = {
+  where: Prisma.AreaWhereUniqueInput
+  create: Prisma.XOR<Prisma.AreaCreateWithoutComputersInput, Prisma.AreaUncheckedCreateWithoutComputersInput>
+}
+
+export type AreaUpsertWithoutComputersInput = {
+  update: Prisma.XOR<Prisma.AreaUpdateWithoutComputersInput, Prisma.AreaUncheckedUpdateWithoutComputersInput>
+  create: Prisma.XOR<Prisma.AreaCreateWithoutComputersInput, Prisma.AreaUncheckedCreateWithoutComputersInput>
+  where?: Prisma.AreaWhereInput
+}
+
+export type AreaUpdateToOneWithWhereWithoutComputersInput = {
+  where?: Prisma.AreaWhereInput
+  data: Prisma.XOR<Prisma.AreaUpdateWithoutComputersInput, Prisma.AreaUncheckedUpdateWithoutComputersInput>
+}
+
+export type AreaUpdateWithoutComputersInput = {
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionRecords?: Prisma.ProductionRecordUpdateManyWithoutAreaNestedInput
+}
+
+export type AreaUncheckedUpdateWithoutComputersInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionRecords?: Prisma.ProductionRecordUncheckedUpdateManyWithoutAreaNestedInput
+}
+
 export type AreaCreateWithoutProductionRecordsInput = {
   code: string
   name: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  computers?: Prisma.ComputerCreateNestedManyWithoutAreaInput
 }
 
 export type AreaUncheckedCreateWithoutProductionRecordsInput = {
@@ -416,6 +499,7 @@ export type AreaUncheckedCreateWithoutProductionRecordsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  computers?: Prisma.ComputerUncheckedCreateNestedManyWithoutAreaInput
 }
 
 export type AreaCreateOrConnectWithoutProductionRecordsInput = {
@@ -440,6 +524,7 @@ export type AreaUpdateWithoutProductionRecordsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  computers?: Prisma.ComputerUpdateManyWithoutAreaNestedInput
 }
 
 export type AreaUncheckedUpdateWithoutProductionRecordsInput = {
@@ -449,6 +534,7 @@ export type AreaUncheckedUpdateWithoutProductionRecordsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  computers?: Prisma.ComputerUncheckedUpdateManyWithoutAreaNestedInput
 }
 
 
@@ -458,10 +544,12 @@ export type AreaUncheckedUpdateWithoutProductionRecordsInput = {
 
 export type AreaCountOutputType = {
   productionRecords: number
+  computers: number
 }
 
 export type AreaCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   productionRecords?: boolean | AreaCountOutputTypeCountProductionRecordsArgs
+  computers?: boolean | AreaCountOutputTypeCountComputersArgs
 }
 
 /**
@@ -481,6 +569,13 @@ export type AreaCountOutputTypeCountProductionRecordsArgs<ExtArgs extends runtim
   where?: Prisma.ProductionRecordWhereInput
 }
 
+/**
+ * AreaCountOutputType without action
+ */
+export type AreaCountOutputTypeCountComputersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ComputerWhereInput
+}
+
 
 export type AreaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -490,6 +585,7 @@ export type AreaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   productionRecords?: boolean | Prisma.Area$productionRecordsArgs<ExtArgs>
+  computers?: boolean | Prisma.Area$computersArgs<ExtArgs>
   _count?: boolean | Prisma.AreaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["area"]>
 
@@ -507,6 +603,7 @@ export type AreaSelectScalar = {
 export type AreaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["area"]>
 export type AreaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   productionRecords?: boolean | Prisma.Area$productionRecordsArgs<ExtArgs>
+  computers?: boolean | Prisma.Area$computersArgs<ExtArgs>
   _count?: boolean | Prisma.AreaCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -514,6 +611,7 @@ export type $AreaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Area"
   objects: {
     productionRecords: Prisma.$ProductionRecordPayload<ExtArgs>[]
+    computers: Prisma.$ComputerPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -863,6 +961,7 @@ readonly fields: AreaFieldRefs;
 export interface Prisma__AreaClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   productionRecords<T extends Prisma.Area$productionRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Area$productionRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductionRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  computers<T extends Prisma.Area$computersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Area$computersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComputerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1267,6 +1366,30 @@ export type Area$productionRecordsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.ProductionRecordScalarFieldEnum | Prisma.ProductionRecordScalarFieldEnum[]
+}
+
+/**
+ * Area.computers
+ */
+export type Area$computersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Computer
+   */
+  select?: Prisma.ComputerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Computer
+   */
+  omit?: Prisma.ComputerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ComputerInclude<ExtArgs> | null
+  where?: Prisma.ComputerWhereInput
+  orderBy?: Prisma.ComputerOrderByWithRelationInput | Prisma.ComputerOrderByWithRelationInput[]
+  cursor?: Prisma.ComputerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ComputerScalarFieldEnum | Prisma.ComputerScalarFieldEnum[]
 }
 
 /**

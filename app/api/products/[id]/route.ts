@@ -7,6 +7,10 @@ type RouteContext = {
   }>;
 };
 
+// =====================================================
+// GET PRODUCT BY ID
+// =====================================================
+
 export async function GET(
   request: Request,
   context: RouteContext
@@ -29,6 +33,18 @@ export async function GET(
     const product = await prisma.product.findUnique({
       where: {
         id: productId,
+      },
+
+      include: {
+        productionTargets: {
+          where: {
+            isActive: true,
+          },
+
+          orderBy: {
+            effectiveFrom: "desc",
+          },
+        },
       },
     });
 
@@ -59,6 +75,10 @@ export async function GET(
   }
 }
 
+// =====================================================
+// PATCH PRODUCT
+// =====================================================
+
 export async function PATCH(
   request: Request,
   context: RouteContext
@@ -80,11 +100,19 @@ export async function PATCH(
 
     const body = await request.json();
 
-    const productCode = String(body.productCode ?? "")
+    // ===================================================
+    // PRODUCT DATA
+    // ===================================================
+
+    const productCode = String(
+      body.productCode ?? ""
+    )
       .trim()
       .toUpperCase();
 
-    const productName = String(body.productName ?? "").trim();
+    const productName = String(
+      body.productName ?? ""
+    ).trim();
 
     const description =
       body.description !== undefined &&
@@ -98,64 +126,268 @@ export async function PATCH(
         ? true
         : Boolean(body.isActive);
 
-    if (!productCode || !productName) {
+    // ===================================================
+    // SHOT WEIGHT
+    // ===================================================
+
+    const shotWeight =
+      body.shotWeight === undefined ||
+      body.shotWeight === null ||
+      body.shotWeight === ""
+        ? null
+        : Number(body.shotWeight);
+
+    if (
+      shotWeight === null ||
+      !Number.isFinite(shotWeight) ||
+      shotWeight <= 0
+    ) {
       return NextResponse.json(
         {
           success: false,
-          message: "Product code dan product name wajib diisi",
+          message:
+            "Shot weight wajib diisi dan harus lebih besar dari 0",
         },
         { status: 400 }
       );
     }
 
-    const existingProduct = await prisma.product.findFirst({
-      where: {
-        productCode,
-        NOT: {
-          id: productId,
+    // ===================================================
+    // SHOT WEIGHT UNIT
+    // ===================================================
+
+    const shotWeightUnit =
+      String(
+        body.shotWeightUnit ?? "KG"
+      ).toUpperCase();
+
+    if (
+      shotWeightUnit !== "KG" &&
+      shotWeightUnit !== "GRAM"
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Shot weight unit harus KG atau GRAM",
         },
-      },
-    });
+        { status: 400 }
+      );
+    }
+
+    // ===================================================
+    // QUANTITY UNIT
+    // ===================================================
+
+    const quantityUnit =
+      String(
+        body.quantityUnit ?? "PCS"
+      ).toUpperCase();
+
+    if (
+      quantityUnit !== "PCS" &&
+      quantityUnit !== "METER"
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Quantity unit harus PCS atau METER",
+        },
+        { status: 400 }
+      );
+    }
+
+    // ===================================================
+    // TARGET 8H
+    // ===================================================
+
+    const target8H =
+      body.target8H === undefined ||
+      body.target8H === null ||
+      body.target8H === ""
+        ? null
+        : Number(body.target8H);
+
+    if (
+      target8H !== null &&
+      (!Number.isFinite(target8H) ||
+        target8H < 0)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Production target / 8H tidak valid",
+        },
+        { status: 400 }
+      );
+    }
+
+    // ===================================================
+    // REQUIRED VALIDATION
+    // ===================================================
+
+    if (!productCode || !productName) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Product code dan product name wajib diisi",
+        },
+        { status: 400 }
+      );
+    }
+
+    // ===================================================
+    // CHECK DUPLICATE PRODUCT CODE
+    // ===================================================
+
+    const existingProduct =
+      await prisma.product.findFirst({
+        where: {
+          productCode,
+
+          NOT: {
+            id: productId,
+          },
+        },
+      });
 
     if (existingProduct) {
       return NextResponse.json(
         {
           success: false,
-          message: "Product code sudah digunakan",
+          message:
+            "Product code sudah digunakan",
         },
         { status: 409 }
       );
     }
 
-    const product = await prisma.product.update({
-      where: {
-        id: productId,
-      },
-      data: {
-        productCode,
-        productName,
-        description,
-        isActive,
-      },
-    });
+    // ===================================================
+    // CHECK PRODUCT
+    // ===================================================
+
+    const currentProduct =
+      await prisma.product.findUnique({
+        where: {
+          id: productId,
+        },
+      });
+
+    if (!currentProduct) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Product tidak ditemukan",
+        },
+        { status: 404 }
+      );
+    }
+
+    // ===================================================
+    // UPDATE PRODUCT
+    // ===================================================
+
+    const product =
+      await prisma.product.update({
+        where: {
+          id: productId,
+        },
+
+        data: {
+          productCode,
+          productName,
+          description,
+
+          shotWeight,
+          shotWeightUnit,
+
+          quantityUnit,
+
+          isActive,
+        },
+      });
+
+    // ===================================================
+    // UPDATE PRODUCTION TARGET
+    // ===================================================
+
+    let productionTarget = null;
+
+    if (target8H !== null) {
+      // Nonaktifkan target aktif sebelumnya
+
+      await prisma.productionTarget.updateMany({
+        where: {
+          productId,
+
+          isActive: true,
+        },
+
+        data: {
+          isActive: false,
+
+          effectiveTo: new Date(),
+        },
+      });
+
+      // Buat target baru
+
+      productionTarget =
+        await prisma.productionTarget.create({
+          data: {
+            productId,
+
+            target8H,
+
+            effectiveFrom:
+              new Date(),
+
+            effectiveTo:
+              null,
+
+            isActive: true,
+          },
+        });
+    }
+
+    // ===================================================
+    // RESPONSE
+    // ===================================================
 
     return NextResponse.json({
       success: true,
-      message: "Product berhasil diperbarui",
+
+      message:
+        "Product berhasil diperbarui",
+
       product,
+
+      productionTarget,
     });
   } catch (error) {
-    console.error("PATCH product error:", error);
+    console.error(
+      "PATCH product error:",
+      error
+    );
 
     return NextResponse.json(
       {
         success: false,
-        message: "Gagal memperbarui product",
+        message:
+          "Gagal memperbarui product",
       },
       { status: 500 }
     );
   }
 }
+
+// =====================================================
+// DELETE PRODUCT
+// =====================================================
 
 export async function DELETE(
   request: Request,
@@ -170,33 +402,92 @@ export async function DELETE(
       return NextResponse.json(
         {
           success: false,
-          message: "ID product tidak valid",
+          message:
+            "ID product tidak valid",
         },
         { status: 400 }
       );
     }
 
-    const product = await prisma.product.update({
+    // ===================================================
+    // CHECK PRODUCT
+    // ===================================================
+
+    const existingProduct =
+      await prisma.product.findUnique({
+        where: {
+          id: productId,
+        },
+      });
+
+    if (!existingProduct) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Product tidak ditemukan",
+        },
+        { status: 404 }
+      );
+    }
+
+    // ===================================================
+    // SOFT DELETE
+    // ===================================================
+
+    const product =
+      await prisma.product.update({
+        where: {
+          id: productId,
+        },
+
+        data: {
+          isActive: false,
+        },
+      });
+
+    // ===================================================
+    // NONAKTIFKAN TARGET
+    // ===================================================
+
+    await prisma.productionTarget.updateMany({
       where: {
-        id: productId,
+        productId,
+
+        isActive: true,
       },
+
       data: {
         isActive: false,
+
+        effectiveTo:
+          new Date(),
       },
     });
 
+    // ===================================================
+    // RESPONSE
+    // ===================================================
+
     return NextResponse.json({
       success: true,
-      message: "Product berhasil dinonaktifkan",
+
+      message:
+        "Product berhasil dinonaktifkan",
+
       product,
     });
   } catch (error) {
-    console.error("DELETE product error:", error);
+    console.error(
+      "DELETE product error:",
+      error
+    );
 
     return NextResponse.json(
       {
         success: false,
-        message: "Gagal menonaktifkan product",
+        message:
+          "Gagal menonaktifkan product",
       },
       { status: 500 }
     );

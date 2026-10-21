@@ -51,16 +51,18 @@ export type ProductionRecordSumAggregateOutputType = {
 export type ProductionRecordMinAggregateOutputType = {
   id: number | null
   productionDate: Date | null
+  machineNo: string | null
   areaId: number | null
   shiftId: number | null
   productId: number | null
-  operatorName: string | null
   computerCode: string | null
+  operatorName: string | null
   outputQty: runtime.Decimal | null
   okQty: runtime.Decimal | null
   actualRm: runtime.Decimal | null
   otReplace: string | null
   remarks: string | null
+  status: $Enums.ProductionStatus | null
   inputById: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -69,16 +71,18 @@ export type ProductionRecordMinAggregateOutputType = {
 export type ProductionRecordMaxAggregateOutputType = {
   id: number | null
   productionDate: Date | null
+  machineNo: string | null
   areaId: number | null
   shiftId: number | null
   productId: number | null
-  operatorName: string | null
   computerCode: string | null
+  operatorName: string | null
   outputQty: runtime.Decimal | null
   okQty: runtime.Decimal | null
   actualRm: runtime.Decimal | null
   otReplace: string | null
   remarks: string | null
+  status: $Enums.ProductionStatus | null
   inputById: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -87,16 +91,18 @@ export type ProductionRecordMaxAggregateOutputType = {
 export type ProductionRecordCountAggregateOutputType = {
   id: number
   productionDate: number
+  machineNo: number
   areaId: number
   shiftId: number
   productId: number
-  operatorName: number
   computerCode: number
+  operatorName: number
   outputQty: number
   okQty: number
   actualRm: number
   otReplace: number
   remarks: number
+  status: number
   inputById: number
   createdAt: number
   updatedAt: number
@@ -129,16 +135,18 @@ export type ProductionRecordSumAggregateInputType = {
 export type ProductionRecordMinAggregateInputType = {
   id?: true
   productionDate?: true
+  machineNo?: true
   areaId?: true
   shiftId?: true
   productId?: true
-  operatorName?: true
   computerCode?: true
+  operatorName?: true
   outputQty?: true
   okQty?: true
   actualRm?: true
   otReplace?: true
   remarks?: true
+  status?: true
   inputById?: true
   createdAt?: true
   updatedAt?: true
@@ -147,16 +155,18 @@ export type ProductionRecordMinAggregateInputType = {
 export type ProductionRecordMaxAggregateInputType = {
   id?: true
   productionDate?: true
+  machineNo?: true
   areaId?: true
   shiftId?: true
   productId?: true
-  operatorName?: true
   computerCode?: true
+  operatorName?: true
   outputQty?: true
   okQty?: true
   actualRm?: true
   otReplace?: true
   remarks?: true
+  status?: true
   inputById?: true
   createdAt?: true
   updatedAt?: true
@@ -165,16 +175,18 @@ export type ProductionRecordMaxAggregateInputType = {
 export type ProductionRecordCountAggregateInputType = {
   id?: true
   productionDate?: true
+  machineNo?: true
   areaId?: true
   shiftId?: true
   productId?: true
-  operatorName?: true
   computerCode?: true
+  operatorName?: true
   outputQty?: true
   okQty?: true
   actualRm?: true
   otReplace?: true
   remarks?: true
+  status?: true
   inputById?: true
   createdAt?: true
   updatedAt?: true
@@ -270,16 +282,18 @@ export type ProductionRecordGroupByArgs<ExtArgs extends runtime.Types.Extensions
 export type ProductionRecordGroupByOutputType = {
   id: number
   productionDate: Date
+  machineNo: string | null
   areaId: number
   shiftId: number
   productId: number
-  operatorName: string | null
   computerCode: string | null
+  operatorName: string | null
   outputQty: runtime.Decimal
   okQty: runtime.Decimal
   actualRm: runtime.Decimal
   otReplace: string | null
   remarks: string | null
+  status: $Enums.ProductionStatus
   inputById: number
   createdAt: Date
   updatedAt: Date
@@ -311,16 +325,18 @@ export type ProductionRecordWhereInput = {
   NOT?: Prisma.ProductionRecordWhereInput | Prisma.ProductionRecordWhereInput[]
   id?: Prisma.IntFilter<"ProductionRecord"> | number
   productionDate?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
+  machineNo?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   areaId?: Prisma.IntFilter<"ProductionRecord"> | number
   shiftId?: Prisma.IntFilter<"ProductionRecord"> | number
   productId?: Prisma.IntFilter<"ProductionRecord"> | number
-  operatorName?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   computerCode?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  operatorName?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   outputQty?: Prisma.DecimalFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   remarks?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  status?: Prisma.EnumProductionStatusFilter<"ProductionRecord"> | $Enums.ProductionStatus
   inputById?: Prisma.IntFilter<"ProductionRecord"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
@@ -328,21 +344,24 @@ export type ProductionRecordWhereInput = {
   shift?: Prisma.XOR<Prisma.ShiftScalarRelationFilter, Prisma.ShiftWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
   inputBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  materialUsages?: Prisma.ProductionMaterialUsageListRelationFilter
 }
 
 export type ProductionRecordOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   productionDate?: Prisma.SortOrder
+  machineNo?: Prisma.SortOrderInput | Prisma.SortOrder
   areaId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
-  operatorName?: Prisma.SortOrderInput | Prisma.SortOrder
   computerCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  operatorName?: Prisma.SortOrderInput | Prisma.SortOrder
   outputQty?: Prisma.SortOrder
   okQty?: Prisma.SortOrder
   actualRm?: Prisma.SortOrder
   otReplace?: Prisma.SortOrderInput | Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   inputById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -350,6 +369,7 @@ export type ProductionRecordOrderByWithRelationInput = {
   shift?: Prisma.ShiftOrderByWithRelationInput
   product?: Prisma.ProductOrderByWithRelationInput
   inputBy?: Prisma.UserOrderByWithRelationInput
+  materialUsages?: Prisma.ProductionMaterialUsageOrderByRelationAggregateInput
   _relevance?: Prisma.ProductionRecordOrderByRelevanceInput
 }
 
@@ -359,16 +379,18 @@ export type ProductionRecordWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProductionRecordWhereInput[]
   NOT?: Prisma.ProductionRecordWhereInput | Prisma.ProductionRecordWhereInput[]
   productionDate?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
+  machineNo?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   areaId?: Prisma.IntFilter<"ProductionRecord"> | number
   shiftId?: Prisma.IntFilter<"ProductionRecord"> | number
   productId?: Prisma.IntFilter<"ProductionRecord"> | number
-  operatorName?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   computerCode?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  operatorName?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   outputQty?: Prisma.DecimalFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   remarks?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  status?: Prisma.EnumProductionStatusFilter<"ProductionRecord"> | $Enums.ProductionStatus
   inputById?: Prisma.IntFilter<"ProductionRecord"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
@@ -376,21 +398,24 @@ export type ProductionRecordWhereUniqueInput = Prisma.AtLeast<{
   shift?: Prisma.XOR<Prisma.ShiftScalarRelationFilter, Prisma.ShiftWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
   inputBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  materialUsages?: Prisma.ProductionMaterialUsageListRelationFilter
 }, "id">
 
 export type ProductionRecordOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   productionDate?: Prisma.SortOrder
+  machineNo?: Prisma.SortOrderInput | Prisma.SortOrder
   areaId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
-  operatorName?: Prisma.SortOrderInput | Prisma.SortOrder
   computerCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  operatorName?: Prisma.SortOrderInput | Prisma.SortOrder
   outputQty?: Prisma.SortOrder
   okQty?: Prisma.SortOrder
   actualRm?: Prisma.SortOrder
   otReplace?: Prisma.SortOrderInput | Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   inputById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -407,16 +432,18 @@ export type ProductionRecordScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProductionRecordScalarWhereWithAggregatesInput | Prisma.ProductionRecordScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"ProductionRecord"> | number
   productionDate?: Prisma.DateTimeWithAggregatesFilter<"ProductionRecord"> | Date | string
+  machineNo?: Prisma.StringNullableWithAggregatesFilter<"ProductionRecord"> | string | null
   areaId?: Prisma.IntWithAggregatesFilter<"ProductionRecord"> | number
   shiftId?: Prisma.IntWithAggregatesFilter<"ProductionRecord"> | number
   productId?: Prisma.IntWithAggregatesFilter<"ProductionRecord"> | number
-  operatorName?: Prisma.StringNullableWithAggregatesFilter<"ProductionRecord"> | string | null
   computerCode?: Prisma.StringNullableWithAggregatesFilter<"ProductionRecord"> | string | null
+  operatorName?: Prisma.StringNullableWithAggregatesFilter<"ProductionRecord"> | string | null
   outputQty?: Prisma.DecimalWithAggregatesFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalWithAggregatesFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalWithAggregatesFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.StringNullableWithAggregatesFilter<"ProductionRecord"> | string | null
   remarks?: Prisma.StringNullableWithAggregatesFilter<"ProductionRecord"> | string | null
+  status?: Prisma.EnumProductionStatusWithAggregatesFilter<"ProductionRecord"> | $Enums.ProductionStatus
   inputById?: Prisma.IntWithAggregatesFilter<"ProductionRecord"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProductionRecord"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ProductionRecord"> | Date | string
@@ -424,87 +451,101 @@ export type ProductionRecordScalarWhereWithAggregatesInput = {
 
 export type ProductionRecordCreateInput = {
   productionDate: Date | string
-  operatorName?: string | null
+  machineNo?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   area: Prisma.AreaCreateNestedOneWithoutProductionRecordsInput
   shift: Prisma.ShiftCreateNestedOneWithoutProductionRecordsInput
   product: Prisma.ProductCreateNestedOneWithoutProductionRecordsInput
   inputBy: Prisma.UserCreateNestedOneWithoutProductionRecordsInput
+  materialUsages?: Prisma.ProductionMaterialUsageCreateNestedManyWithoutProductionRecordInput
 }
 
 export type ProductionRecordUncheckedCreateInput = {
   id?: number
   productionDate: Date | string
+  machineNo?: string | null
   areaId: number
   shiftId: number
   productId: number
-  operatorName?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  materialUsages?: Prisma.ProductionMaterialUsageUncheckedCreateNestedManyWithoutProductionRecordInput
 }
 
 export type ProductionRecordUpdateInput = {
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   area?: Prisma.AreaUpdateOneRequiredWithoutProductionRecordsNestedInput
   shift?: Prisma.ShiftUpdateOneRequiredWithoutProductionRecordsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutProductionRecordsNestedInput
   inputBy?: Prisma.UserUpdateOneRequiredWithoutProductionRecordsNestedInput
+  materialUsages?: Prisma.ProductionMaterialUsageUpdateManyWithoutProductionRecordNestedInput
 }
 
 export type ProductionRecordUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   areaId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   productId?: Prisma.IntFieldUpdateOperationsInput | number
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  materialUsages?: Prisma.ProductionMaterialUsageUncheckedUpdateManyWithoutProductionRecordNestedInput
 }
 
 export type ProductionRecordCreateManyInput = {
   id?: number
   productionDate: Date | string
+  machineNo?: string | null
   areaId: number
   shiftId: number
   productId: number
-  operatorName?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -512,13 +553,15 @@ export type ProductionRecordCreateManyInput = {
 
 export type ProductionRecordUpdateManyMutationInput = {
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -526,16 +569,18 @@ export type ProductionRecordUpdateManyMutationInput = {
 export type ProductionRecordUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   areaId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   productId?: Prisma.IntFieldUpdateOperationsInput | number
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -560,16 +605,18 @@ export type ProductionRecordOrderByRelevanceInput = {
 export type ProductionRecordCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   productionDate?: Prisma.SortOrder
+  machineNo?: Prisma.SortOrder
   areaId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
-  operatorName?: Prisma.SortOrder
   computerCode?: Prisma.SortOrder
+  operatorName?: Prisma.SortOrder
   outputQty?: Prisma.SortOrder
   okQty?: Prisma.SortOrder
   actualRm?: Prisma.SortOrder
   otReplace?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   inputById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -589,16 +636,18 @@ export type ProductionRecordAvgOrderByAggregateInput = {
 export type ProductionRecordMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   productionDate?: Prisma.SortOrder
+  machineNo?: Prisma.SortOrder
   areaId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
-  operatorName?: Prisma.SortOrder
   computerCode?: Prisma.SortOrder
+  operatorName?: Prisma.SortOrder
   outputQty?: Prisma.SortOrder
   okQty?: Prisma.SortOrder
   actualRm?: Prisma.SortOrder
   otReplace?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   inputById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -607,16 +656,18 @@ export type ProductionRecordMaxOrderByAggregateInput = {
 export type ProductionRecordMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   productionDate?: Prisma.SortOrder
+  machineNo?: Prisma.SortOrder
   areaId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
-  operatorName?: Prisma.SortOrder
   computerCode?: Prisma.SortOrder
+  operatorName?: Prisma.SortOrder
   outputQty?: Prisma.SortOrder
   okQty?: Prisma.SortOrder
   actualRm?: Prisma.SortOrder
   otReplace?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   inputById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -631,6 +682,11 @@ export type ProductionRecordSumOrderByAggregateInput = {
   okQty?: Prisma.SortOrder
   actualRm?: Prisma.SortOrder
   inputById?: Prisma.SortOrder
+}
+
+export type ProductionRecordScalarRelationFilter = {
+  is?: Prisma.ProductionRecordWhereInput
+  isNot?: Prisma.ProductionRecordWhereInput
 }
 
 export type ProductionRecordCreateNestedManyWithoutInputByInput = {
@@ -801,37 +857,61 @@ export type ProductionRecordUncheckedUpdateManyWithoutProductNestedInput = {
   deleteMany?: Prisma.ProductionRecordScalarWhereInput | Prisma.ProductionRecordScalarWhereInput[]
 }
 
+export type EnumProductionStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ProductionStatus
+}
+
+export type ProductionRecordCreateNestedOneWithoutMaterialUsagesInput = {
+  create?: Prisma.XOR<Prisma.ProductionRecordCreateWithoutMaterialUsagesInput, Prisma.ProductionRecordUncheckedCreateWithoutMaterialUsagesInput>
+  connectOrCreate?: Prisma.ProductionRecordCreateOrConnectWithoutMaterialUsagesInput
+  connect?: Prisma.ProductionRecordWhereUniqueInput
+}
+
+export type ProductionRecordUpdateOneRequiredWithoutMaterialUsagesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductionRecordCreateWithoutMaterialUsagesInput, Prisma.ProductionRecordUncheckedCreateWithoutMaterialUsagesInput>
+  connectOrCreate?: Prisma.ProductionRecordCreateOrConnectWithoutMaterialUsagesInput
+  upsert?: Prisma.ProductionRecordUpsertWithoutMaterialUsagesInput
+  connect?: Prisma.ProductionRecordWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductionRecordUpdateToOneWithWhereWithoutMaterialUsagesInput, Prisma.ProductionRecordUpdateWithoutMaterialUsagesInput>, Prisma.ProductionRecordUncheckedUpdateWithoutMaterialUsagesInput>
+}
+
 export type ProductionRecordCreateWithoutInputByInput = {
   productionDate: Date | string
-  operatorName?: string | null
+  machineNo?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   area: Prisma.AreaCreateNestedOneWithoutProductionRecordsInput
   shift: Prisma.ShiftCreateNestedOneWithoutProductionRecordsInput
   product: Prisma.ProductCreateNestedOneWithoutProductionRecordsInput
+  materialUsages?: Prisma.ProductionMaterialUsageCreateNestedManyWithoutProductionRecordInput
 }
 
 export type ProductionRecordUncheckedCreateWithoutInputByInput = {
   id?: number
   productionDate: Date | string
+  machineNo?: string | null
   areaId: number
   shiftId: number
   productId: number
-  operatorName?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  materialUsages?: Prisma.ProductionMaterialUsageUncheckedCreateNestedManyWithoutProductionRecordInput
 }
 
 export type ProductionRecordCreateOrConnectWithoutInputByInput = {
@@ -866,16 +946,18 @@ export type ProductionRecordScalarWhereInput = {
   NOT?: Prisma.ProductionRecordScalarWhereInput | Prisma.ProductionRecordScalarWhereInput[]
   id?: Prisma.IntFilter<"ProductionRecord"> | number
   productionDate?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
+  machineNo?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   areaId?: Prisma.IntFilter<"ProductionRecord"> | number
   shiftId?: Prisma.IntFilter<"ProductionRecord"> | number
   productId?: Prisma.IntFilter<"ProductionRecord"> | number
-  operatorName?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   computerCode?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  operatorName?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   outputQty?: Prisma.DecimalFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFilter<"ProductionRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   remarks?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  status?: Prisma.EnumProductionStatusFilter<"ProductionRecord"> | $Enums.ProductionStatus
   inputById?: Prisma.IntFilter<"ProductionRecord"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
@@ -883,35 +965,41 @@ export type ProductionRecordScalarWhereInput = {
 
 export type ProductionRecordCreateWithoutAreaInput = {
   productionDate: Date | string
-  operatorName?: string | null
+  machineNo?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   shift: Prisma.ShiftCreateNestedOneWithoutProductionRecordsInput
   product: Prisma.ProductCreateNestedOneWithoutProductionRecordsInput
   inputBy: Prisma.UserCreateNestedOneWithoutProductionRecordsInput
+  materialUsages?: Prisma.ProductionMaterialUsageCreateNestedManyWithoutProductionRecordInput
 }
 
 export type ProductionRecordUncheckedCreateWithoutAreaInput = {
   id?: number
   productionDate: Date | string
+  machineNo?: string | null
   shiftId: number
   productId: number
-  operatorName?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  materialUsages?: Prisma.ProductionMaterialUsageUncheckedCreateNestedManyWithoutProductionRecordInput
 }
 
 export type ProductionRecordCreateOrConnectWithoutAreaInput = {
@@ -942,35 +1030,41 @@ export type ProductionRecordUpdateManyWithWhereWithoutAreaInput = {
 
 export type ProductionRecordCreateWithoutShiftInput = {
   productionDate: Date | string
-  operatorName?: string | null
+  machineNo?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   area: Prisma.AreaCreateNestedOneWithoutProductionRecordsInput
   product: Prisma.ProductCreateNestedOneWithoutProductionRecordsInput
   inputBy: Prisma.UserCreateNestedOneWithoutProductionRecordsInput
+  materialUsages?: Prisma.ProductionMaterialUsageCreateNestedManyWithoutProductionRecordInput
 }
 
 export type ProductionRecordUncheckedCreateWithoutShiftInput = {
   id?: number
   productionDate: Date | string
+  machineNo?: string | null
   areaId: number
   productId: number
-  operatorName?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  materialUsages?: Prisma.ProductionMaterialUsageUncheckedCreateNestedManyWithoutProductionRecordInput
 }
 
 export type ProductionRecordCreateOrConnectWithoutShiftInput = {
@@ -1001,35 +1095,41 @@ export type ProductionRecordUpdateManyWithWhereWithoutShiftInput = {
 
 export type ProductionRecordCreateWithoutProductInput = {
   productionDate: Date | string
-  operatorName?: string | null
+  machineNo?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   area: Prisma.AreaCreateNestedOneWithoutProductionRecordsInput
   shift: Prisma.ShiftCreateNestedOneWithoutProductionRecordsInput
   inputBy: Prisma.UserCreateNestedOneWithoutProductionRecordsInput
+  materialUsages?: Prisma.ProductionMaterialUsageCreateNestedManyWithoutProductionRecordInput
 }
 
 export type ProductionRecordUncheckedCreateWithoutProductInput = {
   id?: number
   productionDate: Date | string
+  machineNo?: string | null
   areaId: number
   shiftId: number
-  operatorName?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  materialUsages?: Prisma.ProductionMaterialUsageUncheckedCreateNestedManyWithoutProductionRecordInput
 }
 
 export type ProductionRecordCreateOrConnectWithoutProductInput = {
@@ -1058,69 +1158,173 @@ export type ProductionRecordUpdateManyWithWhereWithoutProductInput = {
   data: Prisma.XOR<Prisma.ProductionRecordUpdateManyMutationInput, Prisma.ProductionRecordUncheckedUpdateManyWithoutProductInput>
 }
 
-export type ProductionRecordCreateManyInputByInput = {
-  id?: number
+export type ProductionRecordCreateWithoutMaterialUsagesInput = {
   productionDate: Date | string
-  areaId: number
-  shiftId: number
-  productId: number
-  operatorName?: string | null
+  machineNo?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  area: Prisma.AreaCreateNestedOneWithoutProductionRecordsInput
+  shift: Prisma.ShiftCreateNestedOneWithoutProductionRecordsInput
+  product: Prisma.ProductCreateNestedOneWithoutProductionRecordsInput
+  inputBy: Prisma.UserCreateNestedOneWithoutProductionRecordsInput
+}
+
+export type ProductionRecordUncheckedCreateWithoutMaterialUsagesInput = {
+  id?: number
+  productionDate: Date | string
+  machineNo?: string | null
+  areaId: number
+  shiftId: number
+  productId: number
+  computerCode?: string | null
+  operatorName?: string | null
+  outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
+  okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
+  actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otReplace?: string | null
+  remarks?: string | null
+  status?: $Enums.ProductionStatus
+  inputById: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ProductionRecordCreateOrConnectWithoutMaterialUsagesInput = {
+  where: Prisma.ProductionRecordWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductionRecordCreateWithoutMaterialUsagesInput, Prisma.ProductionRecordUncheckedCreateWithoutMaterialUsagesInput>
+}
+
+export type ProductionRecordUpsertWithoutMaterialUsagesInput = {
+  update: Prisma.XOR<Prisma.ProductionRecordUpdateWithoutMaterialUsagesInput, Prisma.ProductionRecordUncheckedUpdateWithoutMaterialUsagesInput>
+  create: Prisma.XOR<Prisma.ProductionRecordCreateWithoutMaterialUsagesInput, Prisma.ProductionRecordUncheckedCreateWithoutMaterialUsagesInput>
+  where?: Prisma.ProductionRecordWhereInput
+}
+
+export type ProductionRecordUpdateToOneWithWhereWithoutMaterialUsagesInput = {
+  where?: Prisma.ProductionRecordWhereInput
+  data: Prisma.XOR<Prisma.ProductionRecordUpdateWithoutMaterialUsagesInput, Prisma.ProductionRecordUncheckedUpdateWithoutMaterialUsagesInput>
+}
+
+export type ProductionRecordUpdateWithoutMaterialUsagesInput = {
+  productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  area?: Prisma.AreaUpdateOneRequiredWithoutProductionRecordsNestedInput
+  shift?: Prisma.ShiftUpdateOneRequiredWithoutProductionRecordsNestedInput
+  product?: Prisma.ProductUpdateOneRequiredWithoutProductionRecordsNestedInput
+  inputBy?: Prisma.UserUpdateOneRequiredWithoutProductionRecordsNestedInput
+}
+
+export type ProductionRecordUncheckedUpdateWithoutMaterialUsagesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  areaId?: Prisma.IntFieldUpdateOperationsInput | number
+  shiftId?: Prisma.IntFieldUpdateOperationsInput | number
+  productId?: Prisma.IntFieldUpdateOperationsInput | number
+  computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
+  inputById?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProductionRecordCreateManyInputByInput = {
+  id?: number
+  productionDate: Date | string
+  machineNo?: string | null
+  areaId: number
+  shiftId: number
+  productId: number
+  computerCode?: string | null
+  operatorName?: string | null
+  outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
+  okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
+  actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
+  otReplace?: string | null
+  remarks?: string | null
+  status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type ProductionRecordUpdateWithoutInputByInput = {
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   area?: Prisma.AreaUpdateOneRequiredWithoutProductionRecordsNestedInput
   shift?: Prisma.ShiftUpdateOneRequiredWithoutProductionRecordsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutProductionRecordsNestedInput
+  materialUsages?: Prisma.ProductionMaterialUsageUpdateManyWithoutProductionRecordNestedInput
 }
 
 export type ProductionRecordUncheckedUpdateWithoutInputByInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   areaId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   productId?: Prisma.IntFieldUpdateOperationsInput | number
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  materialUsages?: Prisma.ProductionMaterialUsageUncheckedUpdateManyWithoutProductionRecordNestedInput
 }
 
 export type ProductionRecordUncheckedUpdateManyWithoutInputByInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   areaId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   productId?: Prisma.IntFieldUpdateOperationsInput | number
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1128,15 +1332,17 @@ export type ProductionRecordUncheckedUpdateManyWithoutInputByInput = {
 export type ProductionRecordCreateManyAreaInput = {
   id?: number
   productionDate: Date | string
+  machineNo?: string | null
   shiftId: number
   productId: number
-  operatorName?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1144,49 +1350,57 @@ export type ProductionRecordCreateManyAreaInput = {
 
 export type ProductionRecordUpdateWithoutAreaInput = {
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   shift?: Prisma.ShiftUpdateOneRequiredWithoutProductionRecordsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutProductionRecordsNestedInput
   inputBy?: Prisma.UserUpdateOneRequiredWithoutProductionRecordsNestedInput
+  materialUsages?: Prisma.ProductionMaterialUsageUpdateManyWithoutProductionRecordNestedInput
 }
 
 export type ProductionRecordUncheckedUpdateWithoutAreaInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   productId?: Prisma.IntFieldUpdateOperationsInput | number
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  materialUsages?: Prisma.ProductionMaterialUsageUncheckedUpdateManyWithoutProductionRecordNestedInput
 }
 
 export type ProductionRecordUncheckedUpdateManyWithoutAreaInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   productId?: Prisma.IntFieldUpdateOperationsInput | number
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1195,15 +1409,17 @@ export type ProductionRecordUncheckedUpdateManyWithoutAreaInput = {
 export type ProductionRecordCreateManyShiftInput = {
   id?: number
   productionDate: Date | string
+  machineNo?: string | null
   areaId: number
   productId: number
-  operatorName?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1211,49 +1427,57 @@ export type ProductionRecordCreateManyShiftInput = {
 
 export type ProductionRecordUpdateWithoutShiftInput = {
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   area?: Prisma.AreaUpdateOneRequiredWithoutProductionRecordsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutProductionRecordsNestedInput
   inputBy?: Prisma.UserUpdateOneRequiredWithoutProductionRecordsNestedInput
+  materialUsages?: Prisma.ProductionMaterialUsageUpdateManyWithoutProductionRecordNestedInput
 }
 
 export type ProductionRecordUncheckedUpdateWithoutShiftInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   areaId?: Prisma.IntFieldUpdateOperationsInput | number
   productId?: Prisma.IntFieldUpdateOperationsInput | number
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  materialUsages?: Prisma.ProductionMaterialUsageUncheckedUpdateManyWithoutProductionRecordNestedInput
 }
 
 export type ProductionRecordUncheckedUpdateManyWithoutShiftInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   areaId?: Prisma.IntFieldUpdateOperationsInput | number
   productId?: Prisma.IntFieldUpdateOperationsInput | number
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1262,15 +1486,17 @@ export type ProductionRecordUncheckedUpdateManyWithoutShiftInput = {
 export type ProductionRecordCreateManyProductInput = {
   id?: number
   productionDate: Date | string
+  machineNo?: string | null
   areaId: number
   shiftId: number
-  operatorName?: string | null
   computerCode?: string | null
+  operatorName?: string | null
   outputQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty: runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm: runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: string | null
   remarks?: string | null
+  status?: $Enums.ProductionStatus
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1278,69 +1504,108 @@ export type ProductionRecordCreateManyProductInput = {
 
 export type ProductionRecordUpdateWithoutProductInput = {
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   area?: Prisma.AreaUpdateOneRequiredWithoutProductionRecordsNestedInput
   shift?: Prisma.ShiftUpdateOneRequiredWithoutProductionRecordsNestedInput
   inputBy?: Prisma.UserUpdateOneRequiredWithoutProductionRecordsNestedInput
+  materialUsages?: Prisma.ProductionMaterialUsageUpdateManyWithoutProductionRecordNestedInput
 }
 
 export type ProductionRecordUncheckedUpdateWithoutProductInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   areaId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  materialUsages?: Prisma.ProductionMaterialUsageUncheckedUpdateManyWithoutProductionRecordNestedInput
 }
 
 export type ProductionRecordUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   productionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  machineNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   areaId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
-  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   computerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   okQty?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   actualRm?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   otReplace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
+/**
+ * Count Type ProductionRecordCountOutputType
+ */
+
+export type ProductionRecordCountOutputType = {
+  materialUsages: number
+}
+
+export type ProductionRecordCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  materialUsages?: boolean | ProductionRecordCountOutputTypeCountMaterialUsagesArgs
+}
+
+/**
+ * ProductionRecordCountOutputType without action
+ */
+export type ProductionRecordCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProductionRecordCountOutputType
+   */
+  select?: Prisma.ProductionRecordCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ProductionRecordCountOutputType without action
+ */
+export type ProductionRecordCountOutputTypeCountMaterialUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProductionMaterialUsageWhereInput
+}
+
 
 export type ProductionRecordSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   productionDate?: boolean
+  machineNo?: boolean
   areaId?: boolean
   shiftId?: boolean
   productId?: boolean
-  operatorName?: boolean
   computerCode?: boolean
+  operatorName?: boolean
   outputQty?: boolean
   okQty?: boolean
   actualRm?: boolean
   otReplace?: boolean
   remarks?: boolean
+  status?: boolean
   inputById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1348,6 +1613,8 @@ export type ProductionRecordSelect<ExtArgs extends runtime.Types.Extensions.Inte
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   inputBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  materialUsages?: boolean | Prisma.ProductionRecord$materialUsagesArgs<ExtArgs>
+  _count?: boolean | Prisma.ProductionRecordCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["productionRecord"]>
 
 
@@ -1355,27 +1622,31 @@ export type ProductionRecordSelect<ExtArgs extends runtime.Types.Extensions.Inte
 export type ProductionRecordSelectScalar = {
   id?: boolean
   productionDate?: boolean
+  machineNo?: boolean
   areaId?: boolean
   shiftId?: boolean
   productId?: boolean
-  operatorName?: boolean
   computerCode?: boolean
+  operatorName?: boolean
   outputQty?: boolean
   okQty?: boolean
   actualRm?: boolean
   otReplace?: boolean
   remarks?: boolean
+  status?: boolean
   inputById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProductionRecordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productionDate" | "areaId" | "shiftId" | "productId" | "operatorName" | "computerCode" | "outputQty" | "okQty" | "actualRm" | "otReplace" | "remarks" | "inputById" | "createdAt" | "updatedAt", ExtArgs["result"]["productionRecord"]>
+export type ProductionRecordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productionDate" | "machineNo" | "areaId" | "shiftId" | "productId" | "computerCode" | "operatorName" | "outputQty" | "okQty" | "actualRm" | "otReplace" | "remarks" | "status" | "inputById" | "createdAt" | "updatedAt", ExtArgs["result"]["productionRecord"]>
 export type ProductionRecordInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   area?: boolean | Prisma.AreaDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   inputBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  materialUsages?: boolean | Prisma.ProductionRecord$materialUsagesArgs<ExtArgs>
+  _count?: boolean | Prisma.ProductionRecordCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $ProductionRecordPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1385,20 +1656,23 @@ export type $ProductionRecordPayload<ExtArgs extends runtime.Types.Extensions.In
     shift: Prisma.$ShiftPayload<ExtArgs>
     product: Prisma.$ProductPayload<ExtArgs>
     inputBy: Prisma.$UserPayload<ExtArgs>
+    materialUsages: Prisma.$ProductionMaterialUsagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     productionDate: Date
+    machineNo: string | null
     areaId: number
     shiftId: number
     productId: number
-    operatorName: string | null
     computerCode: string | null
+    operatorName: string | null
     outputQty: runtime.Decimal
     okQty: runtime.Decimal
     actualRm: runtime.Decimal
     otReplace: string | null
     remarks: string | null
+    status: $Enums.ProductionStatus
     inputById: number
     createdAt: Date
     updatedAt: Date
@@ -1746,6 +2020,7 @@ export interface Prisma__ProductionRecordClient<T, Null = never, ExtArgs extends
   shift<T extends Prisma.ShiftDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShiftDefaultArgs<ExtArgs>>): Prisma.Prisma__ShiftClient<runtime.Types.Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   product<T extends Prisma.ProductDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductDefaultArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   inputBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  materialUsages<T extends Prisma.ProductionRecord$materialUsagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductionRecord$materialUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductionMaterialUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1777,16 +2052,18 @@ export interface Prisma__ProductionRecordClient<T, Null = never, ExtArgs extends
 export interface ProductionRecordFieldRefs {
   readonly id: Prisma.FieldRef<"ProductionRecord", 'Int'>
   readonly productionDate: Prisma.FieldRef<"ProductionRecord", 'DateTime'>
+  readonly machineNo: Prisma.FieldRef<"ProductionRecord", 'String'>
   readonly areaId: Prisma.FieldRef<"ProductionRecord", 'Int'>
   readonly shiftId: Prisma.FieldRef<"ProductionRecord", 'Int'>
   readonly productId: Prisma.FieldRef<"ProductionRecord", 'Int'>
-  readonly operatorName: Prisma.FieldRef<"ProductionRecord", 'String'>
   readonly computerCode: Prisma.FieldRef<"ProductionRecord", 'String'>
+  readonly operatorName: Prisma.FieldRef<"ProductionRecord", 'String'>
   readonly outputQty: Prisma.FieldRef<"ProductionRecord", 'Decimal'>
   readonly okQty: Prisma.FieldRef<"ProductionRecord", 'Decimal'>
   readonly actualRm: Prisma.FieldRef<"ProductionRecord", 'Decimal'>
   readonly otReplace: Prisma.FieldRef<"ProductionRecord", 'String'>
   readonly remarks: Prisma.FieldRef<"ProductionRecord", 'String'>
+  readonly status: Prisma.FieldRef<"ProductionRecord", 'ProductionStatus'>
   readonly inputById: Prisma.FieldRef<"ProductionRecord", 'Int'>
   readonly createdAt: Prisma.FieldRef<"ProductionRecord", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ProductionRecord", 'DateTime'>
@@ -2135,6 +2412,30 @@ export type ProductionRecordDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many ProductionRecords to delete.
    */
   limit?: number
+}
+
+/**
+ * ProductionRecord.materialUsages
+ */
+export type ProductionRecord$materialUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProductionMaterialUsage
+   */
+  select?: Prisma.ProductionMaterialUsageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProductionMaterialUsage
+   */
+  omit?: Prisma.ProductionMaterialUsageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductionMaterialUsageInclude<ExtArgs> | null
+  where?: Prisma.ProductionMaterialUsageWhereInput
+  orderBy?: Prisma.ProductionMaterialUsageOrderByWithRelationInput | Prisma.ProductionMaterialUsageOrderByWithRelationInput[]
+  cursor?: Prisma.ProductionMaterialUsageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProductionMaterialUsageScalarFieldEnum | Prisma.ProductionMaterialUsageScalarFieldEnum[]
 }
 
 /**

@@ -31,6 +31,7 @@ const menuGroups = [
           </svg>
         ),
       },
+
       {
         name: "Production",
         href: "/admin/production",
@@ -50,6 +51,7 @@ const menuGroups = [
       },
     ],
   },
+
   {
     title: "Master Data",
     items: [
@@ -70,23 +72,7 @@ const menuGroups = [
           </svg>
         ),
       },
-      {
-        name: "Production Target",
-        href: "/admin/targets",
-        icon: (
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            className="h-5 w-5"
-          >
-            <circle cx="12" cy="12" r="9" />
-            <circle cx="12" cy="12" r="5" />
-            <circle cx="12" cy="12" r="1" />
-          </svg>
-        ),
-      },
+
       {
         name: "Areas",
         href: "/admin/areas",
@@ -108,6 +94,7 @@ const menuGroups = [
           </svg>
         ),
       },
+
       {
         name: "Shifts",
         href: "/admin/shifts",
@@ -124,6 +111,7 @@ const menuGroups = [
           </svg>
         ),
       },
+
       {
         name: "Users",
         href: "/admin/users",
@@ -170,9 +158,12 @@ export default function Sidebar({
     setLoggingOut(true);
 
     try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-      });
+      const response = await fetch(
+        "/api/auth/logout",
+        {
+          method: "POST",
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Logout gagal");
@@ -184,16 +175,18 @@ export default function Sidebar({
       router.replace("/login");
       router.refresh();
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error(
+        "Logout error:",
+        error
+      );
+
       setLoggingOut(false);
     }
   }
 
   return (
     <>
-      {/* ================================================= */}
       {/* MOBILE OVERLAY */}
-      {/* ================================================= */}
       {open && (
         <button
           type="button"
@@ -208,9 +201,7 @@ export default function Sidebar({
         />
       )}
 
-      {/* ================================================= */}
       {/* SIDEBAR */}
-      {/* ================================================= */}
       <aside
         className={`
           fixed inset-y-0 left-0 z-[95]
@@ -224,13 +215,9 @@ export default function Sidebar({
           ${open ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        {/* ================================================= */}
         {/* HEADER */}
-        {/* ================================================= */}
         <div className="flex h-16 shrink-0 items-center justify-between border-b border-slate-100 px-5">
           <div className="flex items-center gap-3">
-
-            {/* Logo */}
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 shadow-sm shadow-blue-600/20">
               <svg
                 viewBox="0 0 24 24"
@@ -260,7 +247,6 @@ export default function Sidebar({
             </div>
           </div>
 
-          {/* Close mobile */}
           <button
             type="button"
             onClick={onClose}
@@ -286,13 +272,13 @@ export default function Sidebar({
           </button>
         </div>
 
-        {/* ================================================= */}
         {/* NAVIGATION */}
-        {/* ================================================= */}
         <nav className="flex-1 overflow-y-auto px-3 py-5">
           {menuGroups.map((group) => (
-            <div key={group.title} className="mb-7">
-
+            <div
+              key={group.title}
+              className="mb-7"
+            >
               <div className="mb-2 px-3">
                 <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">
                   {group.title}
@@ -301,7 +287,8 @@ export default function Sidebar({
 
               <div className="space-y-1">
                 {group.items.map((item) => {
-                  const active = isActive(item.href);
+                  const active =
+                    isActive(item.href);
 
                   return (
                     <Link
@@ -362,20 +349,14 @@ export default function Sidebar({
           ))}
         </nav>
 
-        {/* ================================================= */}
         {/* USER INFO */}
-        {/* ================================================= */}
         <div className="shrink-0 border-t border-slate-100 p-3">
           <div className="rounded-xl border border-slate-100 bg-slate-50 p-3">
-
             <div className="flex items-center gap-3">
-
-              {/* Avatar */}
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600">
                 A
               </div>
 
-              {/* User */}
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-slate-800">
                   Administrator
@@ -390,10 +371,11 @@ export default function Sidebar({
                 </div>
               </div>
 
-              {/* User Menu */}
               <button
                 type="button"
-                onClick={() => setLogoutOpen(true)}
+                onClick={() =>
+                  setLogoutOpen(true)
+                }
                 aria-label="User menu"
                 className="
                   flex h-8 w-8 items-center justify-center
@@ -408,12 +390,23 @@ export default function Sidebar({
                   fill="currentColor"
                   className="h-5 w-5"
                 >
-                  <circle cx="5" cy="12" r="1.5" />
-                  <circle cx="12" cy="12" r="1.5" />
-                  <circle cx="19" cy="12" r="1.5" />
+                  <circle
+                    cx="5"
+                    cy="12"
+                    r="1.5"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="1.5"
+                  />
+                  <circle
+                    cx="19"
+                    cy="12"
+                    r="1.5"
+                  />
                 </svg>
               </button>
-
             </div>
           </div>
 
@@ -423,9 +416,7 @@ export default function Sidebar({
         </div>
       </aside>
 
-      {/* ================================================= */}
-      {/* LOGOUT CONFIRMATION MODAL */}
-      {/* ================================================= */}
+      {/* LOGOUT MODAL */}
       {logoutOpen && (
         <div
           className="
@@ -449,7 +440,6 @@ export default function Sidebar({
               shadow-2xl
             "
           >
-            {/* Icon */}
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
               <svg
                 viewBox="0 0 24 24"
@@ -464,7 +454,6 @@ export default function Sidebar({
               </svg>
             </div>
 
-            {/* Text */}
             <div className="mt-4 text-center">
               <h3
                 id="logout-title"
@@ -474,7 +463,8 @@ export default function Sidebar({
               </h3>
 
               <p className="mt-2 text-sm leading-6 text-slate-500">
-                Apakah Anda yakin ingin logout dari{" "}
+                Apakah Anda yakin ingin logout
+                dari{" "}
                 <span className="font-semibold text-slate-700">
                   PMC Production
                 </span>
@@ -482,14 +472,13 @@ export default function Sidebar({
               </p>
             </div>
 
-            {/* Buttons */}
             <div className="mt-6 flex gap-3">
-
-              {/* Batal */}
               <button
                 type="button"
                 disabled={loggingOut}
-                onClick={() => setLogoutOpen(false)}
+                onClick={() =>
+                  setLogoutOpen(false)
+                }
                 className="
                   flex-1 rounded-xl
                   border border-slate-200
@@ -506,7 +495,6 @@ export default function Sidebar({
                 Batal
               </button>
 
-              {/* Logout */}
               <button
                 type="button"
                 disabled={loggingOut}
@@ -539,6 +527,7 @@ export default function Sidebar({
                         strokeWidth="3"
                         className="opacity-25"
                       />
+
                       <path
                         d="M21 12a9 9 0 0 0-9-9"
                         stroke="currentColor"
@@ -553,7 +542,6 @@ export default function Sidebar({
                   "Logout"
                 )}
               </button>
-
             </div>
           </div>
         </div>

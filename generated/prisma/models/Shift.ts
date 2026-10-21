@@ -38,8 +38,6 @@ export type ShiftMinAggregateOutputType = {
   id: number | null
   code: string | null
   name: string | null
-  startTime: string | null
-  endTime: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -49,8 +47,6 @@ export type ShiftMaxAggregateOutputType = {
   id: number | null
   code: string | null
   name: string | null
-  startTime: string | null
-  endTime: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -60,8 +56,6 @@ export type ShiftCountAggregateOutputType = {
   id: number
   code: number
   name: number
-  startTime: number
-  endTime: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -81,8 +75,6 @@ export type ShiftMinAggregateInputType = {
   id?: true
   code?: true
   name?: true
-  startTime?: true
-  endTime?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -92,8 +84,6 @@ export type ShiftMaxAggregateInputType = {
   id?: true
   code?: true
   name?: true
-  startTime?: true
-  endTime?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -103,8 +93,6 @@ export type ShiftCountAggregateInputType = {
   id?: true
   code?: true
   name?: true
-  startTime?: true
-  endTime?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -201,8 +189,6 @@ export type ShiftGroupByOutputType = {
   id: number
   code: string
   name: string
-  startTime: string
-  endTime: string
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -235,24 +221,22 @@ export type ShiftWhereInput = {
   id?: Prisma.IntFilter<"Shift"> | number
   code?: Prisma.StringFilter<"Shift"> | string
   name?: Prisma.StringFilter<"Shift"> | string
-  startTime?: Prisma.StringFilter<"Shift"> | string
-  endTime?: Prisma.StringFilter<"Shift"> | string
   isActive?: Prisma.BoolFilter<"Shift"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Shift"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Shift"> | Date | string
   productionRecords?: Prisma.ProductionRecordListRelationFilter
+  computers?: Prisma.ComputerListRelationFilter
 }
 
 export type ShiftOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  startTime?: Prisma.SortOrder
-  endTime?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   productionRecords?: Prisma.ProductionRecordOrderByRelationAggregateInput
+  computers?: Prisma.ComputerOrderByRelationAggregateInput
   _relevance?: Prisma.ShiftOrderByRelevanceInput
 }
 
@@ -263,20 +247,17 @@ export type ShiftWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ShiftWhereInput[]
   NOT?: Prisma.ShiftWhereInput | Prisma.ShiftWhereInput[]
   name?: Prisma.StringFilter<"Shift"> | string
-  startTime?: Prisma.StringFilter<"Shift"> | string
-  endTime?: Prisma.StringFilter<"Shift"> | string
   isActive?: Prisma.BoolFilter<"Shift"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Shift"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Shift"> | Date | string
   productionRecords?: Prisma.ProductionRecordListRelationFilter
+  computers?: Prisma.ComputerListRelationFilter
 }, "id" | "code">
 
 export type ShiftOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  startTime?: Prisma.SortOrder
-  endTime?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -294,8 +275,6 @@ export type ShiftScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Shift"> | number
   code?: Prisma.StringWithAggregatesFilter<"Shift"> | string
   name?: Prisma.StringWithAggregatesFilter<"Shift"> | string
-  startTime?: Prisma.StringWithAggregatesFilter<"Shift"> | string
-  endTime?: Prisma.StringWithAggregatesFilter<"Shift"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"Shift"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Shift"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Shift"> | Date | string
@@ -304,55 +283,49 @@ export type ShiftScalarWhereWithAggregatesInput = {
 export type ShiftCreateInput = {
   code: string
   name: string
-  startTime: string
-  endTime: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   productionRecords?: Prisma.ProductionRecordCreateNestedManyWithoutShiftInput
+  computers?: Prisma.ComputerCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftUncheckedCreateInput = {
   id?: number
   code: string
   name: string
-  startTime: string
-  endTime: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   productionRecords?: Prisma.ProductionRecordUncheckedCreateNestedManyWithoutShiftInput
+  computers?: Prisma.ComputerUncheckedCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  startTime?: Prisma.StringFieldUpdateOperationsInput | string
-  endTime?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionRecords?: Prisma.ProductionRecordUpdateManyWithoutShiftNestedInput
+  computers?: Prisma.ComputerUpdateManyWithoutShiftNestedInput
 }
 
 export type ShiftUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  startTime?: Prisma.StringFieldUpdateOperationsInput | string
-  endTime?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionRecords?: Prisma.ProductionRecordUncheckedUpdateManyWithoutShiftNestedInput
+  computers?: Prisma.ComputerUncheckedUpdateManyWithoutShiftNestedInput
 }
 
 export type ShiftCreateManyInput = {
   id?: number
   code: string
   name: string
-  startTime: string
-  endTime: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -361,8 +334,6 @@ export type ShiftCreateManyInput = {
 export type ShiftUpdateManyMutationInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  startTime?: Prisma.StringFieldUpdateOperationsInput | string
-  endTime?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -372,8 +343,6 @@ export type ShiftUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  startTime?: Prisma.StringFieldUpdateOperationsInput | string
-  endTime?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -389,8 +358,6 @@ export type ShiftCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  startTime?: Prisma.SortOrder
-  endTime?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -404,8 +371,6 @@ export type ShiftMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  startTime?: Prisma.SortOrder
-  endTime?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -415,8 +380,6 @@ export type ShiftMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  startTime?: Prisma.SortOrder
-  endTime?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -426,9 +389,30 @@ export type ShiftSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type ShiftNullableScalarRelationFilter = {
+  is?: Prisma.ShiftWhereInput | null
+  isNot?: Prisma.ShiftWhereInput | null
+}
+
 export type ShiftScalarRelationFilter = {
   is?: Prisma.ShiftWhereInput
   isNot?: Prisma.ShiftWhereInput
+}
+
+export type ShiftCreateNestedOneWithoutComputersInput = {
+  create?: Prisma.XOR<Prisma.ShiftCreateWithoutComputersInput, Prisma.ShiftUncheckedCreateWithoutComputersInput>
+  connectOrCreate?: Prisma.ShiftCreateOrConnectWithoutComputersInput
+  connect?: Prisma.ShiftWhereUniqueInput
+}
+
+export type ShiftUpdateOneWithoutComputersNestedInput = {
+  create?: Prisma.XOR<Prisma.ShiftCreateWithoutComputersInput, Prisma.ShiftUncheckedCreateWithoutComputersInput>
+  connectOrCreate?: Prisma.ShiftCreateOrConnectWithoutComputersInput
+  upsert?: Prisma.ShiftUpsertWithoutComputersInput
+  disconnect?: Prisma.ShiftWhereInput | boolean
+  delete?: Prisma.ShiftWhereInput | boolean
+  connect?: Prisma.ShiftWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ShiftUpdateToOneWithWhereWithoutComputersInput, Prisma.ShiftUpdateWithoutComputersInput>, Prisma.ShiftUncheckedUpdateWithoutComputersInput>
 }
 
 export type ShiftCreateNestedOneWithoutProductionRecordsInput = {
@@ -445,25 +429,77 @@ export type ShiftUpdateOneRequiredWithoutProductionRecordsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ShiftUpdateToOneWithWhereWithoutProductionRecordsInput, Prisma.ShiftUpdateWithoutProductionRecordsInput>, Prisma.ShiftUncheckedUpdateWithoutProductionRecordsInput>
 }
 
-export type ShiftCreateWithoutProductionRecordsInput = {
+export type ShiftCreateWithoutComputersInput = {
   code: string
   name: string
-  startTime: string
-  endTime: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionRecords?: Prisma.ProductionRecordCreateNestedManyWithoutShiftInput
+}
+
+export type ShiftUncheckedCreateWithoutComputersInput = {
+  id?: number
+  code: string
+  name: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  productionRecords?: Prisma.ProductionRecordUncheckedCreateNestedManyWithoutShiftInput
+}
+
+export type ShiftCreateOrConnectWithoutComputersInput = {
+  where: Prisma.ShiftWhereUniqueInput
+  create: Prisma.XOR<Prisma.ShiftCreateWithoutComputersInput, Prisma.ShiftUncheckedCreateWithoutComputersInput>
+}
+
+export type ShiftUpsertWithoutComputersInput = {
+  update: Prisma.XOR<Prisma.ShiftUpdateWithoutComputersInput, Prisma.ShiftUncheckedUpdateWithoutComputersInput>
+  create: Prisma.XOR<Prisma.ShiftCreateWithoutComputersInput, Prisma.ShiftUncheckedCreateWithoutComputersInput>
+  where?: Prisma.ShiftWhereInput
+}
+
+export type ShiftUpdateToOneWithWhereWithoutComputersInput = {
+  where?: Prisma.ShiftWhereInput
+  data: Prisma.XOR<Prisma.ShiftUpdateWithoutComputersInput, Prisma.ShiftUncheckedUpdateWithoutComputersInput>
+}
+
+export type ShiftUpdateWithoutComputersInput = {
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionRecords?: Prisma.ProductionRecordUpdateManyWithoutShiftNestedInput
+}
+
+export type ShiftUncheckedUpdateWithoutComputersInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionRecords?: Prisma.ProductionRecordUncheckedUpdateManyWithoutShiftNestedInput
+}
+
+export type ShiftCreateWithoutProductionRecordsInput = {
+  code: string
+  name: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  computers?: Prisma.ComputerCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftUncheckedCreateWithoutProductionRecordsInput = {
   id?: number
   code: string
   name: string
-  startTime: string
-  endTime: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  computers?: Prisma.ComputerUncheckedCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftCreateOrConnectWithoutProductionRecordsInput = {
@@ -485,22 +521,20 @@ export type ShiftUpdateToOneWithWhereWithoutProductionRecordsInput = {
 export type ShiftUpdateWithoutProductionRecordsInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  startTime?: Prisma.StringFieldUpdateOperationsInput | string
-  endTime?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  computers?: Prisma.ComputerUpdateManyWithoutShiftNestedInput
 }
 
 export type ShiftUncheckedUpdateWithoutProductionRecordsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  startTime?: Prisma.StringFieldUpdateOperationsInput | string
-  endTime?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  computers?: Prisma.ComputerUncheckedUpdateManyWithoutShiftNestedInput
 }
 
 
@@ -510,10 +544,12 @@ export type ShiftUncheckedUpdateWithoutProductionRecordsInput = {
 
 export type ShiftCountOutputType = {
   productionRecords: number
+  computers: number
 }
 
 export type ShiftCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   productionRecords?: boolean | ShiftCountOutputTypeCountProductionRecordsArgs
+  computers?: boolean | ShiftCountOutputTypeCountComputersArgs
 }
 
 /**
@@ -533,17 +569,23 @@ export type ShiftCountOutputTypeCountProductionRecordsArgs<ExtArgs extends runti
   where?: Prisma.ProductionRecordWhereInput
 }
 
+/**
+ * ShiftCountOutputType without action
+ */
+export type ShiftCountOutputTypeCountComputersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ComputerWhereInput
+}
+
 
 export type ShiftSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   code?: boolean
   name?: boolean
-  startTime?: boolean
-  endTime?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   productionRecords?: boolean | Prisma.Shift$productionRecordsArgs<ExtArgs>
+  computers?: boolean | Prisma.Shift$computersArgs<ExtArgs>
   _count?: boolean | Prisma.ShiftCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["shift"]>
 
@@ -553,16 +595,15 @@ export type ShiftSelectScalar = {
   id?: boolean
   code?: boolean
   name?: boolean
-  startTime?: boolean
-  endTime?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ShiftOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "startTime" | "endTime" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["shift"]>
+export type ShiftOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["shift"]>
 export type ShiftInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   productionRecords?: boolean | Prisma.Shift$productionRecordsArgs<ExtArgs>
+  computers?: boolean | Prisma.Shift$computersArgs<ExtArgs>
   _count?: boolean | Prisma.ShiftCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -570,13 +611,12 @@ export type $ShiftPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name: "Shift"
   objects: {
     productionRecords: Prisma.$ProductionRecordPayload<ExtArgs>[]
+    computers: Prisma.$ComputerPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     code: string
     name: string
-    startTime: string
-    endTime: string
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -921,6 +961,7 @@ readonly fields: ShiftFieldRefs;
 export interface Prisma__ShiftClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   productionRecords<T extends Prisma.Shift$productionRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shift$productionRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductionRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  computers<T extends Prisma.Shift$computersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shift$computersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComputerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -953,8 +994,6 @@ export interface ShiftFieldRefs {
   readonly id: Prisma.FieldRef<"Shift", 'Int'>
   readonly code: Prisma.FieldRef<"Shift", 'String'>
   readonly name: Prisma.FieldRef<"Shift", 'String'>
-  readonly startTime: Prisma.FieldRef<"Shift", 'String'>
-  readonly endTime: Prisma.FieldRef<"Shift", 'String'>
   readonly isActive: Prisma.FieldRef<"Shift", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Shift", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Shift", 'DateTime'>
@@ -1327,6 +1366,30 @@ export type Shift$productionRecordsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.ProductionRecordScalarFieldEnum | Prisma.ProductionRecordScalarFieldEnum[]
+}
+
+/**
+ * Shift.computers
+ */
+export type Shift$computersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Computer
+   */
+  select?: Prisma.ComputerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Computer
+   */
+  omit?: Prisma.ComputerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ComputerInclude<ExtArgs> | null
+  where?: Prisma.ComputerWhereInput
+  orderBy?: Prisma.ComputerOrderByWithRelationInput | Prisma.ComputerOrderByWithRelationInput[]
+  cursor?: Prisma.ComputerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ComputerScalarFieldEnum | Prisma.ComputerScalarFieldEnum[]
 }
 
 /**
