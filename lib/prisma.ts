@@ -8,6 +8,10 @@ const adapter = new PrismaMariaDb({
   password: process.env.DB_PASSWORD!,
   database: process.env.DB_NAME!,
 
+  // Vercel → Aiven bisa butuh waktu lebih dari default 1 detik
+  connectTimeout: 10000,
+
+  // Batasi connection pool
   connectionLimit: 2,
 
   ssl: {
