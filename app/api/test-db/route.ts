@@ -20,13 +20,15 @@ export async function GET() {
       success: true,
       users,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Database error:", error);
 
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to retrieve users",
+        message: error?.message || "Database connection failed",
+        code: error?.code || null,
+        meta: error?.meta || null,
       },
       { status: 500 }
     );
