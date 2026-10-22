@@ -228,7 +228,9 @@ export default function ProductionTable({
 
   const [search, setSearch] = useState("");
 
-  const [dateFilter, setDateFilter] = useState("");
+  // DATE RANGE
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
   const [areaFilter, setAreaFilter] = useState("ALL");
 
@@ -324,6 +326,9 @@ export default function ProductionTable({
     const keyword = search.trim().toLowerCase();
 
     return [...productionData]
+      // =================================================
+      // SEARCH FILTER
+      // =================================================
       .filter((record) => {
         if (!keyword) return true;
 
@@ -346,11 +351,39 @@ export default function ProductionTable({
             .includes(keyword)
         );
       })
-      .filter((record) => {
-        if (!dateFilter) return true;
 
-        return normalizeDate(record.productionDate) === dateFilter;
+      // =================================================
+      // DATE RANGE FILTER
+      // =================================================
+      .filter((record) => {
+        const productionDate = normalizeDate(record.productionDate);
+
+        if (!productionDate) {
+          return false;
+        }
+
+        // Kalau From kosong dan To kosong
+        // berarti tidak ada filter tanggal
+        if (!dateFrom && !dateTo) {
+          return true;
+        }
+
+        // From Date
+        if (dateFrom && productionDate < dateFrom) {
+          return false;
+        }
+
+        // To Date
+        if (dateTo && productionDate > dateTo) {
+          return false;
+        }
+
+        return true;
       })
+
+      // =================================================
+      // AREA FILTER
+      // =================================================
       .filter((record) => {
         if (areaFilter === "ALL") return true;
 
@@ -358,6 +391,10 @@ export default function ProductionTable({
 
         return area === areaFilter;
       })
+
+      // =================================================
+      // SHIFT FILTER
+      // =================================================
       .filter((record) => {
         if (shiftFilter === "ALL") return true;
 
@@ -365,6 +402,10 @@ export default function ProductionTable({
 
         return shift === shiftFilter;
       })
+
+      // =================================================
+      // SORT
+      // =================================================
       .sort((a, b) => {
         return (
           new Date(b.productionDate).getTime() -
@@ -374,7 +415,8 @@ export default function ProductionTable({
   }, [
     productionData,
     search,
-    dateFilter,
+    dateFrom,
+    dateTo,
     areaFilter,
     shiftFilter,
   ]);
@@ -491,16 +533,31 @@ export default function ProductionTable({
 
   const clearFilters = () => {
     setSearch("");
-    setDateFilter("");
+    setDateFrom("");
+    setDateTo("");
     setAreaFilter("ALL");
     setShiftFilter("ALL");
   };
 
+  // ===================================================
+  // HAS FILTER
+  // ===================================================
+
   const hasFilter =
-    search ||
-    dateFilter ||
+    search.trim() !== "" ||
+    dateFrom !== "" ||
+    dateTo !== "" ||
     areaFilter !== "ALL" ||
     shiftFilter !== "ALL";
+
+  // ===================================================
+  // INVALID DATE RANGE
+  // ===================================================
+
+  const invalidDateRange =
+    dateFrom !== "" &&
+    dateTo !== "" &&
+    dateFrom > dateTo;
 
   // ===================================================
   // RENDER
@@ -676,6 +733,10 @@ export default function ProductionTable({
 
       <div className="border-b border-gray-200 bg-white px-6 py-4">
 
+        {/* =================================================
+            FIRST FILTER ROW
+        ================================================= */}
+
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
 
           {/* SEARCH */}
@@ -714,26 +775,91 @@ export default function ProductionTable({
 
           </div>
 
-          {/* DATE */}
+          {/* FROM DATE */}
 
           <div>
 
             <label className="mb-1.5 block text-xs font-medium text-gray-600">
-              Production Date
+              From Date
             </label>
 
             <input
               type="date"
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              value={dateFrom}
+              max={dateTo || undefined}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className={`w-full rounded-lg border bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 ${
+                invalidDateRange
+                  ? "border-red-300"
+                  : "border-gray-200"
+              }`}
             />
 
           </div>
 
-          {/* AREA */}
+          {/* TO DATE */}
 
           <div>
+
+            <label className="mb-1.5 block text-xs font-medium text-gray-600">
+              To Date
+            </label>
+
+            <input
+              type="date"
+              value={dateTo}
+              min={dateFrom || undefined}
+              onChange={(e) => setDateTo(e.target.value)}
+              className={`w-full rounded-lg border bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 ${
+                invalidDateRange
+                  ? "border-red-300"
+                  : "border-gray-200"
+              }`}
+            />
+
+          </div>
+
+        </div>
+
+        {/* =================================================
+            DATE RANGE INFO
+        ================================================= */}
+
+        {invalidDateRange && (
+          <div className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2">
+            <p className="text-xs font-medium text-red-600">
+              From Date tidak boleh lebih besar dari To Date.
+            </p>
+          </div>
+        )}
+
+        {!invalidDateRange && (dateFrom || dateTo) && (
+          <div className="mt-3 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2">
+            <p className="text-xs text-blue-700">
+              {dateFrom && dateTo
+                ? `Menampilkan data produksi dari ${formatDate(
+                    `${dateFrom}T00:00:00`
+                  )} sampai ${formatDate(`${dateTo}T00:00:00`)}`
+                : dateFrom
+                  ? `Menampilkan data produksi mulai ${formatDate(
+                      `${dateFrom}T00:00:00`
+                    )}`
+                  : `Menampilkan data produksi sampai ${formatDate(
+                      `${dateTo}T00:00:00`
+                    )}`}
+            </p>
+          </div>
+        )}
+
+        {/* =================================================
+            SECOND FILTER ROW
+        ================================================= */}
+
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end">
+
+          {/* AREA */}
+
+          <div className="w-full sm:w-64">
 
             <label className="mb-1.5 block text-xs font-medium text-gray-600">
               Production Area
@@ -744,6 +870,7 @@ export default function ProductionTable({
               onChange={(e) => setAreaFilter(e.target.value)}
               className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
+
               <option value="ALL">
                 All Areas
               </option>
@@ -753,15 +880,12 @@ export default function ProductionTable({
                   {area}
                 </option>
               ))}
+
             </select>
 
           </div>
 
-        </div>
-
-        {/* SECOND FILTER ROW */}
-
-        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end">
+          {/* SHIFT */}
 
           <div className="w-full sm:w-64">
 
@@ -774,6 +898,7 @@ export default function ProductionTable({
               onChange={(e) => setShiftFilter(e.target.value)}
               className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
+
               <option value="ALL">
                 All Shifts
               </option>
@@ -783,9 +908,12 @@ export default function ProductionTable({
                   {shift}
                 </option>
               ))}
+
             </select>
 
           </div>
+
+          {/* CLEAR */}
 
           {hasFilter && (
             <button
@@ -816,467 +944,491 @@ export default function ProductionTable({
       )}
 
       {/* =====================================================
-          TABLE
+          INVALID DATE RANGE
       ===================================================== */}
 
-      <div className="w-full overflow-x-auto">
+      {invalidDateRange ? (
+        <div className="border-b border-yellow-200 bg-yellow-50 px-6 py-8 text-center">
 
-        <table className="w-max min-w-full border-collapse">
+          <p className="text-sm font-medium text-yellow-700">
+            Periode tanggal tidak valid.
+          </p>
 
-          {/* =====================================================
-              HEADER
-          ===================================================== */}
+          <p className="mt-1 text-xs text-yellow-600">
+            Silakan pilih From Date yang lebih kecil atau sama dengan To Date.
+          </p>
 
-          <thead>
+        </div>
+      ) : (
+        /* =====================================================
+            TABLE
+        ===================================================== */
 
-            <tr className="bg-slate-50">
+        <div className="w-full overflow-x-auto">
 
-              {columns.map((column) => (
-                <th
-                  key={column.name}
-                  className={`
-                    ${column.width}
-                    border-b
-                    border-r
-                    border-gray-200
-                    px-4
-                    py-4
-                    text-center
-                    align-middle
-                    text-xs
-                    font-semibold
-                    leading-4
-                    text-slate-600
-                    last:border-r-0
-                    whitespace-nowrap
-                  `}
-                >
-                  {column.name}
-                </th>
-              ))}
+          <table className="w-max min-w-full border-collapse">
 
-            </tr>
+            {/* =====================================================
+                HEADER
+            ===================================================== */}
 
-          </thead>
+            <thead>
 
-          {/* =====================================================
-              BODY
-          ===================================================== */}
+              <tr className="bg-slate-50">
 
-          <tbody>
-
-            {/* LOADING */}
-
-            {isLoading ? (
-
-              <tr>
-
-                <td
-                  colSpan={columns.length}
-                  className="border-b border-gray-100 px-6 py-16 text-center"
-                >
-
-                  <div className="flex flex-col items-center justify-center">
-
-                    <div className="mb-4 h-8 w-8 animate-spin rounded-full border-2 border-gray-200 border-t-slate-600" />
-
-                    <p className="text-sm font-medium text-gray-600">
-                      Loading production data...
-                    </p>
-
-                  </div>
-
-                </td>
+                {columns.map((column) => (
+                  <th
+                    key={column.name}
+                    className={`
+                      ${column.width}
+                      border-b
+                      border-r
+                      border-gray-200
+                      px-4
+                      py-4
+                      text-center
+                      align-middle
+                      text-xs
+                      font-semibold
+                      leading-4
+                      text-slate-600
+                      last:border-r-0
+                      whitespace-nowrap
+                    `}
+                  >
+                    {column.name}
+                  </th>
+                ))}
 
               </tr>
 
-            ) : filteredProductionData.length === 0 ? (
+            </thead>
 
-              /* EMPTY */
+            {/* =====================================================
+                BODY
+            ===================================================== */}
 
-              <tr>
+            <tbody>
 
-                <td
-                  colSpan={columns.length}
-                  className="border-b border-gray-100 px-6 py-16 text-center"
-                >
+              {/* LOADING */}
 
-                  <div className="flex flex-col items-center justify-center">
+              {isLoading ? (
 
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+                <tr>
 
-                      <svg
-                        className="h-6 w-6 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
+                  <td
+                    colSpan={columns.length}
+                    className="border-b border-gray-100 px-6 py-16 text-center"
+                  >
 
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1.8}
-                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h6l5 5v11a2 2 0 01-2 2z"
-                        />
+                    <div className="flex flex-col items-center justify-center">
 
-                      </svg>
+                      <div className="mb-4 h-8 w-8 animate-spin rounded-full border-2 border-gray-200 border-t-slate-600" />
+
+                      <p className="text-sm font-medium text-gray-600">
+                        Loading production data...
+                      </p>
 
                     </div>
 
-                    <p className="text-sm font-medium text-gray-600">
-                      {hasFilter
-                        ? "Data tidak ditemukan"
-                        : "Belum ada data produksi"}
-                    </p>
+                  </td>
 
-                    <p className="mt-1 text-xs text-gray-400">
-                      {hasFilter
-                        ? "Coba ubah atau hapus filter yang digunakan."
-                        : "Data production akan muncul di sini setelah dilakukan input."}
-                    </p>
+                </tr>
 
-                  </div>
+              ) : filteredProductionData.length === 0 ? (
 
-                </td>
+                /* EMPTY */
 
-              </tr>
+                <tr>
 
-            ) : (
+                  <td
+                    colSpan={columns.length}
+                    className="border-b border-gray-100 px-6 py-16 text-center"
+                  >
 
-              /* DATA */
+                    <div className="flex flex-col items-center justify-center">
 
-              calculatedRows.map(
-                (
-                  {
-                    record,
-                    outputQty,
-                    okQty,
-                    actualRm,
-                    target8H,
-                    pmc,
-                  },
-                  index
-                ) => {
+                      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
 
-                  const rmUnit =
-                    record.product?.shotWeightUnit || "KG";
-
-                  const quantityUnit =
-                    record.product?.quantityUnit || "";
-
-                  const machineNo =
-                    record.machineNo?.trim() || "-";
-
-                  return (
-
-                    <tr
-                      key={record.id}
-                      className="transition-colors hover:bg-slate-50"
-                    >
-
-                      {/* NO */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
-                        {index + 1}
-                      </td>
-
-                      {/* DATE */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
-                        {formatDate(record.productionDate)}
-                      </td>
-
-                      {/* MONTH */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
-                        {getMonth(record.productionDate)}
-                      </td>
-
-                      {/* DAYS */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
-                        {getDay(record.productionDate)}
-                      </td>
-
-                      {/* MACHINE */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm font-medium text-gray-700">
-                        {machineNo}
-                      </td>
-
-                      {/* AREA */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
-                        {record.area?.name ||
-                          record.area?.code ||
-                          "-"}
-                      </td>
-
-                      {/* SHIFT */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
-                        {record.shift?.name ||
-                          record.shift?.code ||
-                          "-"}
-                      </td>
-
-                      {/* OPERATOR */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
-                        {record.operatorName || "-"}
-                      </td>
-
-                      {/* COMPUTER CODE */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
-                        {record.computerCode || "-"}
-                      </td>
-
-                      {/* PRODUCT */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-left text-sm font-medium text-gray-700">
-                        {record.product?.productName || "-"}
-                      </td>
-
-                      {/* DESCRIPTION */}
-
-                      <td className="max-w-xs border-b border-r border-gray-100 px-4 py-3 text-left text-sm text-gray-600">
-                        <div
-                          className="truncate"
-                          title={record.product?.description || ""}
+                        <svg
+                          className="h-6 w-6 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
                         >
-                          {record.product?.description || "-"}
-                        </div>
-                      </td>
 
-                      {/* OUTPUT */}
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.8}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h6l5 5v11a2 2 0 01-2 2z"
+                          />
 
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-gray-700">
+                        </svg>
 
-                        {formatNumber(outputQty, 2)}
+                      </div>
 
-                        {quantityUnit && (
-                          <span className="ml-1 text-xs text-gray-400">
-                            {quantityUnit}
-                          </span>
-                        )}
+                      <p className="text-sm font-medium text-gray-600">
 
-                      </td>
+                        {hasFilter
+                          ? "Data tidak ditemukan"
+                          : "Belum ada data produksi"}
 
-                      {/* OK */}
+                      </p>
 
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm text-gray-600">
+                      <p className="mt-1 text-xs text-gray-400">
 
-                        {formatNumber(okQty, 2)}
+                        {hasFilter
+                          ? "Coba ubah atau hapus filter yang digunakan."
+                          : "Data production akan muncul di sini setelah dilakukan input."}
 
-                        {quantityUnit && (
-                          <span className="ml-1 text-xs text-gray-400">
-                            {quantityUnit}
-                          </span>
-                        )}
+                      </p>
 
-                      </td>
+                    </div>
 
-                      {/* NG */}
+                  </td>
 
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-red-600">
+                </tr>
 
-                        {formatNumber(pmc.ngQty, 2)}
+              ) : (
 
-                        {quantityUnit && (
-                          <span className="ml-1 text-xs text-gray-400">
-                            {quantityUnit}
-                          </span>
-                        )}
+                /* DATA */
 
-                      </td>
+                calculatedRows.map(
+                  (
+                    {
+                      record,
+                      outputQty,
+                      okQty,
+                      actualRm,
+                      target8H,
+                      pmc,
+                    },
+                    index
+                  ) => {
 
-                      {/* NG RATE */}
+                    const rmUnit =
+                      record.product?.shotWeightUnit || "KG";
 
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-red-600">
+                    const quantityUnit =
+                      record.product?.quantityUnit || "";
 
-                        {formatNumber(pmc.ngRate, 2)}%
+                    const machineNo =
+                      record.machineNo?.trim() || "-";
 
-                      </td>
+                    return (
 
-                      {/* ACTUAL RM */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm text-gray-600">
-
-                        {formatNumber(actualRm, 3)}
-
-                        <span className="ml-1 text-xs text-gray-400">
-                          {rmUnit}
-                        </span>
-
-                      </td>
-
-                      {/* RM REQUIREMENT */}
-
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-gray-700">
-
-                        {formatNumber(
-                          pmc.rmRequirement,
-                          3
-                        )}
-
-                        <span className="ml-1 text-xs text-gray-400">
-                          {rmUnit}
-                        </span>
-
-                      </td>
-
-                      {/* RM VARIANCE */}
-
-                      <td
-                        className={`
-                          border-b
-                          border-r
-                          border-gray-100
-                          px-4
-                          py-3
-                          text-right
-                          text-sm
-                          font-medium
-                          ${
-                            pmc.rmVariance > 0
-                              ? "text-red-600"
-                              : pmc.rmVariance < 0
-                                ? "text-green-600"
-                                : "text-gray-600"
-                          }
-                        `}
+                      <tr
+                        key={record.id}
+                        className="transition-colors hover:bg-slate-50"
                       >
 
-                        {formatNumber(
-                          pmc.rmVariance,
-                          3
-                        )}
+                        {/* NO */}
 
-                        <span className="ml-1 text-xs text-gray-400">
-                          {rmUnit}
-                        </span>
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+                          {index + 1}
+                        </td>
 
-                      </td>
+                        {/* DATE */}
 
-                      {/* RM PERCENTAGE */}
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+                          {formatDate(record.productionDate)}
+                        </td>
 
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm text-gray-600">
+                        {/* MONTH */}
 
-                        {formatNumber(
-                          pmc.rmPercentage,
-                          2
-                        )}
-                        %
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+                          {getMonth(record.productionDate)}
+                        </td>
 
-                      </td>
+                        {/* DAYS */}
 
-                      {/* TARGET */}
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+                          {getDay(record.productionDate)}
+                        </td>
 
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-semibold text-blue-700">
+                        {/* MACHINE */}
 
-                        {target8H > 0
-                          ? formatNumber(target8H, 2)
-                          : "-"}
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm font-medium text-gray-700">
+                          {machineNo}
+                        </td>
 
-                        {quantityUnit &&
-                          target8H > 0 && (
+                        {/* AREA */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+                          {record.area?.name ||
+                            record.area?.code ||
+                            "-"}
+                        </td>
+
+                        {/* SHIFT */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+                          {record.shift?.name ||
+                            record.shift?.code ||
+                            "-"}
+                        </td>
+
+                        {/* OPERATOR */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+                          {record.operatorName || "-"}
+                        </td>
+
+                        {/* COMPUTER CODE */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+                          {record.computerCode || "-"}
+                        </td>
+
+                        {/* PRODUCT */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-left text-sm font-medium text-gray-700">
+                          {record.product?.productName || "-"}
+                        </td>
+
+                        {/* DESCRIPTION */}
+
+                        <td className="max-w-xs border-b border-r border-gray-100 px-4 py-3 text-left text-sm text-gray-600">
+
+                          <div
+                            className="truncate"
+                            title={record.product?.description || ""}
+                          >
+                            {record.product?.description || "-"}
+                          </div>
+
+                        </td>
+
+                        {/* OUTPUT */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-gray-700">
+
+                          {formatNumber(outputQty, 2)}
+
+                          {quantityUnit && (
+                            <span className="ml-1 text-xs text-gray-400">
+                              {quantityUnit}
+                            </span>
+                          )}
+
+                        </td>
+
+                        {/* OK */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm text-gray-600">
+
+                          {formatNumber(okQty, 2)}
+
+                          {quantityUnit && (
+                            <span className="ml-1 text-xs text-gray-400">
+                              {quantityUnit}
+                            </span>
+                          )}
+
+                        </td>
+
+                        {/* NG */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-red-600">
+
+                          {formatNumber(pmc.ngQty, 2)}
+
+                          {quantityUnit && (
+                            <span className="ml-1 text-xs text-gray-400">
+                              {quantityUnit}
+                            </span>
+                          )}
+
+                        </td>
+
+                        {/* NG RATE */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-red-600">
+
+                          {formatNumber(pmc.ngRate, 2)}%
+
+                        </td>
+
+                        {/* ACTUAL RM */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm text-gray-600">
+
+                          {formatNumber(actualRm, 3)}
+
+                          <span className="ml-1 text-xs text-gray-400">
+                            {rmUnit}
+                          </span>
+
+                        </td>
+
+                        {/* RM REQUIREMENT */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-gray-700">
+
+                          {formatNumber(
+                            pmc.rmRequirement,
+                            3
+                          )}
+
+                          <span className="ml-1 text-xs text-gray-400">
+                            {rmUnit}
+                          </span>
+
+                        </td>
+
+                        {/* RM VARIANCE */}
+
+                        <td
+                          className={`
+                            border-b
+                            border-r
+                            border-gray-100
+                            px-4
+                            py-3
+                            text-right
+                            text-sm
+                            font-medium
+                            ${
+                              pmc.rmVariance > 0
+                                ? "text-red-600"
+                                : pmc.rmVariance < 0
+                                  ? "text-green-600"
+                                  : "text-gray-600"
+                            }
+                          `}
+                        >
+
+                          {formatNumber(
+                            pmc.rmVariance,
+                            3
+                          )}
+
+                          <span className="ml-1 text-xs text-gray-400">
+                            {rmUnit}
+                          </span>
+
+                        </td>
+
+                        {/* RM PERCENTAGE */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm text-gray-600">
+
+                          {formatNumber(
+                            pmc.rmPercentage,
+                            2
+                          )}
+                          %
+
+                        </td>
+
+                        {/* TARGET */}
+
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-semibold text-blue-700">
+
+                          {target8H > 0
+                            ? formatNumber(target8H, 2)
+                            : "-"}
+
+                          {quantityUnit &&
+                            target8H > 0 && (
+                              <span className="ml-1 text-xs font-normal text-gray-400">
+                                {quantityUnit}
+                              </span>
+                            )}
+
+                        </td>
+
+                        {/* PRODUCT VARIANCE */}
+
+                        <td
+                          className={`
+                            border-b
+                            border-r
+                            border-gray-100
+                            px-4
+                            py-3
+                            text-right
+                            text-sm
+                            font-semibold
+                            ${
+                              pmc.productVariance >= 0
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }
+                          `}
+                        >
+
+                          {formatNumber(
+                            pmc.productVariance,
+                            2
+                          )}
+
+                          {quantityUnit && (
                             <span className="ml-1 text-xs font-normal text-gray-400">
                               {quantityUnit}
                             </span>
                           )}
 
-                      </td>
+                        </td>
 
-                      {/* PRODUCT VARIANCE */}
+                        {/* ACHIEVEMENT */}
 
-                      <td
-                        className={`
-                          border-b
-                          border-r
-                          border-gray-100
-                          px-4
-                          py-3
-                          text-right
-                          text-sm
-                          font-semibold
-                          ${
-                            pmc.productVariance >= 0
-                              ? "text-green-600"
-                              : "text-red-600"
-                          }
-                        `}
-                      >
+                        <td
+                          className={`
+                            border-b
+                            border-r
+                            border-gray-100
+                            px-4
+                            py-3
+                            text-right
+                            text-sm
+                            font-semibold
+                            ${
+                              pmc.achievement >= 100
+                                ? "text-green-600"
+                                : pmc.achievement >= 80
+                                  ? "text-yellow-600"
+                                  : "text-red-600"
+                            }
+                          `}
+                        >
 
-                        {formatNumber(
-                          pmc.productVariance,
-                          2
-                        )}
+                          {target8H > 0
+                            ? `${formatNumber(
+                                pmc.achievement,
+                                2
+                              )}%`
+                            : "-"}
 
-                        {quantityUnit && (
-                          <span className="ml-1 text-xs font-normal text-gray-400">
-                            {quantityUnit}
-                          </span>
-                        )}
+                        </td>
 
-                      </td>
+                        {/* OT / REPLACE */}
 
-                      {/* ACHIEVEMENT */}
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+                          {record.otReplace || "-"}
+                        </td>
 
-                      <td
-                        className={`
-                          border-b
-                          border-r
-                          border-gray-100
-                          px-4
-                          py-3
-                          text-right
-                          text-sm
-                          font-semibold
-                          ${
-                            pmc.achievement >= 100
-                              ? "text-green-600"
-                              : pmc.achievement >= 80
-                                ? "text-yellow-600"
-                                : "text-red-600"
-                          }
-                        `}
-                      >
+                        {/* REMARKS */}
 
-                        {target8H > 0
-                          ? `${formatNumber(
-                              pmc.achievement,
-                              2
-                            )}%`
-                          : "-"}
+                        <td className="border-b border-gray-100 px-4 py-3 text-left text-sm text-gray-600">
+                          {record.remarks || "-"}
+                        </td>
 
-                      </td>
+                      </tr>
 
-                      {/* OT / REPLACE */}
+                    );
+                  }
+                )
 
-                      <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
-                        {record.otReplace || "-"}
-                      </td>
+              )}
 
-                      {/* REMARKS */}
+            </tbody>
 
-                      <td className="border-b border-gray-100 px-4 py-3 text-left text-sm text-gray-600">
-                        {record.remarks || "-"}
-                      </td>
+          </table>
 
-                    </tr>
-
-                  );
-                }
-              )
-
-            )}
-
-          </tbody>
-
-        </table>
-
-      </div>
+        </div>
+      )}
 
       {/* =====================================================
           FOOTER
