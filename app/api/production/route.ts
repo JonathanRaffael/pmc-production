@@ -2,122 +2,297 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 // =====================================================
-// HELPER
+// TYPES
 // =====================================================
 
-async function getProductionTarget(
+type ProductionTargetRecord = {
+  id: number;
+  productId: number;
+  target8H: unknown;
+  effectiveFrom: Date;
+  effectiveTo: Date | null;
+  isActive: boolean;
+};
+
+// =====================================================
+// HELPER
+// FIND PRODUCTION TARGET FROM ALREADY LOADED TARGETS
+// =====================================================
+
+function findProductionTarget(
+  targets: ProductionTargetRecord[],
   productId: number,
   productionDate: Date
 ) {
   // ===================================================
-  // 1. CARI TARGET BERDASARKAN PERIODE BERLAKU
+  // 1. TARGET BERDASARKAN PERIODE
   // ===================================================
 
-  const targetByPeriod =
-    await prisma.productionTarget.findFirst({
-      where: {
-        productId,
+  const targetByPeriod = targets.find(
+    (target) => {
+      if (
+        target.productId !==
+        productId
+      ) {
+        return false;
+      }
 
-        isActive: true,
+      if (
+        !target.isActive
+      ) {
+        return false;
+      }
 
-        effectiveFrom: {
-          lte: productionDate,
-        },
+      const afterStart =
+        target.effectiveFrom <=
+        productionDate;
 
-        OR: [
-          {
-            effectiveTo: null,
-          },
-          {
-            effectiveTo: {
-              gte: productionDate,
-            },
-          },
-        ],
-      },
+      const beforeEnd =
+        target.effectiveTo ===
+          null ||
+        target.effectiveTo >=
+          productionDate;
 
-      orderBy: {
-        effectiveFrom: "desc",
-      },
-    });
+      return (
+        afterStart &&
+        beforeEnd
+      );
+    }
+  );
 
-  if (targetByPeriod) {
+  if (
+    targetByPeriod
+  ) {
     return targetByPeriod;
   }
 
   // ===================================================
   // 2. FALLBACK
   // ===================================================
-  // Kalau tidak ada target yang cocok berdasarkan periode,
-  // ambil target aktif terbaru dari product tersebut.
-  //
-  // Ini mencegah dashboard mendapatkan target 0 hanya
-  // karena perbedaan waktu/tanggal effectiveFrom.
-  // ===================================================
 
-  const latestActiveTarget =
-    await prisma.productionTarget.findFirst({
-      where: {
-        productId,
-        isActive: true,
-      },
+  const activeTargets =
+    targets.filter(
+      (target) =>
+        target.productId ===
+          productId &&
+        target.isActive
+    );
 
-      orderBy: {
-        effectiveFrom: "desc",
-      },
-    });
+  if (
+    activeTargets.length ===
+    0
+  ) {
+    return null;
+  }
 
-  return latestActiveTarget;
+  // effectiveFrom terbaru
+  activeTargets.sort(
+    (a, b) =>
+      b.effectiveFrom.getTime() -
+      a.effectiveFrom.getTime()
+  );
+
+  return (
+    activeTargets[0] ??
+    null
+  );
 }
 
 // =====================================================
 // GET PRODUCTION DATA
 // =====================================================
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest
+) {
   try {
     const { searchParams } =
-      new URL(request.url);
+      new URL(
+        request.url
+      );
+
+    // ===================================================
+    // QUERY PARAMETERS
+    // ===================================================
+
+    const search =
+      searchParams
+        .get("search")
+        ?.trim() || "";
 
     const date =
-      searchParams.get("date");
+      searchParams.get(
+        "date"
+      );
+
+    const fromDate =
+      searchParams.get(
+        "fromDate"
+      );
+
+    const toDate =
+      searchParams.get(
+        "toDate"
+      );
 
     const areaId =
-      searchParams.get("areaId");
+      searchParams.get(
+        "areaId"
+      );
 
     const shiftId =
-      searchParams.get("shiftId");
+      searchParams.get(
+        "shiftId"
+      );
 
     const productId =
-      searchParams.get("productId");
+      searchParams.get(
+        "productId"
+      );
 
     const computerCode =
-      searchParams.get("computerCode");
+      searchParams.get(
+        "computerCode"
+      );
+
+    // ===================================================
+    // PAGINATION
+    // ===================================================
+
+    const pageParam =
+      Number(
+        searchParams.get(
+          "page"
+        ) || "1"
+      );
+
+    const limitParam =
+      Number(
+        searchParams.get(
+          "limit"
+        ) || "25"
+      );
+
+    const page =
+      Number.isInteger(
+        pageParam
+      ) &&
+      pageParam > 0
+        ? pageParam
+        : 1;
+
+    const limit =
+      Number.isInteger(
+        limitParam
+      ) &&
+      limitParam > 0
+        ? Math.min(
+            limitParam,
+            100
+          )
+        : 25;
+
+    const skip =
+      (page - 1) *
+      limit;
 
     // ===================================================
     // BUILD WHERE
     // ===================================================
 
-    const where: {
-      productionDate?: {
-        gte: Date;
-        lte: Date;
-      };
-
-      areaId?: number;
-
-      shiftId?: number;
-
-      productId?: number;
-
-      computerCode?: string;
-    } = {};
+    const where: any =
+      {};
 
     // ===================================================
-    // DATE
+    // SEARCH
     // ===================================================
 
-    if (date) {
+    if (
+      search
+    ) {
+      where.OR = [
+        {
+          operatorName: {
+            contains:
+              search,
+          },
+        },
+
+        {
+          computerCode: {
+            contains:
+              search,
+          },
+        },
+
+        {
+          machineNo: {
+            contains:
+              search,
+          },
+        },
+
+        {
+          otReplace: {
+            contains:
+              search,
+          },
+        },
+
+        {
+          remarks: {
+            contains:
+              search,
+          },
+        },
+
+        {
+          status: {
+            contains:
+              search,
+          },
+        },
+
+        // ===============================================
+        // PRODUCT SEARCH
+        // ===============================================
+
+        {
+          product: {
+            OR: [
+              {
+                productCode: {
+                  contains:
+                    search,
+                },
+              },
+
+              {
+                productName: {
+                  contains:
+                    search,
+                },
+              },
+
+              {
+                description: {
+                  contains:
+                    search,
+                },
+              },
+            ],
+          },
+        },
+      ];
+    }
+
+    // ===================================================
+    // SINGLE DATE
+    // ===================================================
+
+    if (
+      date
+    ) {
       const startDate =
         new Date(
           `${date}T00:00:00`
@@ -128,19 +303,107 @@ export async function GET(request: NextRequest) {
           `${date}T23:59:59.999`
         );
 
-      where.productionDate = {
-        gte: startDate,
-        lte: endDate,
-      };
+      if (
+        !Number.isNaN(
+          startDate.getTime()
+        ) &&
+        !Number.isNaN(
+          endDate.getTime()
+        )
+      ) {
+        where.productionDate =
+          {
+            gte:
+              startDate,
+
+            lte:
+              endDate,
+          };
+      }
+    }
+
+    // ===================================================
+    // DATE RANGE
+    // FROM DATE / TO DATE
+    // ===================================================
+
+    if (
+      fromDate ||
+      toDate
+    ) {
+      const productionDate: {
+        gte?: Date;
+        lte?: Date;
+      } = {};
+
+      // ================================================
+      // FROM DATE
+      // ================================================
+
+      if (
+        fromDate
+      ) {
+        const startDate =
+          new Date(
+            `${fromDate}T00:00:00`
+          );
+
+        if (
+          !Number.isNaN(
+            startDate.getTime()
+          )
+        ) {
+          productionDate.gte =
+            startDate;
+        }
+      }
+
+      // ================================================
+      // TO DATE
+      // ================================================
+
+      if (
+        toDate
+      ) {
+        const endDate =
+          new Date(
+            `${toDate}T23:59:59.999`
+          );
+
+        if (
+          !Number.isNaN(
+            endDate.getTime()
+          )
+        ) {
+          productionDate.lte =
+            endDate;
+        }
+      }
+
+      // ================================================
+      // APPLY DATE RANGE
+      // ================================================
+
+      if (
+        productionDate.gte ||
+        productionDate.lte
+      ) {
+        where.productionDate =
+          productionDate;
+      }
     }
 
     // ===================================================
     // AREA
     // ===================================================
 
-    if (areaId) {
+    if (
+      areaId
+    ) {
       const parsedAreaId =
-        Number(areaId);
+        Number(
+          areaId
+        );
 
       if (
         Number.isInteger(
@@ -156,9 +419,13 @@ export async function GET(request: NextRequest) {
     // SHIFT
     // ===================================================
 
-    if (shiftId) {
+    if (
+      shiftId
+    ) {
       const parsedShiftId =
-        Number(shiftId);
+        Number(
+          shiftId
+        );
 
       if (
         Number.isInteger(
@@ -174,9 +441,13 @@ export async function GET(request: NextRequest) {
     // PRODUCT
     // ===================================================
 
-    if (productId) {
+    if (
+      productId
+    ) {
       const parsedProductId =
-        Number(productId);
+        Number(
+          productId
+        );
 
       if (
         Number.isInteger(
@@ -202,396 +473,572 @@ export async function GET(request: NextRequest) {
     }
 
     // ===================================================
-    // GET PRODUCTION RECORDS
+    // COUNT TOTAL DATA
+    // ===================================================
+
+    const total =
+      await prisma.productionRecord.count(
+        {
+          where,
+        }
+      );
+
+    // ===================================================
+    // GET CURRENT PAGE ONLY
     // ===================================================
 
     const productionRecords =
-      await prisma.productionRecord.findMany({
-        where,
-
-        orderBy: [
-          {
-            productionDate:
-              "desc",
-          },
-
-          {
-            id: "desc",
-          },
-        ],
-
-        include: {
-          // =============================================
-          // AREA
-          // =============================================
-
-          area: true,
+      await prisma.productionRecord.findMany(
+        {
+          where,
 
           // =============================================
-          // SHIFT
+          // SORTING
+          // PALING LAMA DIBUAT → PALING BARU
           // =============================================
 
-          shift: true,
+          orderBy: [
+            {
+              createdAt:
+                "asc",
+            },
+
+            {
+              id:
+                "asc",
+            },
+          ],
 
           // =============================================
-          // PRODUCT
+          // PAGINATION
           // =============================================
 
-          product: {
-            select: {
-              id: true,
+          skip,
 
-              productCode:
-                true,
+          take:
+            limit,
 
-              productName:
-                true,
+          // =============================================
+          // RELATIONS
+          // =============================================
 
-              description:
-                true,
+          include: {
+            // =========================================
+            // AREA
+            // =========================================
 
-              quantityUnit:
-                true,
+            area: true,
 
-              shotWeight:
-                true,
+            // =========================================
+            // SHIFT
+            // =========================================
 
-              shotWeightUnit:
-                true,
+            shift: true,
 
-              isActive:
-                true,
+            // =========================================
+            // PRODUCT
+            // =========================================
+
+            product: {
+              select: {
+                id:
+                  true,
+
+                productCode:
+                  true,
+
+                productName:
+                  true,
+
+                description:
+                  true,
+
+                quantityUnit:
+                  true,
+
+                shotWeight:
+                  true,
+
+                shotWeightUnit:
+                  true,
+
+                isActive:
+                  true,
+              },
+            },
+
+            // =========================================
+            // INPUT USER
+            // =========================================
+
+            inputBy: {
+              select: {
+                id:
+                  true,
+
+                name:
+                  true,
+
+                email:
+                  true,
+              },
             },
           },
+        }
+      );
 
-          // =============================================
-          // INPUT USER
-          // =============================================
+    // ===================================================
+    // GET UNIQUE PRODUCT IDS
+    // FROM CURRENT PAGE ONLY
+    // ===================================================
 
-          inputBy: {
-            select: {
-              id: true,
+    const productIds =
+      Array.from(
+        new Set(
+          productionRecords.map(
+            (
+              record
+            ) =>
+              record.productId
+          )
+        )
+      );
 
-              name: true,
+    // ===================================================
+    // GET PRODUCTION TARGETS
+    // ONLY FOR PRODUCTS ON CURRENT PAGE
+    // ===================================================
 
-              email: true,
-            },
-          },
-        },
-      });
+    const targets =
+      productIds.length >
+      0
+        ? await prisma.productionTarget.findMany(
+            {
+              where: {
+                productId: {
+                  in:
+                    productIds,
+                },
+
+                isActive:
+                  true,
+              },
+
+              orderBy: {
+                effectiveFrom:
+                  "desc",
+              },
+
+              select: {
+                id:
+                  true,
+
+                productId:
+                  true,
+
+                target8H:
+                  true,
+
+                effectiveFrom:
+                  true,
+
+                effectiveTo:
+                  true,
+
+                isActive:
+                  true,
+              },
+            }
+          )
+        : [];
 
     // ===================================================
     // FORMAT RESULT
     // ===================================================
 
     const result =
-      await Promise.all(
-        productionRecords.map(
-          async (record) => {
-            // =============================================
-            // GET TARGET 8H
-            // =============================================
+      productionRecords.map(
+        (
+          record
+        ) => {
+          // =============================================
+          // FIND TARGET FROM MEMORY
+          // =============================================
 
-            const target =
-              await getProductionTarget(
-                record.productId,
-                record.productionDate
-              );
+          const target =
+            findProductionTarget(
+              targets,
+              record.productId,
+              record.productionDate
+            );
 
-            // =============================================
-            // NUMBER VALUES
-            // =============================================
+          // =============================================
+          // NUMBER VALUES
+          // =============================================
 
-            const outputQty =
-              Number(
-                record.outputQty
-              );
+          const outputQty =
+            Number(
+              record.outputQty
+            );
 
-            const okQty =
-              Number(
-                record.okQty
-              );
+          const okQty =
+            Number(
+              record.okQty
+            );
 
-            const actualRm =
-              Number(
-                record.actualRm
-              );
+          const actualRm =
+            Number(
+              record.actualRm
+            );
 
-            // =============================================
-            // TOTAL NG
-            // =============================================
+          // =============================================
+          // TOTAL NG
+          // =============================================
 
-            const ngQty =
-              Math.max(
-                0,
-                outputQty -
-                  okQty
-              );
+          const ngQty =
+            Math.max(
+              0,
+              outputQty -
+                okQty
+            );
 
-            // =============================================
-            // TARGET
-            // =============================================
+          // =============================================
+          // TARGET 8H
+          // =============================================
 
-            const target8H =
-              target
-                ? Number(
-                    target.target8H
-                  )
-                : 0;
+          const target8H =
+            target
+              ? Number(
+                  target.target8H
+                )
+              : 0;
 
-            // =============================================
-            // PRODUCT VARIANCE
-            // =============================================
+          // =============================================
+          // PRODUCT VARIANCE
+          // =============================================
 
-            const productVariance =
-              target8H > 0
-                ? outputQty -
+          const productVariance =
+            target8H >
+            0
+              ? outputQty -
+                target8H
+              : 0;
+
+          // =============================================
+          // ACHIEVEMENT
+          // =============================================
+
+          const achievement =
+            target8H >
+            0
+              ? (
+                  outputQty /
                   target8H
-                : 0;
+                ) *
+                100
+              : 0;
 
-            // =============================================
-            // ACHIEVEMENT
-            // =============================================
+          // =============================================
+          // RETURN DATA
+          // =============================================
 
-            const achievement =
-              target8H > 0
-                ? (
-                    outputQty /
-                    target8H
-                  ) * 100
-                : 0;
+          return {
+            // =========================================
+            // BASIC
+            // =========================================
 
-            // =============================================
-            // RETURN DATA
-            // =============================================
+            id:
+              record.id,
 
-            return {
-              // =========================================
-              // BASIC
-              // =========================================
+            productionDate:
+              record.productionDate,
 
-              id:
-                record.id,
+            // =========================================
+            // MACHINE
+            // =========================================
 
-              productionDate:
-                record.productionDate,
+            machineNo:
+              record.machineNo,
 
-              // =========================================
-              // MACHINE NO.
-              // =========================================
+            // =========================================
+            // AREA
+            // =========================================
 
-              machineNo:
-                record.machineNo,
+            area:
+              record.area
+                ? {
+                    id:
+                      record
+                        .area
+                        .id,
 
-              // =========================================
-              // AREA
-              // =========================================
+                    code:
+                      record
+                        .area
+                        .code,
 
-              area:
-                record.area
-                  ? {
-                      id:
-                        record.area
-                          .id,
+                    name:
+                      record
+                        .area
+                        .name,
+                  }
+                : null,
 
-                      code:
-                        record.area
-                          .code,
+            // =========================================
+            // SHIFT
+            // =========================================
 
-                      name:
-                        record.area
-                          .name,
-                    }
-                  : null,
+            shift:
+              record.shift
+                ? {
+                    id:
+                      record
+                        .shift
+                        .id,
 
-              // =========================================
-              // SHIFT
-              // =========================================
+                    code:
+                      record
+                        .shift
+                        .code,
 
-              shift:
-                record.shift
-                  ? {
-                      id:
-                        record.shift
-                          .id,
+                    name:
+                      record
+                        .shift
+                        .name,
+                  }
+                : null,
 
-                      code:
-                        record.shift
-                          .code,
+            // =========================================
+            // PRODUCT
+            // =========================================
 
-                      name:
-                        record.shift
-                          .name,
-                    }
-                  : null,
+            product:
+              record.product
+                ? {
+                    id:
+                      record
+                        .product
+                        .id,
 
-              // =========================================
-              // PRODUCT
-              // =========================================
+                    productCode:
+                      record
+                        .product
+                        .productCode,
 
-              product:
-                record.product
-                  ? {
-                      id:
-                        record.product
-                          .id,
+                    productName:
+                      record
+                        .product
+                        .productName,
 
-                      productCode:
-                        record.product
-                          .productCode,
+                    description:
+                      record
+                        .product
+                        .description,
 
-                      productName:
-                        record.product
-                          .productName,
+                    quantityUnit:
+                      record
+                        .product
+                        .quantityUnit,
 
-                      description:
-                        record.product
-                          .description,
+                    shotWeight:
+                      Number(
+                        record
+                          .product
+                          .shotWeight
+                      ),
 
-                      quantityUnit:
-                        record.product
-                          .quantityUnit,
+                    shotWeightUnit:
+                      record
+                        .product
+                        .shotWeightUnit,
 
-                      shotWeight:
-                        Number(
-                          record
-                            .product
-                            .shotWeight
-                        ),
+                    isActive:
+                      record
+                        .product
+                        .isActive,
+                  }
+                : null,
 
-                      shotWeightUnit:
-                        record.product
-                          .shotWeightUnit,
+            // =========================================
+            // COMPUTER CODE
+            // =========================================
 
-                      isActive:
-                        record.product
-                          .isActive,
-                    }
-                  : null,
+            computerCode:
+              record.computerCode,
 
-              // =========================================
-              // COMPUTER CODE
-              // =========================================
+            // =========================================
+            // OPERATOR
+            // =========================================
 
-              computerCode:
-                record.computerCode,
+            operatorName:
+              record.operatorName,
 
-              // =========================================
-              // OPERATOR
-              // =========================================
+            // =========================================
+            // PRODUCTION VALUES
+            // =========================================
 
-              operatorName:
-                record.operatorName,
+            outputQty,
 
-              // =========================================
-              // PRODUCTION VALUES
-              // =========================================
+            okQty,
 
-              outputQty,
+            ngQty,
 
+            actualRm,
+
+            // =========================================
+            // DASHBOARD ALIASES
+            // =========================================
+
+            quantityProductOk:
               okQty,
 
+            totalNgProduct:
               ngQty,
 
+            totalActualRawMaterialUsage:
               actualRm,
 
-              // =========================================
-              // DASHBOARD ALIASES
-              // =========================================
+            // =========================================
+            // TARGET
+            // =========================================
 
-              quantityProductOk:
-                okQty,
+            target8H,
 
-              totalNgProduct:
-                ngQty,
+            targetEffectiveFrom:
+              target?.effectiveFrom ??
+              null,
 
-              totalActualRawMaterialUsage:
-                actualRm,
+            targetEffectiveTo:
+              target?.effectiveTo ??
+              null,
 
-              // =========================================
-              // TARGET 8H
-              // =========================================
+            // =========================================
+            // PRODUCT VARIANCE
+            // =========================================
 
-              target8H,
+            productVariance,
 
-              targetEffectiveFrom:
-                target?.effectiveFrom ??
-                null,
+            // =========================================
+            // ACHIEVEMENT
+            // =========================================
 
-              targetEffectiveTo:
-                target?.effectiveTo ??
-                null,
+            achievement,
 
-              // =========================================
-              // PRODUCT VARIANCE
-              // =========================================
+            // =========================================
+            // OTHER
+            // =========================================
 
-              productVariance,
+            otReplace:
+              record.otReplace,
 
-              // =========================================
-              // ACHIEVEMENT
-              // =========================================
+            remarks:
+              record.remarks,
 
-              achievement,
+            status:
+              record.status,
 
-              // =========================================
-              // OTHER
-              // =========================================
+            // =========================================
+            // INPUT USER
+            // =========================================
 
-              otReplace:
-                record.otReplace,
+            inputBy:
+              record.inputBy,
 
-              remarks:
-                record.remarks,
+            // =========================================
+            // TIMESTAMP
+            // =========================================
 
-              // =========================================
-              // INPUT BY
-              // =========================================
+            createdAt:
+              record.createdAt,
 
-              inputBy:
-                record.inputBy,
+            updatedAt:
+              record.updatedAt,
+          };
+        }
+      );
 
-              // =========================================
-              // TIMESTAMP
-              // =========================================
+    // ===================================================
+    // PAGINATION INFORMATION
+    // ===================================================
 
-              createdAt:
-                record.createdAt,
-
-              updatedAt:
-                record.updatedAt,
-            };
-          }
-        )
+    const totalPages =
+      Math.ceil(
+        total /
+          limit
       );
 
     // ===================================================
     // RESPONSE
     // ===================================================
 
-    return NextResponse.json({
-      success: true,
+    return NextResponse.json(
+      {
+        success:
+          true,
 
-      data: result,
+        data:
+          result,
 
-      total:
-        result.length,
-    });
+        // Total semua data
+        // bukan jumlah data di halaman sekarang
+        total,
+
+        pagination: {
+          page,
+
+          limit,
+
+          total,
+
+          totalPages,
+
+          hasNextPage:
+            page <
+            totalPages,
+
+          hasPreviousPage:
+            page >
+            1,
+        },
+      }
+    );
   } catch (error) {
+    // ===================================================
+    // ERROR LOG
+    // ===================================================
+
     console.error(
       "GET /api/production error:",
       error
     );
 
+    // ===================================================
+    // ERROR RESPONSE
+    // ===================================================
+
     return NextResponse.json(
       {
-        success: false,
+        success:
+          false,
 
         message:
           "Failed to fetch production data.",
+
+        // Tampilkan detail error
+        // hanya saat development
+        error:
+          process.env.NODE_ENV ===
+          "development"
+            ? error instanceof Error
+              ? error.message
+              : String(
+                  error
+                )
+            : undefined,
       },
       {
-        status: 500,
+        status:
+          500,
       }
     );
   }
@@ -633,16 +1080,20 @@ export async function POST(
     // REQUIRED VALIDATION
     // ===================================================
 
-    if (!productionDate) {
+    if (
+      !productionDate
+    ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Production date is required.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -651,16 +1102,20 @@ export async function POST(
     // AREA
     // ===================================================
 
-    if (!areaId) {
+    if (
+      !areaId
+    ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Production area is required.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -669,16 +1124,20 @@ export async function POST(
     // SHIFT
     // ===================================================
 
-    if (!shiftId) {
+    if (
+      !shiftId
+    ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Shift is required.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -690,19 +1149,24 @@ export async function POST(
     if (
       machineNo ===
         undefined ||
-      machineNo === null ||
-      String(machineNo).trim() ===
+      machineNo ===
+        null ||
+      String(
+        machineNo
+      ).trim() ===
         ""
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Machine No. is required.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -711,16 +1175,20 @@ export async function POST(
     // PRODUCT
     // ===================================================
 
-    if (!productId) {
+    if (
+      !productId
+    ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Product could not be determined from Computer Code.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -734,13 +1202,15 @@ export async function POST(
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Computer Code is required.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -752,18 +1222,22 @@ export async function POST(
     if (
       outputQty ===
         undefined ||
-      outputQty === null ||
-      outputQty === ""
+      outputQty ===
+        null ||
+      outputQty ===
+        ""
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Output quantity is required.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -775,18 +1249,22 @@ export async function POST(
     if (
       okQty ===
         undefined ||
-      okQty === null ||
-      okQty === ""
+      okQty ===
+        null ||
+      okQty ===
+        ""
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "OK quantity is required.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -798,18 +1276,22 @@ export async function POST(
     if (
       actualRm ===
         undefined ||
-      actualRm === null ||
-      actualRm === ""
+      actualRm ===
+        null ||
+      actualRm ===
+        ""
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Actual raw material usage is required.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -818,16 +1300,20 @@ export async function POST(
     // INPUT USER
     // ===================================================
 
-    if (!inputById) {
+    if (
+      !inputById
+    ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Input user is required.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -857,16 +1343,24 @@ export async function POST(
     // ===================================================
 
     const parsedAreaId =
-      Number(areaId);
+      Number(
+        areaId
+      );
 
     const parsedShiftId =
-      Number(shiftId);
+      Number(
+        shiftId
+      );
 
     const parsedProductId =
-      Number(productId);
+      Number(
+        productId
+      );
 
     const parsedInputById =
-      Number(inputById);
+      Number(
+        inputById
+      );
 
     if (
       !Number.isInteger(
@@ -884,13 +1378,15 @@ export async function POST(
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Invalid ID value.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -900,13 +1396,19 @@ export async function POST(
     // ===================================================
 
     const parsedOutputQty =
-      Number(outputQty);
+      Number(
+        outputQty
+      );
 
     const parsedOkQty =
-      Number(okQty);
+      Number(
+        okQty
+      );
 
     const parsedActualRm =
-      Number(actualRm);
+      Number(
+        actualRm
+      );
 
     if (
       !Number.isFinite(
@@ -921,13 +1423,15 @@ export async function POST(
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Invalid production numeric values.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -937,17 +1441,20 @@ export async function POST(
     // ===================================================
 
     if (
-      parsedOutputQty < 0
+      parsedOutputQty <
+      0
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Output quantity cannot be negative.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -957,17 +1464,20 @@ export async function POST(
     // ===================================================
 
     if (
-      parsedOkQty < 0
+      parsedOkQty <
+      0
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "OK quantity cannot be negative.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -982,13 +1492,15 @@ export async function POST(
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "OK quantity cannot be greater than output quantity.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -998,17 +1510,20 @@ export async function POST(
     // ===================================================
 
     if (
-      parsedActualRm < 0
+      parsedActualRm <
+      0
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Actual raw material cannot be negative.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -1029,13 +1544,15 @@ export async function POST(
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Invalid production date.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -1045,11 +1562,14 @@ export async function POST(
     // ===================================================
 
     const area =
-      await prisma.area.findUnique({
-        where: {
-          id: parsedAreaId,
-        },
-      });
+      await prisma.area.findUnique(
+        {
+          where: {
+            id:
+              parsedAreaId,
+          },
+        }
+      );
 
     if (
       !area ||
@@ -1057,13 +1577,15 @@ export async function POST(
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Production area not found or inactive.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -1073,11 +1595,14 @@ export async function POST(
     // ===================================================
 
     const shift =
-      await prisma.shift.findUnique({
-        where: {
-          id: parsedShiftId,
-        },
-      });
+      await prisma.shift.findUnique(
+        {
+          where: {
+            id:
+              parsedShiftId,
+          },
+        }
+      );
 
     if (
       !shift ||
@@ -1085,13 +1610,15 @@ export async function POST(
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Shift not found or inactive.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -1101,36 +1628,40 @@ export async function POST(
     // ===================================================
 
     const product =
-      await prisma.product.findUnique({
-        where: {
-          id: parsedProductId,
-        },
+      await prisma.product.findUnique(
+        {
+          where: {
+            id:
+              parsedProductId,
+          },
 
-        select: {
-          id: true,
+          select: {
+            id:
+              true,
 
-          productCode:
-            true,
+            productCode:
+              true,
 
-          productName:
-            true,
+            productName:
+              true,
 
-          description:
-            true,
+            description:
+              true,
 
-          quantityUnit:
-            true,
+            quantityUnit:
+              true,
 
-          shotWeight:
-            true,
+            shotWeight:
+              true,
 
-          shotWeightUnit:
-            true,
+            shotWeightUnit:
+              true,
 
-          isActive:
-            true,
-        },
-      });
+            isActive:
+              true,
+          },
+        }
+      );
 
     if (
       !product ||
@@ -1138,13 +1669,15 @@ export async function POST(
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Product not found or inactive.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -1154,21 +1687,28 @@ export async function POST(
     // ===================================================
 
     const user =
-      await prisma.user.findUnique({
-        where: {
-          id: parsedInputById,
-        },
+      await prisma.user.findUnique(
+        {
+          where: {
+            id:
+              parsedInputById,
+          },
 
-        select: {
-          id: true,
+          select: {
+            id:
+              true,
 
-          name: true,
+            name:
+              true,
 
-          email: true,
+            email:
+              true,
 
-          isActive: true,
-        },
-      });
+            isActive:
+              true,
+          },
+        }
+      );
 
     if (
       !user ||
@@ -1176,13 +1716,15 @@ export async function POST(
     ) {
       return NextResponse.json(
         {
-          success: false,
+          success:
+            false,
 
           message:
             "Input user not found or inactive.",
         },
         {
-          status: 400,
+          status:
+            400,
         }
       );
     }
@@ -1192,10 +1734,64 @@ export async function POST(
     // ===================================================
 
     const target =
-      await getProductionTarget(
-        parsedProductId,
-        productionDateValue
+      await prisma.productionTarget.findFirst(
+        {
+          where: {
+            productId:
+              parsedProductId,
+
+            isActive:
+              true,
+
+            effectiveFrom: {
+              lte:
+                productionDateValue,
+            },
+
+            OR: [
+              {
+                effectiveTo:
+                  null,
+              },
+
+              {
+                effectiveTo: {
+                  gte:
+                    productionDateValue,
+                },
+              },
+            ],
+          },
+
+          orderBy: {
+            effectiveFrom:
+              "desc",
+          },
+        }
       );
+
+    // ===================================================
+    // FALLBACK TARGET
+    // ===================================================
+
+    const finalTarget =
+      target ??
+      (await prisma.productionTarget.findFirst(
+        {
+          where: {
+            productId:
+              parsedProductId,
+
+            isActive:
+              true,
+          },
+
+          orderBy: {
+            effectiveFrom:
+              "desc",
+          },
+        }
+      ));
 
     // ===================================================
     // LOG TARGET
@@ -1208,22 +1804,22 @@ export async function POST(
           parsedProductId,
 
         targetId:
-          target?.id ??
+          finalTarget?.id ??
           null,
 
         target8H:
-          target
+          finalTarget
             ? Number(
-                target.target8H
+                finalTarget.target8H
               )
             : 0,
 
         effectiveFrom:
-          target?.effectiveFrom ??
+          finalTarget?.effectiveFrom ??
           null,
 
         effectiveTo:
-          target?.effectiveTo ??
+          finalTarget?.effectiveTo ??
           null,
       }
     );
@@ -1233,108 +1829,110 @@ export async function POST(
     // ===================================================
 
     const production =
-      await prisma.productionRecord.create({
-        data: {
-          // =============================================
-          // DATE
-          // =============================================
+      await prisma.productionRecord.create(
+        {
+          data: {
+            // =============================================
+            // DATE
+            // =============================================
 
-          productionDate:
-            productionDateValue,
+            productionDate:
+              productionDateValue,
 
-          // =============================================
-          // AREA
-          // =============================================
+            // =============================================
+            // AREA
+            // =============================================
 
-          areaId:
-            parsedAreaId,
+            areaId:
+              parsedAreaId,
 
-          // =============================================
-          // SHIFT
-          // =============================================
+            // =============================================
+            // SHIFT
+            // =============================================
 
-          shiftId:
-            parsedShiftId,
+            shiftId:
+              parsedShiftId,
 
-          // =============================================
-          // MACHINE NO.
-          // =============================================
+            // =============================================
+            // MACHINE NO.
+            // =============================================
 
-          machineNo:
-            normalizedMachineNo,
+            machineNo:
+              normalizedMachineNo,
 
-          // =============================================
-          // PRODUCT
-          // =============================================
+            // =============================================
+            // PRODUCT
+            // =============================================
 
-          productId:
-            parsedProductId,
+            productId:
+              parsedProductId,
 
-          // =============================================
-          // OPERATOR
-          // =============================================
+            // =============================================
+            // OPERATOR
+            // =============================================
 
-          operatorName:
-            operatorName
-              ? String(
-                  operatorName
-                ).trim()
-              : null,
+            operatorName:
+              operatorName
+                ? String(
+                    operatorName
+                  ).trim()
+                : null,
 
-          // =============================================
-          // COMPUTER CODE
-          // =============================================
+            // =============================================
+            // COMPUTER CODE
+            // =============================================
 
-          computerCode:
-            normalizedComputerCode,
+            computerCode:
+              normalizedComputerCode,
 
-          // =============================================
-          // OUTPUT
-          // =============================================
+            // =============================================
+            // OUTPUT
+            // =============================================
 
-          outputQty:
-            parsedOutputQty,
+            outputQty:
+              parsedOutputQty,
 
-          // =============================================
-          // OK
-          // =============================================
+            // =============================================
+            // OK
+            // =============================================
 
-          okQty:
-            parsedOkQty,
+            okQty:
+              parsedOkQty,
 
-          // =============================================
-          // ACTUAL RM
-          // =============================================
+            // =============================================
+            // ACTUAL RM
+            // =============================================
 
-          actualRm:
-            parsedActualRm,
+            actualRm:
+              parsedActualRm,
 
-          // =============================================
-          // OTHER
-          // =============================================
+            // =============================================
+            // OTHER
+            // =============================================
 
-          otReplace:
-            otReplace
-              ? String(
-                  otReplace
-                ).trim()
-              : null,
+            otReplace:
+              otReplace
+                ? String(
+                    otReplace
+                  ).trim()
+                : null,
 
-          remarks:
-            remarks
-              ? String(
-                  remarks
-                ).trim()
-              : null,
+            remarks:
+              remarks
+                ? String(
+                    remarks
+                  ).trim()
+                : null,
 
-          // =============================================
-          // INPUT USER
-          // =============================================
+            // =============================================
+            // INPUT USER
+            // =============================================
 
-          inputById:
-            parsedInputById,
-        },
-      });
+            inputById:
+              parsedInputById,
+          },
+        }
+      );
 
     // ===================================================
     // NG CALCULATION
@@ -1352,9 +1950,9 @@ export async function POST(
     // ===================================================
 
     const target8H =
-      target
+      finalTarget
         ? Number(
-            target.target8H
+            finalTarget.target8H
           )
         : 0;
 
@@ -1363,21 +1961,24 @@ export async function POST(
     // ===================================================
 
     const productVariance =
-      target8H > 0
+      target8H >
+      0
         ? parsedOutputQty -
           target8H
         : 0;
 
     // ===================================================
     // ACHIEVEMENT
-    // ===================================================
+    // =====================================================
 
     const achievement =
-      target8H > 0
+      target8H >
+      0
         ? (
             parsedOutputQty /
             target8H
-          ) * 100
+          ) *
+          100
         : 0;
 
     // ===================================================
@@ -1386,7 +1987,8 @@ export async function POST(
 
     return NextResponse.json(
       {
-        success: true,
+        success:
+          true,
 
         message:
           "Production record created successfully.",
@@ -1521,11 +2123,11 @@ export async function POST(
           target8H,
 
           targetEffectiveFrom:
-            target?.effectiveFrom ??
+            finalTarget?.effectiveFrom ??
             null,
 
           targetEffectiveTo:
-            target?.effectiveTo ??
+            finalTarget?.effectiveTo ??
             null,
 
           // =============================================
@@ -1577,10 +2179,15 @@ export async function POST(
         },
       },
       {
-        status: 201,
+        status:
+          201,
       }
     );
   } catch (error) {
+    // ===================================================
+    // ERROR LOG
+    // ===================================================
+
     console.error(
       "POST /api/production error:",
       error
@@ -1588,13 +2195,25 @@ export async function POST(
 
     return NextResponse.json(
       {
-        success: false,
+        success:
+          false,
 
         message:
           "Failed to create production record.",
+
+        error:
+          process.env.NODE_ENV ===
+          "development"
+            ? error instanceof Error
+              ? error.message
+              : String(
+                  error
+                )
+            : undefined,
       },
       {
-        status: 500,
+        status:
+          500,
       }
     );
   }
