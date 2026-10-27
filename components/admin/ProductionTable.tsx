@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { calculatePMC } from "@/lib/pmc-calculation";
 
 // =====================================================
@@ -23,15 +23,42 @@ const columns = [
   { name: "Quantity Product OK", width: "w-36" },
   { name: "Total NG Product", width: "w-32" },
   { name: "Product Rate NG (%)", width: "w-36" },
-  { name: "Total Actual Raw Material Usage", width: "w-48" },
-  { name: "Raw Material Requirement", width: "w-44" },
-  { name: "Variance Raw Material", width: "w-40" },
-  { name: "Percentage (%)", width: "w-32" },
-  { name: "Target Qty Production /8H", width: "w-40" },
-  { name: "Variance Product", width: "w-36" },
-  { name: "Achievement (%)", width: "w-36" },
-  { name: "OT / REPLACE", width: "w-32" },
-  { name: "Remarks", width: "w-56" },
+  {
+    name: "Total Actual Raw Material Usage",
+    width: "w-48",
+  },
+  {
+    name: "Raw Material Requirement",
+    width: "w-44",
+  },
+  {
+    name: "Variance Raw Material",
+    width: "w-40",
+  },
+  {
+    name: "Percentage (%)",
+    width: "w-32",
+  },
+  {
+    name: "Target Qty Production /8H",
+    width: "w-40",
+  },
+  {
+    name: "Variance Product",
+    width: "w-36",
+  },
+  {
+    name: "Achievement (%)",
+    width: "w-36",
+  },
+  {
+    name: "OT / REPLACE",
+    width: "w-32",
+  },
+  {
+    name: "Remarks",
+    width: "w-56",
+  },
 ];
 
 // =====================================================
@@ -41,9 +68,10 @@ const columns = [
 export interface ProductionRecord {
   id: number;
 
-  createdAt: string | Date;
-
   productionDate: string | Date;
+
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 
   machineNo: string | null;
 
@@ -71,6 +99,7 @@ export interface ProductionRecord {
   } | null;
 
   operatorName: string | null;
+
   computerCode: string | null;
 
   outputQty: number | string;
@@ -96,37 +125,16 @@ interface ProductionTableProps {
 }
 
 // =====================================================
-// FILTER
+// FORMAT NUMBER
 // =====================================================
 
-interface Filters {
-  search: string;
-  dateFrom: string;
-  dateTo: string;
-  area: string;
-  shift: string;
-}
-
-const initialFilters: Filters = {
-  search: "",
-  dateFrom: "",
-  dateTo: "",
-  area: "ALL",
-  shift: "ALL",
-};
-
-// =====================================================
-// PAGINATION
-// =====================================================
-
-const ITEMS_PER_PAGE = 25;
-
-// =====================================================
-// HELPERS
-// =====================================================
-
-function formatNumber(value: number, decimals = 2) {
-  if (!Number.isFinite(value)) return "-";
+function formatNumber(
+  value: number,
+  decimals = 2
+) {
+  if (!Number.isFinite(value)) {
+    return "-";
+  }
 
   return new Intl.NumberFormat("en-US", {
     minimumFractionDigits: decimals,
@@ -134,120 +142,109 @@ function formatNumber(value: number, decimals = 2) {
   }).format(value);
 }
 
-function getDateValue(date: string | Date) {
+// =====================================================
+// FORMAT DATE
+// =====================================================
+
+function formatDate(
+  date: string | Date
+) {
   const value = new Date(date);
 
-  return Number.isNaN(value.getTime()) ? null : value;
+  if (
+    Number.isNaN(
+      value.getTime()
+    )
+  ) {
+    return "-";
+  }
+
+  return value.toLocaleDateString(
+    "id-ID",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }
+  );
 }
 
-function formatDate(date: string | Date) {
-  const value = getDateValue(date);
+// =====================================================
+// GET MONTH
+// =====================================================
 
-  if (!value) return "-";
+function getMonth(
+  date: string | Date
+) {
+  const value = new Date(date);
 
-  return value.toLocaleDateString("id-ID", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  if (
+    Number.isNaN(
+      value.getTime()
+    )
+  ) {
+    return "-";
+  }
+
+  return value.toLocaleDateString(
+    "id-ID",
+    {
+      month: "long",
+    }
+  );
 }
 
-function getMonth(date: string | Date) {
-  const value = getDateValue(date);
+// =====================================================
+// GET DAY
+// =====================================================
 
-  if (!value) return "-";
+function getDay(
+  date: string | Date
+) {
+  const value = new Date(date);
 
-  return value.toLocaleDateString("id-ID", {
-    month: "long",
-  });
-}
-
-function getDay(date: string | Date) {
-  const value = getDateValue(date);
-
-  if (!value) return "-";
+  if (
+    Number.isNaN(
+      value.getTime()
+    )
+  ) {
+    return "-";
+  }
 
   return value.getDate();
 }
 
-function normalizeDate(date: string | Date) {
-  const value = getDateValue(date);
+// =====================================================
+// NORMALIZE DATE
+// =====================================================
 
-  if (!value) return "";
+function normalizeDate(
+  date: string | Date
+) {
+  const value = new Date(date);
 
-  const year = value.getFullYear();
-  const month = String(value.getMonth() + 1).padStart(2, "0");
-  const day = String(value.getDate()).padStart(2, "0");
+  if (
+    Number.isNaN(
+      value.getTime()
+    )
+  ) {
+    return "";
+  }
+
+  const year =
+    value.getFullYear();
+
+  const month =
+    String(
+      value.getMonth() + 1
+    ).padStart(2, "0");
+
+  const day =
+    String(
+      value.getDate()
+    ).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
-}
-
-function getArea(record: ProductionRecord) {
-  return record.area?.name || record.area?.code || "";
-}
-
-function getShift(record: ProductionRecord) {
-  return record.shift?.name || record.shift?.code || "";
-}
-
-// =====================================================
-// TABLE CELL
-// =====================================================
-
-function TableCell({
-  children,
-  align = "right",
-  className = "",
-}: {
-  children: ReactNode;
-  align?: "left" | "center" | "right";
-  className?: string;
-}) {
-  const alignClass = {
-    left: "text-left",
-    center: "text-center",
-    right: "text-right",
-  }[align];
-
-  return (
-    <td
-  className={`border-b border-r border-gray-100 px-4 py-3 text-sm text-gray-700 ${alignClass} ${className}`}
->
-      {children}
-    </td>
-  );
-}
-
-// =====================================================
-// KPI CARD
-// =====================================================
-
-function KpiCard({
-  title,
-  value,
-  description,
-  valueClass = "text-gray-900",
-}: {
-  title: string;
-  value: ReactNode;
-  description: ReactNode;
-  valueClass?: string;
-}) {
-  return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-      <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
-        {title}
-      </p>
-
-      <p className={`mt-2 text-xl font-bold ${valueClass}`}>
-        {value}
-      </p>
-
-      <p className="mt-1 text-xs text-gray-400">
-        {description}
-      </p>
-    </div>
-  );
 }
 
 // =====================================================
@@ -255,53 +252,99 @@ function KpiCard({
 // =====================================================
 
 export default function ProductionTable({
-  productionData: externalProductionData,
-  loading: externalLoading = false,
+  productionData:
+    externalProductionData,
+  loading:
+    externalLoading = false,
 }: ProductionTableProps) {
   // ===================================================
-  // STATE
+  // DATA STATE
   // ===================================================
 
-  const [productionData, setProductionData] = useState<
+  const [
+    productionData,
+    setProductionData,
+  ] = useState<
     ProductionRecord[]
   >([]);
 
-  const [loading, setLoading] = useState(true);
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
 
-  const [error, setError] = useState<string | null>(null);
-
-  const [filters, setFilters] =
-    useState<Filters>(initialFilters);
-
-  const [currentPage, setCurrentPage] = useState(1);
+  const [
+    error,
+    setError,
+  ] = useState<string | null>(
+    null
+  );
 
   // ===================================================
-  // FILTER SHORTCUT
+  // FILTER STATE
   // ===================================================
 
-  const {
+  const [
     search,
+    setSearch,
+  ] = useState("");
+
+  const [
     dateFrom,
+    setDateFrom,
+  ] = useState("");
+
+  const [
     dateTo,
-    area,
-    shift,
-  } = filters;
+    setDateTo,
+  ] = useState("");
 
-  const updateFilter = <K extends keyof Filters>(
-    key: K,
-    value: Filters[K]
-  ) => {
-    setFilters((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+  const [
+    areaFilter,
+    setAreaFilter,
+  ] = useState("ALL");
 
-    // Kembali ke halaman pertama
-    setCurrentPage(1);
-  };
+  const [
+    shiftFilter,
+    setShiftFilter,
+  ] = useState("ALL");
 
   // ===================================================
-  // GET PRODUCTION DATA
+  // PAGINATION STATE
+  // ===================================================
+
+  const [
+    currentPage,
+    setCurrentPage,
+  ] = useState(1);
+
+  const [
+    pageSize,
+    setPageSize,
+  ] = useState(25);
+
+  const [
+    totalRecords,
+    setTotalRecords,
+  ] = useState(0);
+
+  const [
+    totalPages,
+    setTotalPages,
+  ] = useState(0);
+
+  const [
+    hasNextPage,
+    setHasNextPage,
+  ] = useState(false);
+
+  const [
+    hasPreviousPage,
+    setHasPreviousPage,
+  ] = useState(false);
+
+  // ===================================================
+  // FETCH PRODUCTION DATA
   // ===================================================
 
   useEffect(() => {
@@ -312,26 +355,182 @@ export default function ProductionTable({
         setLoading(true);
         setError(null);
 
-        const response = await fetch("/api/production", {
-          method: "GET",
-          cache: "no-store",
-        });
+        // =============================================
+        // BUILD QUERY
+        // =============================================
 
-        const result = await response.json();
+        const params =
+          new URLSearchParams();
 
-        if (!response.ok) {
+        params.set(
+          "page",
+          String(
+            currentPage
+          )
+        );
+
+        params.set(
+          "limit",
+          String(
+            pageSize
+          )
+        );
+
+        // =============================================
+        // SEARCH
+        // =============================================
+
+        if (
+          search.trim()
+        ) {
+          params.set(
+            "search",
+            search.trim()
+          );
+        }
+
+        // =============================================
+        // DATE FROM
+        // =============================================
+
+        if (
+          dateFrom
+        ) {
+          params.set(
+            "fromDate",
+            dateFrom
+          );
+        }
+
+        // =============================================
+        // DATE TO
+        // =============================================
+
+        if (
+          dateTo
+        ) {
+          params.set(
+            "toDate",
+            dateTo
+          );
+        }
+
+        // =============================================
+        // AREA
+        // =============================================
+
+        if (
+          areaFilter !==
+          "ALL"
+        ) {
+          params.set(
+            "areaId",
+            areaFilter
+          );
+        }
+
+        // =============================================
+        // SHIFT
+        // =============================================
+
+        if (
+          shiftFilter !==
+          "ALL"
+        ) {
+          params.set(
+            "shiftId",
+            shiftFilter
+          );
+        }
+
+        // =============================================
+        // REQUEST
+        // =============================================
+
+        const response =
+          await fetch(
+            `/api/production?${params.toString()}`,
+            {
+              method:
+                "GET",
+
+              cache:
+                "no-store",
+            }
+          );
+
+        const result =
+          await response.json();
+
+        if (
+          !response.ok
+        ) {
           throw new Error(
             result?.message ||
               "Gagal mengambil data production."
           );
         }
 
-        const records = Array.isArray(result?.data)
-          ? result.data
-          : [];
+        if (
+          !cancelled
+        ) {
+          const records =
+            Array.isArray(
+              result?.data
+            )
+              ? result.data
+              : [];
 
-        if (!cancelled) {
-          setProductionData(records);
+          setProductionData(
+            records
+          );
+
+          // =========================================
+          // PAGINATION RESPONSE
+          // =========================================
+
+          const pagination =
+            result?.pagination;
+
+          const total =
+            Number(
+              pagination?.total ??
+                result?.total ??
+                0
+            );
+
+          const pages =
+            Number(
+              pagination?.totalPages ??
+                Math.ceil(
+                  total /
+                    pageSize
+                )
+            );
+
+          setTotalRecords(
+            total
+          );
+
+          setTotalPages(
+            pages
+          );
+
+          setHasNextPage(
+            Boolean(
+              pagination?.hasNextPage ??
+                currentPage <
+                  pages
+            )
+          );
+
+          setHasPreviousPage(
+            Boolean(
+              pagination?.hasPreviousPage ??
+                currentPage >
+                  1
+            )
+          );
         }
       } catch (err) {
         console.error(
@@ -339,18 +538,42 @@ export default function ProductionTable({
           err
         );
 
-        if (!cancelled) {
+        if (
+          !cancelled
+        ) {
           setError(
             err instanceof Error
               ? err.message
               : "Gagal mengambil data production."
           );
 
-          setProductionData([]);
+          setProductionData(
+            []
+          );
+
+          setTotalRecords(
+            0
+          );
+
+          setTotalPages(
+            0
+          );
+
+          setHasNextPage(
+            false
+          );
+
+          setHasPreviousPage(
+            false
+          );
         }
       } finally {
-        if (!cancelled) {
-          setLoading(false);
+        if (
+          !cancelled
+        ) {
+          setLoading(
+            false
+          );
         }
       }
     }
@@ -360,336 +583,305 @@ export default function ProductionTable({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [
+    currentPage,
+    pageSize,
+    search,
+    dateFrom,
+    dateTo,
+    areaFilter,
+    shiftFilter,
+  ]);
 
   // ===================================================
-  // LOADING
+  // RESET PAGE WHEN FILTER CHANGES
+  // ===================================================
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [
+    search,
+    dateFrom,
+    dateTo,
+    areaFilter,
+    shiftFilter,
+  ]);
+
+  // ===================================================
+  // FINAL LOADING
   // ===================================================
 
   const isLoading =
-    loading || externalLoading;
+    loading ||
+    externalLoading;
 
   // ===================================================
   // FILTER OPTIONS
   // ===================================================
 
-  const areaOptions = useMemo(() => {
-    return Array.from(
-      new Set(
-        productionData
-          .map(getArea)
-          .filter(Boolean)
-      )
-    ).sort();
-  }, [productionData]);
-
-  const shiftOptions = useMemo(() => {
-    return Array.from(
-      new Set(
-        productionData
-          .map(getShift)
-          .filter(Boolean)
-      )
-    ).sort();
-  }, [productionData]);
-
-  // ===================================================
-  // FILTERED DATA
-  // ===================================================
-
-  const filteredProductionData = useMemo(() => {
-    const keyword =
-      search.trim().toLowerCase();
-
-    return productionData
-      .filter((record) => {
-        // =============================================
-        // SEARCH
-        // =============================================
-
-        if (keyword) {
-          const values = [
-            record.product?.productName,
-            record.product?.productCode,
-            record.computerCode,
-            record.operatorName,
-            record.machineNo,
-            record.area?.name,
-            record.area?.code,
-            record.shift?.name,
-            record.shift?.code,
-            record.remarks,
-          ];
-
-          const matched = values.some(
-            (value) =>
-              String(value ?? "")
-                .toLowerCase()
-                .includes(keyword)
-          );
-
-          if (!matched) return false;
-        }
-
-        // =============================================
-        // DATE
-        // =============================================
-
-        const productionDate =
-          normalizeDate(
-            record.productionDate
-          );
-
-        if (!productionDate) {
-          return false;
-        }
-
-        if (
-          dateFrom &&
-          productionDate < dateFrom
-        ) {
-          return false;
-        }
-
-        if (
-          dateTo &&
-          productionDate > dateTo
-        ) {
-          return false;
-        }
-
-        // =============================================
-        // AREA
-        // =============================================
-
-        if (
-          area !== "ALL" &&
-          getArea(record) !== area
-        ) {
-          return false;
-        }
-
-        // =============================================
-        // SHIFT
-        // =============================================
-
-        if (
-          shift !== "ALL" &&
-          getShift(record) !== shift
-        ) {
-          return false;
-        }
-
-        return true;
-      })
-
-      // ===============================================
-      // SORT BY CREATED AT
-      // TERLAMA → TERBARU
-      // ===============================================
-
-      .sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() -
-          new Date(b.createdAt).getTime()
-      );
-  }, [
-    productionData,
-    search,
-    dateFrom,
-    dateTo,
-    area,
-    shift,
-  ]);
-
-  // ===================================================
-  // PAGINATION INFO
-  // ===================================================
-
-  const totalPages = Math.max(
-    1,
-    Math.ceil(
-      filteredProductionData.length /
-        ITEMS_PER_PAGE
-    )
-  );
-
-  // ===================================================
-  // FIX CURRENT PAGE
-  // ===================================================
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [
-    currentPage,
-    totalPages,
-  ]);
-
-  // ===================================================
-  // PAGINATED DATA
-  // ===================================================
-
-  const paginatedProductionData =
+  const areaOptions =
     useMemo(() => {
-      const startIndex =
-        (currentPage - 1) *
-        ITEMS_PER_PAGE;
+      const values =
+        productionData
+          .map(
+            (record) =>
+              record.area
+                ?.name ||
+              record.area
+                ?.code
+          )
+          .filter(
+            Boolean
+          ) as string[];
 
-      const endIndex =
-        startIndex +
-        ITEMS_PER_PAGE;
-
-      return filteredProductionData.slice(
-        startIndex,
-        endIndex
-      );
+      return Array.from(
+        new Set(values)
+      ).sort();
     }, [
-      filteredProductionData,
-      currentPage,
+      productionData,
+    ]);
+
+  const shiftOptions =
+    useMemo(() => {
+      const values =
+        productionData
+          .map(
+            (record) =>
+              record.shift
+                ?.name ||
+              record.shift
+                ?.code
+          )
+          .filter(
+            Boolean
+          ) as string[];
+
+      return Array.from(
+        new Set(values)
+      ).sort();
+    }, [
+      productionData,
     ]);
 
   // ===================================================
-  // CALCULATE PMC
+  // CALCULATE PMC DATA
   // ===================================================
 
-  const calculatedRows = useMemo(() => {
-    return paginatedProductionData.map(
-      (record) => {
-        const outputQty =
-          Number(record.outputQty) || 0;
-
-        const okQty =
-          Number(record.okQty) || 0;
-
-        const actualRm =
-          Number(record.actualRm) || 0;
-
-        const shotWeight =
-          Number(
-            record.product?.shotWeight
-          ) || 0;
-
-        const target8H =
-          Number(record.target8H) || 0;
-
-        const pmc = calculatePMC({
-          outputQty,
-          okQty,
-          actualRm,
-          shotWeight,
-          target8H,
-        });
-
-        return {
-          record,
-          outputQty,
-          okQty,
-          actualRm,
-          shotWeight,
-          target8H,
-          pmc,
-        };
-      }
-    );
-  }, [paginatedProductionData]);
-
-  // ===================================================
-  // DASHBOARD SUMMARY
-  // ===================================================
-
-  const summary = useMemo(() => {
-    const totals =
-      filteredProductionData.reduce(
-        (acc, record) => {
+  const calculatedRows =
+    useMemo(() => {
+      return productionData.map(
+        (
+          record
+        ) => {
           const outputQty =
-            Number(record.outputQty) || 0;
+            Number(
+              record.outputQty
+            ) || 0;
 
           const okQty =
-            Number(record.okQty) || 0;
+            Number(
+              record.okQty
+            ) || 0;
 
           const actualRm =
-            Number(record.actualRm) || 0;
+            Number(
+              record.actualRm
+            ) || 0;
 
           const shotWeight =
             Number(
-              record.product?.shotWeight
+              record.product
+                ?.shotWeight
             ) || 0;
 
           const target8H =
-            Number(record.target8H) || 0;
+            Number(
+              record.target8H
+            ) || 0;
 
-          const pmc = calculatePMC({
+          const pmc =
+            calculatePMC({
+              outputQty,
+              okQty,
+              actualRm,
+              shotWeight,
+              target8H,
+            });
+
+          return {
+            record,
             outputQty,
             okQty,
             actualRm,
             shotWeight,
             target8H,
-          });
-
-          acc.totalOutput += outputQty;
-          acc.totalOk += okQty;
-          acc.totalNg += pmc.ngQty;
-          acc.totalActualRm += actualRm;
-          acc.totalRmRequirement +=
-            pmc.rmRequirement;
-          acc.totalRmVariance +=
-            pmc.rmVariance;
-          acc.totalTarget += target8H;
-
-          return acc;
-        },
-        {
-          totalOutput: 0,
-          totalOk: 0,
-          totalNg: 0,
-          totalActualRm: 0,
-          totalRmRequirement: 0,
-          totalRmVariance: 0,
-          totalTarget: 0,
+            pmc,
+          };
         }
       );
-
-    const ngRate =
-      totals.totalOutput > 0
-        ? (totals.totalNg /
-            totals.totalOutput) *
-          100
-        : 0;
-
-    const achievement =
-      totals.totalTarget > 0
-        ? (totals.totalOutput /
-            totals.totalTarget) *
-          100
-        : 0;
-
-    const rmPercentage =
-      totals.totalRmRequirement > 0
-        ? (totals.totalActualRm /
-            totals.totalRmRequirement) *
-          100
-        : 0;
-
-    return {
-      ...totals,
-      ngRate,
-      achievement,
-      rmPercentage,
-    };
-  }, [filteredProductionData]);
+    }, [
+      productionData,
+    ]);
 
   // ===================================================
-  // FILTER STATUS
+  // DASHBOARD SUMMARY
+  // ===================================================
+
+  const summary =
+    useMemo(() => {
+      const totalOutput =
+        calculatedRows.reduce(
+          (
+            sum,
+            row
+          ) =>
+            sum +
+            row.outputQty,
+          0
+        );
+
+      const totalOk =
+        calculatedRows.reduce(
+          (
+            sum,
+            row
+          ) =>
+            sum +
+            row.okQty,
+          0
+        );
+
+      const totalNg =
+        calculatedRows.reduce(
+          (
+            sum,
+            row
+          ) =>
+            sum +
+            row.pmc.ngQty,
+          0
+        );
+
+      const totalActualRm =
+        calculatedRows.reduce(
+          (
+            sum,
+            row
+          ) =>
+            sum +
+            row.actualRm,
+          0
+        );
+
+      const totalRmRequirement =
+        calculatedRows.reduce(
+          (
+            sum,
+            row
+          ) =>
+            sum +
+            row.pmc
+              .rmRequirement,
+          0
+        );
+
+      const totalRmVariance =
+        calculatedRows.reduce(
+          (
+            sum,
+            row
+          ) =>
+            sum +
+            row.pmc
+              .rmVariance,
+          0
+        );
+
+      const totalTarget =
+        calculatedRows.reduce(
+          (
+            sum,
+            row
+          ) =>
+            sum +
+            row.target8H,
+          0
+        );
+
+      const ngRate =
+        totalOutput >
+        0
+          ? (totalNg /
+              totalOutput) *
+            100
+          : 0;
+
+      const achievement =
+        totalTarget >
+        0
+          ? (totalOutput /
+              totalTarget) *
+            100
+          : 0;
+
+      const rmPercentage =
+        totalRmRequirement >
+        0
+          ? (totalActualRm /
+              totalRmRequirement) *
+            100
+          : 0;
+
+      return {
+        totalOutput,
+        totalOk,
+        totalNg,
+        totalActualRm,
+        totalRmRequirement,
+        totalRmVariance,
+        totalTarget,
+        ngRate,
+        achievement,
+        rmPercentage,
+      };
+    }, [
+      calculatedRows,
+    ]);
+
+  // ===================================================
+  // CLEAR FILTER
+  // ===================================================
+
+  const clearFilters =
+    () => {
+      setSearch("");
+      setDateFrom("");
+      setDateTo("");
+      setAreaFilter(
+        "ALL"
+      );
+      setShiftFilter(
+        "ALL"
+      );
+      setCurrentPage(
+        1
+      );
+    };
+
+  // ===================================================
+  // HAS FILTER
   // ===================================================
 
   const hasFilter =
     search.trim() !== "" ||
     dateFrom !== "" ||
     dateTo !== "" ||
-    area !== "ALL" ||
-    shift !== "ALL";
+    areaFilter !== "ALL" ||
+    shiftFilter !== "ALL";
+
+  // ===================================================
+  // INVALID DATE RANGE
+  // ===================================================
 
   const invalidDateRange =
     dateFrom !== "" &&
@@ -697,139 +889,95 @@ export default function ProductionTable({
     dateFrom > dateTo;
 
   // ===================================================
-  // CLEAR FILTER
+  // PAGINATION NUMBERS
   // ===================================================
 
-  const clearFilters = () => {
-    setFilters(initialFilters);
-    setCurrentPage(1);
-  };
+  const pageNumbers =
+    useMemo(() => {
+      const pages: number[] =
+        [];
 
-  // ===================================================
-  // PAGINATION CONTROLS
-  // ===================================================
+      if (
+        totalPages <= 7
+      ) {
+        for (
+          let i = 1;
+          i <= totalPages;
+          i++
+        ) {
+          pages.push(i);
+        }
 
-  const goToPage = (
-    page: number
-  ) => {
-    if (
-      page < 1 ||
-      page > totalPages
-    ) {
-      return;
-    }
+        return pages;
+      }
 
-    setCurrentPage(page);
-  };
+      pages.push(1);
 
-  // ===================================================
-  // PAGE NUMBERS
-  // ===================================================
+      if (
+        currentPage > 4
+      ) {
+        pages.push(-1);
+      }
 
-  const pageNumbers = useMemo(() => {
-    const pages: number[] = [];
+      const start =
+        Math.max(
+          2,
+          currentPage - 1
+        );
 
-    const maxVisiblePages = 5;
+      const end =
+        Math.min(
+          totalPages - 1,
+          currentPage + 1
+        );
 
-    let start = Math.max(
-      1,
-      currentPage -
-        Math.floor(
-          maxVisiblePages / 2
-        )
-    );
+      for (
+        let i = start;
+        i <= end;
+        i++
+      ) {
+        pages.push(i);
+      }
 
-    let end = Math.min(
-      totalPages,
-      start +
-        maxVisiblePages -
-        1
-    );
+      if (
+        currentPage <
+        totalPages - 3
+      ) {
+        pages.push(-1);
+      }
 
-    if (
-      end - start + 1 <
-      maxVisiblePages
-    ) {
-      start = Math.max(
-        1,
-        end -
-          maxVisiblePages +
-          1
+      pages.push(
+        totalPages
       );
-    }
 
-    for (
-      let i = start;
-      i <= end;
-      i++
-    ) {
-      pages.push(i);
-    }
-
-    return pages;
-  }, [
-    currentPage,
-    totalPages,
-  ]);
+      return pages;
+    }, [
+      currentPage,
+      totalPages,
+    ]);
 
   // ===================================================
-  // PAGINATION RANGE
+  // GO TO PAGE
   // ===================================================
 
-  const firstItem =
-    filteredProductionData.length === 0
-      ? 0
-      : (currentPage - 1) *
-          ITEMS_PER_PAGE +
-        1;
+  const goToPage =
+    (
+      page: number
+    ) => {
+      if (
+        page < 1 ||
+        page >
+          totalPages ||
+        page ===
+          currentPage
+      ) {
+        return;
+      }
 
-  const lastItem = Math.min(
-    currentPage *
-      ITEMS_PER_PAGE,
-    filteredProductionData.length
-  );
-
-  // ===================================================
-  // SEARCH ICON
-  // ===================================================
-
-  const SearchIcon = () => (
-    <svg
-      className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
-      />
-    </svg>
-  );
-
-  // ===================================================
-  // EMPTY ICON
-  // ===================================================
-
-  const EmptyIcon = () => (
-    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
-      <svg
-        className="h-6 w-6 text-gray-400"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.8}
-          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h6l5 5v11a2 2 0 01-2 2z"
-        />
-      </svg>
-    </div>
-  );
+      setCurrentPage(
+        page
+      );
+    };
 
   // ===================================================
   // RENDER
@@ -843,6 +991,7 @@ export default function ProductionTable({
       ===================================================== */}
 
       <div className="border-b border-gray-200 px-6 py-5">
+
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
           <div>
@@ -858,10 +1007,11 @@ export default function ProductionTable({
           <div className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-500">
             {isLoading
               ? "Loading production data..."
-              : `${firstItem}-${lastItem} of ${filteredProductionData.length} records`}
+              : `${productionData.length} of ${totalRecords} records`}
           </div>
 
         </div>
+
       </div>
 
       {/* =====================================================
@@ -870,94 +1020,166 @@ export default function ProductionTable({
 
       <div className="grid grid-cols-2 gap-3 border-b border-gray-200 bg-gray-50 p-4 md:grid-cols-3 xl:grid-cols-6">
 
-        <KpiCard
-          title="Total Output"
-          value={formatNumber(
-            summary.totalOutput,
-            0
-          )}
-          description="Production"
-        />
+        {/* OUTPUT */}
 
-        <KpiCard
-          title="Product OK"
-          value={formatNumber(
-            summary.totalOk,
-            0
-          )}
-          description="Passed"
-          valueClass="text-green-600"
-        />
+        <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
 
-        <KpiCard
-          title="Total NG"
-          value={formatNumber(
-            summary.totalNg,
-            0
-          )}
-          description={`${formatNumber(
-            summary.ngRate,
-            2
-          )}% NG Rate`}
-          valueClass="text-red-600"
-        />
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+            Total Output
+          </p>
 
-        <KpiCard
-          title="Achievement"
-          value={`${formatNumber(
-            summary.achievement,
-            2
-          )}%`}
-          description={
-            <>
-              {formatNumber(
-                summary.totalOutput,
-                0
-              )}{" "}
-              /{" "}
-              {formatNumber(
-                summary.totalTarget,
-                0
-              )}
-            </>
-          }
-          valueClass={
-            summary.achievement >= 100
-              ? "text-green-600"
-              : summary.achievement >= 80
-                ? "text-yellow-600"
-                : "text-red-600"
-          }
-        />
+          <p className="mt-2 text-xl font-bold text-gray-900">
+            {formatNumber(
+              summary.totalOutput,
+              0
+            )}
+          </p>
 
-        <KpiCard
-          title="RM Usage"
-          value={formatNumber(
-            summary.totalActualRm,
-            3
-          )}
-          description="Actual"
-          valueClass="text-blue-600"
-        />
+          <p className="mt-1 text-xs text-gray-400">
+            Production
+          </p>
 
-        <KpiCard
-          title="RM Variance"
-          value={formatNumber(
-            summary.totalRmVariance,
-            3
-          )}
-          description={`${formatNumber(
-            summary.rmPercentage,
-            2
-          )}% usage`}
-          valueClass={
-            summary.totalRmVariance > 0
-              ? "text-red-600"
-              : summary.totalRmVariance < 0
+        </div>
+
+        {/* OK */}
+
+        <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+            Product OK
+          </p>
+
+          <p className="mt-2 text-xl font-bold text-green-600">
+            {formatNumber(
+              summary.totalOk,
+              0
+            )}
+          </p>
+
+          <p className="mt-1 text-xs text-gray-400">
+            Passed
+          </p>
+
+        </div>
+
+        {/* NG */}
+
+        <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+            Total NG
+          </p>
+
+          <p className="mt-2 text-xl font-bold text-red-600">
+            {formatNumber(
+              summary.totalNg,
+              0
+            )}
+          </p>
+
+          <p className="mt-1 text-xs text-gray-400">
+            {formatNumber(
+              summary.ngRate,
+              2
+            )}% NG Rate
+          </p>
+
+        </div>
+
+        {/* ACHIEVEMENT */}
+
+        <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+            Achievement
+          </p>
+
+          <p
+            className={`mt-2 text-xl font-bold ${
+              summary.achievement >=
+              100
                 ? "text-green-600"
-                : "text-gray-600"
-          }
-        />
+                : summary.achievement >=
+                    80
+                  ? "text-yellow-600"
+                  : "text-red-600"
+            }`}
+          >
+            {formatNumber(
+              summary.achievement,
+              2
+            )}
+            %
+          </p>
+
+          <p className="mt-1 text-xs text-gray-400">
+            {formatNumber(
+              summary.totalOutput,
+              0
+            )}{" "}
+            /{" "}
+            {formatNumber(
+              summary.totalTarget,
+              0
+            )}
+          </p>
+
+        </div>
+
+        {/* RM */}
+
+        <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+            RM Usage
+          </p>
+
+          <p className="mt-2 text-xl font-bold text-blue-600">
+            {formatNumber(
+              summary.totalActualRm,
+              3
+            )}
+          </p>
+
+          <p className="mt-1 text-xs text-gray-400">
+            Actual
+          </p>
+
+        </div>
+
+        {/* RM VARIANCE */}
+
+        <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+            RM Variance
+          </p>
+
+          <p
+            className={`mt-2 text-xl font-bold ${
+              summary.totalRmVariance >
+              0
+                ? "text-red-600"
+                : summary.totalRmVariance <
+                    0
+                  ? "text-green-600"
+                  : "text-gray-600"
+            }`}
+          >
+            {formatNumber(
+              summary.totalRmVariance,
+              3
+            )}
+          </p>
+
+          <p className="mt-1 text-xs text-gray-400">
+            {formatNumber(
+              summary.rmPercentage,
+              2
+            )}% usage
+          </p>
+
+        </div>
 
       </div>
 
@@ -967,7 +1189,7 @@ export default function ProductionTable({
 
       <div className="border-b border-gray-200 bg-white px-6 py-4">
 
-        {/* SEARCH + DATE */}
+        {/* FIRST ROW */}
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
 
@@ -981,14 +1203,31 @@ export default function ProductionTable({
 
             <div className="relative">
 
-              <SearchIcon />
+              <svg
+                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={
+                    2
+                  }
+                  d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
+                />
+              </svg>
 
               <input
                 type="text"
-                value={search}
-                onChange={(e) =>
-                  updateFilter(
-                    "search",
+                value={
+                  search
+                }
+                onChange={(
+                  e
+                ) =>
+                  setSearch(
                     e.target.value
                   )
                 }
@@ -997,6 +1236,7 @@ export default function ProductionTable({
               />
 
             </div>
+
           </div>
 
           {/* FROM DATE */}
@@ -1009,14 +1249,17 @@ export default function ProductionTable({
 
             <input
               type="date"
-              value={dateFrom}
+              value={
+                dateFrom
+              }
               max={
                 dateTo ||
                 undefined
               }
-              onChange={(e) =>
-                updateFilter(
-                  "dateFrom",
+              onChange={(
+                e
+              ) =>
+                setDateFrom(
                   e.target.value
                 )
               }
@@ -1039,14 +1282,17 @@ export default function ProductionTable({
 
             <input
               type="date"
-              value={dateTo}
+              value={
+                dateTo
+              }
               min={
                 dateFrom ||
                 undefined
               }
-              onChange={(e) =>
-                updateFilter(
-                  "dateTo",
+              onChange={(
+                e
+              ) =>
+                setDateTo(
                   e.target.value
                 )
               }
@@ -1074,7 +1320,8 @@ export default function ProductionTable({
         )}
 
         {!invalidDateRange &&
-          (dateFrom || dateTo) && (
+          (dateFrom ||
+            dateTo) && (
             <div className="mt-3 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2">
 
               <p className="text-xs text-blue-700">
@@ -1099,7 +1346,7 @@ export default function ProductionTable({
             </div>
           )}
 
-        {/* AREA + SHIFT */}
+        {/* SECOND ROW */}
 
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end">
 
@@ -1112,10 +1359,13 @@ export default function ProductionTable({
             </label>
 
             <select
-              value={area}
-              onChange={(e) =>
-                updateFilter(
-                  "area",
+              value={
+                areaFilter
+              }
+              onChange={(
+                e
+              ) =>
+                setAreaFilter(
                   e.target.value
                 )
               }
@@ -1127,12 +1377,18 @@ export default function ProductionTable({
               </option>
 
               {areaOptions.map(
-                (item) => (
+                (
+                  area
+                ) => (
                   <option
-                    key={item}
-                    value={item}
+                    key={
+                      area
+                    }
+                    value={
+                      area
+                    }
                   >
-                    {item}
+                    {area}
                   </option>
                 )
               )}
@@ -1150,10 +1406,13 @@ export default function ProductionTable({
             </label>
 
             <select
-              value={shift}
-              onChange={(e) =>
-                updateFilter(
-                  "shift",
+              value={
+                shiftFilter
+              }
+              onChange={(
+                e
+              ) =>
+                setShiftFilter(
                   e.target.value
                 )
               }
@@ -1165,15 +1424,65 @@ export default function ProductionTable({
               </option>
 
               {shiftOptions.map(
-                (item) => (
+                (
+                  shift
+                ) => (
                   <option
-                    key={item}
-                    value={item}
+                    key={
+                      shift
+                    }
+                    value={
+                      shift
+                    }
                   >
-                    {item}
+                    {shift}
                   </option>
                 )
               )}
+
+            </select>
+
+          </div>
+
+          {/* PAGE SIZE */}
+
+          <div className="w-full sm:w-40">
+
+            <label className="mb-1.5 block text-xs font-medium text-gray-600">
+              Per Page
+            </label>
+
+            <select
+              value={
+                pageSize
+              }
+              onChange={(
+                e
+              ) => {
+                setPageSize(
+                  Number(
+                    e.target.value
+                  )
+                );
+
+                setCurrentPage(
+                  1
+                );
+              }}
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            >
+
+              <option value={25}>
+                25
+              </option>
+
+              <option value={50}>
+                50
+              </option>
+
+              <option value={100}>
+                100
+              </option>
 
             </select>
 
@@ -1184,7 +1493,9 @@ export default function ProductionTable({
           {hasFilter && (
             <button
               type="button"
-              onClick={clearFilters}
+              onClick={
+                clearFilters
+              }
               className="rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 transition hover:bg-gray-50"
             >
               Clear Filter
@@ -1192,24 +1503,26 @@ export default function ProductionTable({
           )}
 
         </div>
+
       </div>
 
       {/* =====================================================
           ERROR
       ===================================================== */}
 
-      {error && !isLoading && (
-        <div className="border-b border-red-200 bg-red-50 px-6 py-3">
+      {error &&
+        !isLoading && (
+          <div className="border-b border-red-200 bg-red-50 px-6 py-3">
 
-          <p className="text-sm font-medium text-red-600">
-            {error}
-          </p>
+            <p className="text-sm font-medium text-red-600">
+              {error}
+            </p>
 
-        </div>
-      )}
+          </div>
+        )}
 
       {/* =====================================================
-          TABLE
+          INVALID DATE
       ===================================================== */}
 
       {invalidDateRange ? (
@@ -1225,25 +1538,49 @@ export default function ProductionTable({
 
         </div>
       ) : (
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
         <div className="w-full overflow-x-auto">
 
           <table className="w-max min-w-full border-collapse">
 
-            {/* =====================================================
-                HEADER
-            ===================================================== */}
+            {/* HEADER */}
 
             <thead>
 
               <tr className="bg-slate-50">
 
                 {columns.map(
-                  (column) => (
+                  (
+                    column
+                  ) => (
                     <th
-                      key={column.name}
-                      className={`${column.width} whitespace-nowrap border-b border-r border-gray-200 px-4 py-4 text-center align-middle text-xs font-semibold leading-4 text-slate-600 last:border-r-0`}
+                      key={
+                        column.name
+                      }
+                      className={`
+                        ${column.width}
+                        border-b
+                        border-r
+                        border-gray-200
+                        px-4
+                        py-4
+                        text-center
+                        align-middle
+                        text-xs
+                        font-semibold
+                        leading-4
+                        text-slate-600
+                        last:border-r-0
+                        whitespace-nowrap
+                      `}
                     >
-                      {column.name}
+                      {
+                        column.name
+                      }
                     </th>
                   )
                 )}
@@ -1252,16 +1589,13 @@ export default function ProductionTable({
 
             </thead>
 
-            {/* =====================================================
-                BODY
-            ===================================================== */}
+            {/* BODY */}
 
             <tbody>
 
               {/* LOADING */}
 
               {isLoading ? (
-
                 <tr>
 
                   <td
@@ -1284,8 +1618,8 @@ export default function ProductionTable({
                   </td>
 
                 </tr>
-
-              ) : filteredProductionData.length === 0 ? (
+              ) : productionData.length ===
+                0 ? (
 
                 /* EMPTY */
 
@@ -1300,7 +1634,27 @@ export default function ProductionTable({
 
                     <div className="flex flex-col items-center justify-center">
 
-                      <EmptyIcon />
+                      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+
+                        <svg
+                          className="h-6 w-6 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={
+                              1.8
+                            }
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h6l5 5v11a2 2 0 01-2 2z"
+                          />
+
+                        </svg>
+
+                      </div>
 
                       <p className="text-sm font-medium text-gray-600">
 
@@ -1352,131 +1706,146 @@ export default function ProductionTable({
                       "";
 
                     const machineNo =
-                      record.machineNo?.trim() ||
+                      record.machineNo
+                        ?.trim() ||
                       "-";
-
-                    const areaName =
-                      getArea(record) ||
-                      "-";
-
-                    const shiftName =
-                      getShift(record) ||
-                      "-";
-
-                    const globalIndex =
-                      (currentPage - 1) *
-                        ITEMS_PER_PAGE +
-                      index +
-                      1;
 
                     return (
-
                       <tr
-                        key={record.id}
+                        key={
+                          record.id
+                        }
                         className="transition-colors hover:bg-slate-50"
                       >
 
                         {/* NO */}
 
-                        <TableCell align="center">
-                          {globalIndex}
-                        </TableCell>
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+
+                          {(currentPage -
+                            1) *
+                            pageSize +
+                            index +
+                            1}
+
+                        </td>
 
                         {/* DATE */}
 
-                        <TableCell align="center">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+
                           {formatDate(
                             record.productionDate
                           )}
-                        </TableCell>
+
+                        </td>
 
                         {/* MONTH */}
 
-                        <TableCell align="center">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+
                           {getMonth(
                             record.productionDate
                           )}
-                        </TableCell>
+
+                        </td>
 
                         {/* DAYS */}
 
-                        <TableCell align="center">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+
                           {getDay(
                             record.productionDate
                           )}
-                        </TableCell>
+
+                        </td>
 
                         {/* MACHINE */}
 
-                        <TableCell
-                          align="center"
-                          className="font-medium text-gray-700"
-                        >
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm font-medium text-gray-700">
+
                           {machineNo}
-                        </TableCell>
+
+                        </td>
 
                         {/* AREA */}
 
-                        <TableCell align="center">
-                          {areaName}
-                        </TableCell>
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+
+                          {record.area
+                            ?.name ||
+                            record.area
+                              ?.code ||
+                            "-"}
+
+                        </td>
 
                         {/* SHIFT */}
 
-                        <TableCell align="center">
-                          {shiftName}
-                        </TableCell>
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+
+                          {record.shift
+                            ?.name ||
+                            record.shift
+                              ?.code ||
+                            "-"}
+
+                        </td>
 
                         {/* OPERATOR */}
 
-                        <TableCell align="center">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+
                           {record.operatorName ||
                             "-"}
-                        </TableCell>
+
+                        </td>
 
                         {/* COMPUTER CODE */}
 
-                        <TableCell align="center">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+
                           {record.computerCode ||
                             "-"}
-                        </TableCell>
+
+                        </td>
 
                         {/* PRODUCT */}
 
-                        <TableCell
-                          align="left"
-                          className="font-medium text-gray-700"
-                        >
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-left text-sm font-medium text-gray-700">
+
                           {record.product
                             ?.productName ||
                             "-"}
-                        </TableCell>
+
+                        </td>
 
                         {/* DESCRIPTION */}
 
-                        <TableCell
-                          align="left"
-                          className="max-w-xs text-gray-600"
-                        >
+                        <td className="max-w-xs border-b border-r border-gray-100 px-4 py-3 text-left text-sm text-gray-600">
 
                           <div
                             className="truncate"
                             title={
-                              record.product
+                              record
+                                .product
                                 ?.description ||
                               ""
                             }
                           >
-                            {record.product
+
+                            {record
+                              .product
                               ?.description ||
                               "-"}
+
                           </div>
 
-                        </TableCell>
+                        </td>
 
                         {/* OUTPUT */}
 
-                        <TableCell className="font-medium text-gray-700">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-gray-700">
 
                           {formatNumber(
                             outputQty,
@@ -1485,15 +1854,17 @@ export default function ProductionTable({
 
                           {quantityUnit && (
                             <span className="ml-1 text-xs text-gray-400">
-                              {quantityUnit}
+                              {
+                                quantityUnit
+                              }
                             </span>
                           )}
 
-                        </TableCell>
+                        </td>
 
                         {/* OK */}
 
-                        <TableCell className="text-gray-600">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm text-gray-600">
 
                           {formatNumber(
                             okQty,
@@ -1502,15 +1873,17 @@ export default function ProductionTable({
 
                           {quantityUnit && (
                             <span className="ml-1 text-xs text-gray-400">
-                              {quantityUnit}
+                              {
+                                quantityUnit
+                              }
                             </span>
                           )}
 
-                        </TableCell>
+                        </td>
 
                         {/* NG */}
 
-                        <TableCell className="font-medium text-red-600">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-red-600">
 
                           {formatNumber(
                             pmc.ngQty,
@@ -1519,25 +1892,29 @@ export default function ProductionTable({
 
                           {quantityUnit && (
                             <span className="ml-1 text-xs text-gray-400">
-                              {quantityUnit}
+                              {
+                                quantityUnit
+                              }
                             </span>
                           )}
 
-                        </TableCell>
+                        </td>
 
                         {/* NG RATE */}
 
-                        <TableCell className="font-medium text-red-600">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-red-600">
+
                           {formatNumber(
                             pmc.ngRate,
                             2
                           )}
                           %
-                        </TableCell>
+
+                        </td>
 
                         {/* ACTUAL RM */}
 
-                        <TableCell className="text-gray-600">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm text-gray-600">
 
                           {formatNumber(
                             actualRm,
@@ -1545,14 +1922,16 @@ export default function ProductionTable({
                           )}
 
                           <span className="ml-1 text-xs text-gray-400">
-                            {rmUnit}
+                            {
+                              rmUnit
+                            }
                           </span>
 
-                        </TableCell>
+                        </td>
 
                         {/* RM REQUIREMENT */}
 
-                        <TableCell className="font-medium text-gray-700">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-medium text-gray-700">
 
                           {formatNumber(
                             pmc.rmRequirement,
@@ -1560,21 +1939,35 @@ export default function ProductionTable({
                           )}
 
                           <span className="ml-1 text-xs text-gray-400">
-                            {rmUnit}
+                            {
+                              rmUnit
+                            }
                           </span>
 
-                        </TableCell>
+                        </td>
 
                         {/* RM VARIANCE */}
 
-                        <TableCell
-                          className={
-                            pmc.rmVariance > 0
-                              ? "font-medium text-red-600"
-                              : pmc.rmVariance < 0
-                                ? "font-medium text-green-600"
-                                : "font-medium text-gray-600"
-                          }
+                        <td
+                          className={`
+                            border-b
+                            border-r
+                            border-gray-100
+                            px-4
+                            py-3
+                            text-right
+                            text-sm
+                            font-medium
+                            ${
+                              pmc.rmVariance >
+                              0
+                                ? "text-red-600"
+                                : pmc.rmVariance <
+                                    0
+                                  ? "text-green-600"
+                                  : "text-gray-600"
+                            }
+                          `}
                         >
 
                           {formatNumber(
@@ -1583,14 +1976,16 @@ export default function ProductionTable({
                           )}
 
                           <span className="ml-1 text-xs text-gray-400">
-                            {rmUnit}
+                            {
+                              rmUnit
+                            }
                           </span>
 
-                        </TableCell>
+                        </td>
 
                         {/* RM PERCENTAGE */}
 
-                        <TableCell className="text-gray-600">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm text-gray-600">
 
                           {formatNumber(
                             pmc.rmPercentage,
@@ -1598,13 +1993,14 @@ export default function ProductionTable({
                           )}
                           %
 
-                        </TableCell>
+                        </td>
 
                         {/* TARGET */}
 
-                        <TableCell className="font-semibold text-blue-700">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-right text-sm font-semibold text-blue-700">
 
-                          {target8H > 0
+                          {target8H >
+                          0
                             ? formatNumber(
                                 target8H,
                                 2
@@ -1612,7 +2008,8 @@ export default function ProductionTable({
                             : "-"}
 
                           {quantityUnit &&
-                            target8H > 0 && (
+                            target8H >
+                              0 && (
                               <span className="ml-1 text-xs font-normal text-gray-400">
                                 {
                                   quantityUnit
@@ -1620,17 +2017,27 @@ export default function ProductionTable({
                               </span>
                             )}
 
-                        </TableCell>
+                        </td>
 
                         {/* PRODUCT VARIANCE */}
 
-                        <TableCell
-                          className={
-                            pmc.productVariance >=
-                            0
-                              ? "font-semibold text-green-600"
-                              : "font-semibold text-red-600"
-                          }
+                        <td
+                          className={`
+                            border-b
+                            border-r
+                            border-gray-100
+                            px-4
+                            py-3
+                            text-right
+                            text-sm
+                            font-semibold
+                            ${
+                              pmc.productVariance >=
+                              0
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }
+                          `}
                         >
 
                           {formatNumber(
@@ -1646,44 +2053,59 @@ export default function ProductionTable({
                             </span>
                           )}
 
-                        </TableCell>
+                        </td>
 
                         {/* ACHIEVEMENT */}
 
-                        <TableCell
-                          className={
-                            pmc.achievement >=
-                            100
-                              ? "font-semibold text-green-600"
-                              : pmc.achievement >=
-                                  80
-                                ? "font-semibold text-yellow-600"
-                                : "font-semibold text-red-600"
-                          }
+                        <td
+                          className={`
+                            border-b
+                            border-r
+                            border-gray-100
+                            px-4
+                            py-3
+                            text-right
+                            text-sm
+                            font-semibold
+                            ${
+                              pmc.achievement >=
+                              100
+                                ? "text-green-600"
+                                : pmc.achievement >=
+                                    80
+                                  ? "text-yellow-600"
+                                  : "text-red-600"
+                            }
+                          `}
                         >
 
-                          {target8H > 0
+                          {target8H >
+                          0
                             ? `${formatNumber(
                                 pmc.achievement,
                                 2
                               )}%`
                             : "-"}
 
-                        </TableCell>
+                        </td>
 
                         {/* OT / REPLACE */}
 
-                        <TableCell align="center">
+                        <td className="border-b border-r border-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+
                           {record.otReplace ||
                             "-"}
-                        </TableCell>
+
+                        </td>
 
                         {/* REMARKS */}
 
-                        <TableCell align="left">
+                        <td className="border-b border-gray-100 px-4 py-3 text-left text-sm text-gray-600">
+
                           {record.remarks ||
                             "-"}
-                        </TableCell>
+
+                        </td>
 
                       </tr>
                     );
@@ -1705,179 +2127,153 @@ export default function ProductionTable({
 
       {!isLoading &&
         !invalidDateRange &&
-        filteredProductionData.length >
+        totalRecords >
           0 && (
-
-          <div className="flex flex-col gap-3 border-t border-gray-200 bg-gray-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 border-t border-gray-200 bg-gray-50 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
 
             {/* INFO */}
 
-            <p className="text-xs text-gray-500">
+            <div className="text-xs text-gray-500">
 
               Showing{" "}
 
               <span className="font-semibold text-gray-700">
-                {firstItem}
+                {Math.min(
+                  (currentPage -
+                    1) *
+                    pageSize +
+                    1,
+                  totalRecords
+                )}
               </span>
 
               {" - "}
 
               <span className="font-semibold text-gray-700">
-                {lastItem}
+                {Math.min(
+                  currentPage *
+                    pageSize,
+                  totalRecords
+                )}
               </span>
 
               {" of "}
 
               <span className="font-semibold text-gray-700">
-                {
-                  filteredProductionData.length
-                }
+                {totalRecords}
               </span>
 
               {" production records"}
 
-            </p>
+            </div>
 
             {/* PAGINATION */}
 
-            {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-1">
 
-              <div className="flex items-center gap-1">
+              {/* PREVIOUS */}
 
-                {/* PREVIOUS */}
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    goToPage(
-                      currentPage - 1
-                    )
-                  }
-                  disabled={
-                    currentPage === 1
-                  }
-                  className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Previous
-                </button>
-
-                {/* FIRST PAGE */}
-
-                {pageNumbers[0] >
-                  1 && (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        goToPage(1)
-                      }
-                      className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 hover:bg-gray-100"
-                    >
+              <button
+                type="button"
+                disabled={
+                  !hasPreviousPage ||
+                  isLoading
+                }
+                onClick={() =>
+                  goToPage(
+                    currentPage -
                       1
-                    </button>
-
-                    {pageNumbers[0] >
-                      2 && (
-                      <span className="px-1 text-gray-400">
-                        ...
-                      </span>
-                    )}
-                  </>
-                )}
-
-                {/* PAGE NUMBERS */}
-
-                {pageNumbers.map(
-                  (page) => (
-                    <button
-                      key={page}
-                      type="button"
-                      onClick={() =>
-                        goToPage(page)
-                      }
-                      className={`rounded-lg border px-3 py-2 text-sm transition ${
-                        currentPage ===
-                        page
-                          ? "border-blue-600 bg-blue-600 text-white"
-                          : "border-gray-200 bg-white text-gray-600 hover:bg-gray-100"
-                      }`}
-                    >
-                      {page}
-                    </button>
                   )
-                )}
+                }
+                className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Previous
+              </button>
 
-                {/* LAST PAGE */}
+              {/* PAGE NUMBERS */}
 
-                {pageNumbers[
-                  pageNumbers.length -
-                    1
-                ] < totalPages && (
-                  <>
-                    {pageNumbers[
-                      pageNumbers.length -
-                        1
-                    ] <
-                      totalPages -
-                        1 && (
-                      <span className="px-1 text-gray-400">
-                        ...
-                      </span>
-                    )}
-
+              {pageNumbers.map(
+                (
+                  page,
+                  index
+                ) =>
+                  page ===
+                  -1 ? (
+                    <span
+                      key={`ellipsis-${index}`}
+                      className="px-2 text-sm text-gray-400"
+                    >
+                      ...
+                    </span>
+                  ) : (
                     <button
+                      key={
+                        page
+                      }
                       type="button"
+                      disabled={
+                        isLoading
+                      }
                       onClick={() =>
                         goToPage(
-                          totalPages
+                          page
                         )
                       }
-                      className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 hover:bg-gray-100"
+                      className={`min-w-9 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                        currentPage ===
+                        page
+                          ? "bg-slate-700 text-white"
+                          : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-100"
+                      }`}
                     >
-                      {totalPages}
+                      {
+                        page
+                      }
                     </button>
-                  </>
-                )}
+                  )
+              )}
 
-                {/* NEXT */}
+              {/* NEXT */}
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    goToPage(
-                      currentPage + 1
-                    )
-                  }
-                  disabled={
-                    currentPage ===
-                    totalPages
-                  }
-                  className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Next
-                </button>
+              <button
+                type="button"
+                disabled={
+                  !hasNextPage ||
+                  isLoading
+                }
+                onClick={() =>
+                  goToPage(
+                    currentPage +
+                      1
+                  )
+                }
+                className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+              </button>
 
-              </div>
-            )}
+            </div>
+
+            {/* PAGE INFO */}
+
+            <div className="text-center text-xs text-gray-500 lg:text-right">
+
+              Page{" "}
+
+              <span className="font-semibold text-gray-700">
+                {currentPage}
+              </span>
+
+              {" of "}
+
+              <span className="font-semibold text-gray-700">
+                {totalPages}
+              </span>
+
+            </div>
 
           </div>
         )}
-
-      {/* =====================================================
-          FOOTER
-      ===================================================== */}
-
-      <div className="flex flex-col gap-2 border-t border-gray-200 bg-gray-50 px-6 py-3 sm:flex-row sm:items-center sm:justify-between">
-
-        <p className="text-xs text-gray-400">
-          Scroll horizontally untuk melihat seluruh kolom
-        </p>
-
-        <p className="text-xs text-gray-400">
-          {ITEMS_PER_PAGE} records per page
-        </p>
-
-      </div>
 
     </div>
   );
