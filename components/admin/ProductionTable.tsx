@@ -257,6 +257,7 @@ export default function ProductionTable({
   loading:
     externalLoading = false,
 }: ProductionTableProps) {
+
   // ===================================================
   // DATA STATE
   // ===================================================
@@ -287,6 +288,11 @@ export default function ProductionTable({
   const [
     search,
     setSearch,
+  ] = useState("");
+
+  const [
+    debouncedSearch,
+    setDebouncedSearch,
   ] = useState("");
 
   const [
@@ -344,10 +350,30 @@ export default function ProductionTable({
   ] = useState(false);
 
   // ===================================================
+  // DEBOUNCE SEARCH
+  // ===================================================
+
+  useEffect(() => {
+    const timer =
+      setTimeout(() => {
+        setDebouncedSearch(
+          search.trim()
+        );
+      }, 400);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [search]);
+
+  // ===================================================
   // FETCH PRODUCTION DATA
   // ===================================================
 
   useEffect(() => {
+    const controller =
+      new AbortController();
+
     let cancelled = false;
 
     async function fetchProductionData() {
@@ -381,11 +407,11 @@ export default function ProductionTable({
         // =============================================
 
         if (
-          search.trim()
+          debouncedSearch
         ) {
           params.set(
             "search",
-            search.trim()
+            debouncedSearch
           );
         }
 
@@ -456,6 +482,9 @@ export default function ProductionTable({
 
               cache:
                 "no-store",
+
+              signal:
+                controller.signal,
             }
           );
 
@@ -532,7 +561,20 @@ export default function ProductionTable({
             )
           );
         }
+
       } catch (err) {
+
+        // =============================================
+        // ABORT REQUEST
+        // =============================================
+
+        if (
+          err instanceof DOMException &&
+          err.name === "AbortError"
+        ) {
+          return;
+        }
+
         console.error(
           "ProductionTable fetch error:",
           err
@@ -567,7 +609,9 @@ export default function ProductionTable({
             false
           );
         }
+
       } finally {
+
         if (
           !cancelled
         ) {
@@ -582,11 +626,14 @@ export default function ProductionTable({
 
     return () => {
       cancelled = true;
+
+      controller.abort();
     };
+
   }, [
     currentPage,
     pageSize,
-    search,
+    debouncedSearch,
     dateFrom,
     dateTo,
     areaFilter,
@@ -621,6 +668,7 @@ export default function ProductionTable({
 
   const areaOptions =
     useMemo(() => {
+
       const values =
         productionData
           .map(
@@ -637,12 +685,14 @@ export default function ProductionTable({
       return Array.from(
         new Set(values)
       ).sort();
+
     }, [
       productionData,
     ]);
 
   const shiftOptions =
     useMemo(() => {
+
       const values =
         productionData
           .map(
@@ -659,6 +709,7 @@ export default function ProductionTable({
       return Array.from(
         new Set(values)
       ).sort();
+
     }, [
       productionData,
     ]);
@@ -669,10 +720,12 @@ export default function ProductionTable({
 
   const calculatedRows =
     useMemo(() => {
+
       return productionData.map(
         (
           record
         ) => {
+
           const outputQty =
             Number(
               record.outputQty
@@ -719,6 +772,7 @@ export default function ProductionTable({
           };
         }
       );
+
     }, [
       productionData,
     ]);
@@ -729,6 +783,7 @@ export default function ProductionTable({
 
   const summary =
     useMemo(() => {
+
       const totalOutput =
         calculatedRows.reduce(
           (
@@ -844,6 +899,7 @@ export default function ProductionTable({
         achievement,
         rmPercentage,
       };
+
     }, [
       calculatedRows,
     ]);
@@ -854,15 +910,23 @@ export default function ProductionTable({
 
   const clearFilters =
     () => {
+
       setSearch("");
+
+      setDebouncedSearch("");
+
       setDateFrom("");
+
       setDateTo("");
+
       setAreaFilter(
         "ALL"
       );
+
       setShiftFilter(
         "ALL"
       );
+
       setCurrentPage(
         1
       );
@@ -894,12 +958,14 @@ export default function ProductionTable({
 
   const pageNumbers =
     useMemo(() => {
+
       const pages: number[] =
         [];
 
       if (
         totalPages <= 7
       ) {
+
         for (
           let i = 1;
           i <= totalPages;
@@ -951,6 +1017,7 @@ export default function ProductionTable({
       );
 
       return pages;
+
     }, [
       currentPage,
       totalPages,
@@ -964,6 +1031,7 @@ export default function ProductionTable({
     (
       page: number
     ) => {
+
       if (
         page < 1 ||
         page >
@@ -995,6 +1063,7 @@ export default function ProductionTable({
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
           <div>
+
             <h2 className="text-lg font-semibold text-gray-900">
               Production Monitoring
             </h2>
@@ -1002,12 +1071,15 @@ export default function ProductionTable({
             <p className="mt-1 text-sm text-gray-500">
               Daily production monitoring and performance
             </p>
+
           </div>
 
           <div className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-500">
+
             {isLoading
               ? "Loading production data..."
               : `${productionData.length} of ${totalRecords} records`}
+
           </div>
 
         </div>
@@ -1029,10 +1101,12 @@ export default function ProductionTable({
           </p>
 
           <p className="mt-2 text-xl font-bold text-gray-900">
+
             {formatNumber(
               summary.totalOutput,
               0
             )}
+
           </p>
 
           <p className="mt-1 text-xs text-gray-400">
@@ -1050,10 +1124,12 @@ export default function ProductionTable({
           </p>
 
           <p className="mt-2 text-xl font-bold text-green-600">
+
             {formatNumber(
               summary.totalOk,
               0
             )}
+
           </p>
 
           <p className="mt-1 text-xs text-gray-400">
@@ -1071,17 +1147,22 @@ export default function ProductionTable({
           </p>
 
           <p className="mt-2 text-xl font-bold text-red-600">
+
             {formatNumber(
               summary.totalNg,
               0
             )}
+
           </p>
 
           <p className="mt-1 text-xs text-gray-400">
+
             {formatNumber(
               summary.ngRate,
               2
-            )}% NG Rate
+            )}
+            % NG Rate
+
           </p>
 
         </div>
@@ -1105,14 +1186,17 @@ export default function ProductionTable({
                   : "text-red-600"
             }`}
           >
+
             {formatNumber(
               summary.achievement,
               2
             )}
             %
+
           </p>
 
           <p className="mt-1 text-xs text-gray-400">
+
             {formatNumber(
               summary.totalOutput,
               0
@@ -1122,6 +1206,7 @@ export default function ProductionTable({
               summary.totalTarget,
               0
             )}
+
           </p>
 
         </div>
@@ -1135,10 +1220,12 @@ export default function ProductionTable({
           </p>
 
           <p className="mt-2 text-xl font-bold text-blue-600">
+
             {formatNumber(
               summary.totalActualRm,
               3
             )}
+
           </p>
 
           <p className="mt-1 text-xs text-gray-400">
@@ -1166,17 +1253,22 @@ export default function ProductionTable({
                   : "text-gray-600"
             }`}
           >
+
             {formatNumber(
               summary.totalRmVariance,
               3
             )}
+
           </p>
 
           <p className="mt-1 text-xs text-gray-400">
+
             {formatNumber(
               summary.rmPercentage,
               2
-            )}% usage
+            )}
+            % usage
+
           </p>
 
         </div>
@@ -1209,6 +1301,7 @@ export default function ProductionTable({
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
+
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -1217,13 +1310,16 @@ export default function ProductionTable({
                   }
                   d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
                 />
+
               </svg>
 
               <input
-                type="text"
+                type="search"
                 value={
                   search
                 }
+                autoComplete="off"
+                spellCheck={false}
                 onChange={(
                   e
                 ) =>
@@ -1459,6 +1555,7 @@ export default function ProductionTable({
               onChange={(
                 e
               ) => {
+
                 setPageSize(
                   Number(
                     e.target.value
@@ -1468,6 +1565,7 @@ export default function ProductionTable({
                 setCurrentPage(
                   1
                 );
+
               }}
               className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
@@ -1526,6 +1624,7 @@ export default function ProductionTable({
       ===================================================== */}
 
       {invalidDateRange ? (
+
         <div className="border-b border-yellow-200 bg-yellow-50 px-6 py-8 text-center">
 
           <p className="text-sm font-medium text-yellow-700">
@@ -1537,6 +1636,7 @@ export default function ProductionTable({
           </p>
 
         </div>
+
       ) : (
 
         /* =====================================================
@@ -1557,6 +1657,7 @@ export default function ProductionTable({
                   (
                     column
                   ) => (
+
                     <th
                       key={
                         column.name
@@ -1578,10 +1679,13 @@ export default function ProductionTable({
                         whitespace-nowrap
                       `}
                     >
+
                       {
                         column.name
                       }
+
                     </th>
+
                   )
                 )}
 
@@ -1596,6 +1700,7 @@ export default function ProductionTable({
               {/* LOADING */}
 
               {isLoading ? (
+
                 <tr>
 
                   <td
@@ -1618,6 +1723,7 @@ export default function ProductionTable({
                   </td>
 
                 </tr>
+
               ) : productionData.length ===
                 0 ? (
 
@@ -1711,6 +1817,7 @@ export default function ProductionTable({
                       "-";
 
                     return (
+
                       <tr
                         key={
                           record.id
@@ -2108,6 +2215,7 @@ export default function ProductionTable({
                         </td>
 
                       </tr>
+
                     );
                   }
                 )
@@ -2129,6 +2237,7 @@ export default function ProductionTable({
         !invalidDateRange &&
         totalRecords >
           0 && (
+
           <div className="flex flex-col gap-4 border-t border-gray-200 bg-gray-50 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
 
             {/* INFO */}
@@ -2138,6 +2247,7 @@ export default function ProductionTable({
               Showing{" "}
 
               <span className="font-semibold text-gray-700">
+
                 {Math.min(
                   (currentPage -
                     1) *
@@ -2145,22 +2255,27 @@ export default function ProductionTable({
                     1,
                   totalRecords
                 )}
+
               </span>
 
               {" - "}
 
               <span className="font-semibold text-gray-700">
+
                 {Math.min(
                   currentPage *
                     pageSize,
                   totalRecords
                 )}
+
               </span>
 
               {" of "}
 
               <span className="font-semibold text-gray-700">
+
                 {totalRecords}
+
               </span>
 
               {" production records"}
@@ -2199,13 +2314,16 @@ export default function ProductionTable({
                 ) =>
                   page ===
                   -1 ? (
+
                     <span
                       key={`ellipsis-${index}`}
                       className="px-2 text-sm text-gray-400"
                     >
                       ...
                     </span>
+
                   ) : (
+
                     <button
                       key={
                         page
@@ -2230,6 +2348,7 @@ export default function ProductionTable({
                         page
                       }
                     </button>
+
                   )
               )}
 
@@ -2261,13 +2380,17 @@ export default function ProductionTable({
               Page{" "}
 
               <span className="font-semibold text-gray-700">
-                {currentPage}
+                {
+                  currentPage
+                }
               </span>
 
               {" of "}
 
               <span className="font-semibold text-gray-700">
-                {totalPages}
+                {
+                  totalPages
+                }
               </span>
 
             </div>
