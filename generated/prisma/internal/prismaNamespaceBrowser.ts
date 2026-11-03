@@ -61,7 +61,9 @@ export const ModelName = {
   ProductMaterial: 'ProductMaterial',
   ProductionTarget: 'ProductionTarget',
   ProductionRecord: 'ProductionRecord',
-  ProductionMaterialUsage: 'ProductionMaterialUsage'
+  ProductionAuditLog: 'ProductionAuditLog',
+  ProductionMaterialUsage: 'ProductionMaterialUsage',
+  MoldingProduct: 'MoldingProduct'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -221,10 +223,29 @@ export const ProductionRecordScalarFieldEnum = {
   status: 'status',
   inputById: 'inputById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  deleteReason: 'deleteReason',
+  updatedBy: 'updatedBy'
 } as const
 
 export type ProductionRecordScalarFieldEnum = (typeof ProductionRecordScalarFieldEnum)[keyof typeof ProductionRecordScalarFieldEnum]
+
+
+export const ProductionAuditLogScalarFieldEnum = {
+  id: 'id',
+  recordId: 'recordId',
+  action: 'action',
+  actorId: 'actorId',
+  actorEmail: 'actorEmail',
+  reason: 'reason',
+  beforeData: 'beforeData',
+  afterData: 'afterData',
+  createdAt: 'createdAt'
+} as const
+
+export type ProductionAuditLogScalarFieldEnum = (typeof ProductionAuditLogScalarFieldEnum)[keyof typeof ProductionAuditLogScalarFieldEnum]
 
 
 export const ProductionMaterialUsageScalarFieldEnum = {
@@ -241,12 +262,41 @@ export const ProductionMaterialUsageScalarFieldEnum = {
 export type ProductionMaterialUsageScalarFieldEnum = (typeof ProductionMaterialUsageScalarFieldEnum)[keyof typeof ProductionMaterialUsageScalarFieldEnum]
 
 
+export const MoldingProductScalarFieldEnum = {
+  id: 'id',
+  computerCode: 'computerCode',
+  productName: 'productName',
+  productDescription: 'productDescription',
+  hardnessRequirements: 'hardnessRequirements',
+  colorRequirements: 'colorRequirements',
+  rawMaterialRequirements: 'rawMaterialRequirements',
+  bufferPercent: 'bufferPercent',
+  quotaPerHourShot: 'quotaPerHourShot',
+  quotaPerHourPcs: 'quotaPerHourPcs',
+  productionTime: 'productionTime',
+  productionTargetPerDay: 'productionTargetPerDay',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MoldingProductScalarFieldEnum = (typeof MoldingProductScalarFieldEnum)[keyof typeof MoldingProductScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const UserOrderByRelevanceFieldEnum = {
@@ -323,10 +373,38 @@ export const ProductionRecordOrderByRelevanceFieldEnum = {
   computerCode: 'computerCode',
   operatorName: 'operatorName',
   otReplace: 'otReplace',
-  remarks: 'remarks'
+  remarks: 'remarks',
+  deletedBy: 'deletedBy',
+  deleteReason: 'deleteReason',
+  updatedBy: 'updatedBy'
 } as const
 
 export type ProductionRecordOrderByRelevanceFieldEnum = (typeof ProductionRecordOrderByRelevanceFieldEnum)[keyof typeof ProductionRecordOrderByRelevanceFieldEnum]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const ProductionAuditLogOrderByRelevanceFieldEnum = {
+  actorEmail: 'actorEmail',
+  reason: 'reason'
+} as const
+
+export type ProductionAuditLogOrderByRelevanceFieldEnum = (typeof ProductionAuditLogOrderByRelevanceFieldEnum)[keyof typeof ProductionAuditLogOrderByRelevanceFieldEnum]
 
 
 export const ProductionMaterialUsageOrderByRelevanceFieldEnum = {
@@ -334,4 +412,16 @@ export const ProductionMaterialUsageOrderByRelevanceFieldEnum = {
 } as const
 
 export type ProductionMaterialUsageOrderByRelevanceFieldEnum = (typeof ProductionMaterialUsageOrderByRelevanceFieldEnum)[keyof typeof ProductionMaterialUsageOrderByRelevanceFieldEnum]
+
+
+export const MoldingProductOrderByRelevanceFieldEnum = {
+  computerCode: 'computerCode',
+  productName: 'productName',
+  productDescription: 'productDescription',
+  hardnessRequirements: 'hardnessRequirements',
+  colorRequirements: 'colorRequirements',
+  rawMaterialRequirements: 'rawMaterialRequirements'
+} as const
+
+export type MoldingProductOrderByRelevanceFieldEnum = (typeof MoldingProductOrderByRelevanceFieldEnum)[keyof typeof MoldingProductOrderByRelevanceFieldEnum]
 

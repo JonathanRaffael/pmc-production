@@ -241,6 +241,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   productionRecords?: Prisma.ProductionRecordListRelationFilter
+  productionAuditLogs?: Prisma.ProductionAuditLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -253,6 +254,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   productionRecords?: Prisma.ProductionRecordOrderByRelationAggregateInput
+  productionAuditLogs?: Prisma.ProductionAuditLogOrderByRelationAggregateInput
   _relevance?: Prisma.UserOrderByRelevanceInput
 }
 
@@ -269,6 +271,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   productionRecords?: Prisma.ProductionRecordListRelationFilter
+  productionAuditLogs?: Prisma.ProductionAuditLogListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -310,6 +313,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   productionRecords?: Prisma.ProductionRecordCreateNestedManyWithoutInputByInput
+  productionAuditLogs?: Prisma.ProductionAuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -322,6 +326,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   productionRecords?: Prisma.ProductionRecordUncheckedCreateNestedManyWithoutInputByInput
+  productionAuditLogs?: Prisma.ProductionAuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserUpdateInput = {
@@ -333,6 +338,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionRecords?: Prisma.ProductionRecordUpdateManyWithoutInputByNestedInput
+  productionAuditLogs?: Prisma.ProductionAuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -345,6 +351,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   productionRecords?: Prisma.ProductionRecordUncheckedUpdateManyWithoutInputByNestedInput
+  productionAuditLogs?: Prisma.ProductionAuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -469,6 +476,20 @@ export type UserUpdateOneRequiredWithoutProductionRecordsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProductionRecordsInput, Prisma.UserUpdateWithoutProductionRecordsInput>, Prisma.UserUncheckedUpdateWithoutProductionRecordsInput>
 }
 
+export type UserCreateNestedOneWithoutProductionAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProductionAuditLogsInput, Prisma.UserUncheckedCreateWithoutProductionAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProductionAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutProductionAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProductionAuditLogsInput, Prisma.UserUncheckedCreateWithoutProductionAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProductionAuditLogsInput
+  upsert?: Prisma.UserUpsertWithoutProductionAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProductionAuditLogsInput, Prisma.UserUpdateWithoutProductionAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutProductionAuditLogsInput>
+}
+
 export type UserCreateWithoutProductionRecordsInput = {
   name: string
   email: string
@@ -477,6 +498,7 @@ export type UserCreateWithoutProductionRecordsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionAuditLogs?: Prisma.ProductionAuditLogCreateNestedManyWithoutActorInput
 }
 
 export type UserUncheckedCreateWithoutProductionRecordsInput = {
@@ -488,6 +510,7 @@ export type UserUncheckedCreateWithoutProductionRecordsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionAuditLogs?: Prisma.ProductionAuditLogUncheckedCreateNestedManyWithoutActorInput
 }
 
 export type UserCreateOrConnectWithoutProductionRecordsInput = {
@@ -514,6 +537,7 @@ export type UserUpdateWithoutProductionRecordsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionAuditLogs?: Prisma.ProductionAuditLogUpdateManyWithoutActorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProductionRecordsInput = {
@@ -525,6 +549,69 @@ export type UserUncheckedUpdateWithoutProductionRecordsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionAuditLogs?: Prisma.ProductionAuditLogUncheckedUpdateManyWithoutActorNestedInput
+}
+
+export type UserCreateWithoutProductionAuditLogsInput = {
+  name: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  productionRecords?: Prisma.ProductionRecordCreateNestedManyWithoutInputByInput
+}
+
+export type UserUncheckedCreateWithoutProductionAuditLogsInput = {
+  id?: number
+  name: string
+  email: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  productionRecords?: Prisma.ProductionRecordUncheckedCreateNestedManyWithoutInputByInput
+}
+
+export type UserCreateOrConnectWithoutProductionAuditLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutProductionAuditLogsInput, Prisma.UserUncheckedCreateWithoutProductionAuditLogsInput>
+}
+
+export type UserUpsertWithoutProductionAuditLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProductionAuditLogsInput, Prisma.UserUncheckedUpdateWithoutProductionAuditLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProductionAuditLogsInput, Prisma.UserUncheckedCreateWithoutProductionAuditLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutProductionAuditLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProductionAuditLogsInput, Prisma.UserUncheckedUpdateWithoutProductionAuditLogsInput>
+}
+
+export type UserUpdateWithoutProductionAuditLogsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionRecords?: Prisma.ProductionRecordUpdateManyWithoutInputByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutProductionAuditLogsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionRecords?: Prisma.ProductionRecordUncheckedUpdateManyWithoutInputByNestedInput
 }
 
 
@@ -534,10 +621,12 @@ export type UserUncheckedUpdateWithoutProductionRecordsInput = {
 
 export type UserCountOutputType = {
   productionRecords: number
+  productionAuditLogs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   productionRecords?: boolean | UserCountOutputTypeCountProductionRecordsArgs
+  productionAuditLogs?: boolean | UserCountOutputTypeCountProductionAuditLogsArgs
 }
 
 /**
@@ -557,6 +646,13 @@ export type UserCountOutputTypeCountProductionRecordsArgs<ExtArgs extends runtim
   where?: Prisma.ProductionRecordWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProductionAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProductionAuditLogWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -568,6 +664,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   productionRecords?: boolean | Prisma.User$productionRecordsArgs<ExtArgs>
+  productionAuditLogs?: boolean | Prisma.User$productionAuditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -587,6 +684,7 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "role" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   productionRecords?: boolean | Prisma.User$productionRecordsArgs<ExtArgs>
+  productionAuditLogs?: boolean | Prisma.User$productionAuditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -594,6 +692,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     productionRecords: Prisma.$ProductionRecordPayload<ExtArgs>[]
+    productionAuditLogs: Prisma.$ProductionAuditLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -945,6 +1044,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   productionRecords<T extends Prisma.User$productionRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$productionRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductionRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  productionAuditLogs<T extends Prisma.User$productionAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$productionAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductionAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1351,6 +1451,30 @@ export type User$productionRecordsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.ProductionRecordScalarFieldEnum | Prisma.ProductionRecordScalarFieldEnum[]
+}
+
+/**
+ * User.productionAuditLogs
+ */
+export type User$productionAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProductionAuditLog
+   */
+  select?: Prisma.ProductionAuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProductionAuditLog
+   */
+  omit?: Prisma.ProductionAuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductionAuditLogInclude<ExtArgs> | null
+  where?: Prisma.ProductionAuditLogWhereInput
+  orderBy?: Prisma.ProductionAuditLogOrderByWithRelationInput | Prisma.ProductionAuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.ProductionAuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProductionAuditLogScalarFieldEnum | Prisma.ProductionAuditLogScalarFieldEnum[]
 }
 
 /**

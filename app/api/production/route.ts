@@ -131,7 +131,10 @@ export async function GET(request: NextRequest) {
     // BUILD WHERE
     // ===================================================
 
-    const where: any = {};
+    const where: any = {
+  // Exclude production records that have been soft-deleted.
+  deletedAt: null,
+};
 
     // ===================================================
     // SEARCH

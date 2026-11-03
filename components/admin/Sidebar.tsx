@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -49,6 +50,48 @@ const menuGroups = [
           </svg>
         ),
       },
+
+      // =====================================================
+      // PRODUCTION HISTORY
+      // =====================================================
+      {
+        name: "Production History",
+        href: "/admin/history",
+        icon: (
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            className="h-5 w-5"
+          >
+            <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+            <path d="M3 3v5h5" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+        ),
+      },
+
+      {
+        name: "Molding Production Target",
+        href: "/admin/molding-production-target",
+        icon: (
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            className="h-5 w-5"
+          >
+            <path d="M4 19V5" />
+            <path d="M4 19h16" />
+            <path d="M8 16v-5" />
+            <path d="M12 16V8" />
+            <path d="M16 16v-3" />
+            <path d="M20 16V6" />
+          </svg>
+        ),
+      },
     ],
   },
 
@@ -69,6 +112,51 @@ const menuGroups = [
             <path d="m21 8-9-5-9 5 9 5 9-5Z" />
             <path d="m3 12 9 5 9-5" />
             <path d="m3 16 9 5 9-5" />
+          </svg>
+        ),
+      },
+
+      {
+  name: "Audit Log",
+  href: "/admin/audit",
+  icon: (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      className="h-5 w-5"
+    >
+      <path d="M12 8v4l3 2" />
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12H1" />
+      <path d="M23 12h-2" />
+    </svg>
+  ),
+},
+
+      // =====================================================
+      // MOLDING PRODUCT
+      // =====================================================
+      {
+        name: "Molding Product",
+        href: "/admin/molding-products",
+        icon: (
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            className="h-5 w-5"
+          >
+            <rect x="3" y="4" width="18" height="16" rx="2" />
+            <path d="M3 9h18" />
+            <path d="M8 4v5" />
+            <path d="M16 4v5" />
+            <path d="M7 13h4" />
+            <path d="M13 13h4" />
+            <path d="M7 17h4" />
+            <path d="M13 17h4" />
           </svg>
         ),
       },
@@ -111,7 +199,6 @@ const menuGroups = [
           </svg>
         ),
       },
-
     ],
   },
 ];
@@ -372,21 +459,9 @@ export default function Sidebar({
                   fill="currentColor"
                   className="h-5 w-5"
                 >
-                  <circle
-                    cx="5"
-                    cy="12"
-                    r="1.5"
-                  />
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="1.5"
-                  />
-                  <circle
-                    cx="19"
-                    cy="12"
-                    r="1.5"
-                  />
+                  <circle cx="5" cy="12" r="1.5" />
+                  <circle cx="12" cy="12" r="1.5" />
+                  <circle cx="19" cy="12" r="1.5" />
                 </svg>
               </button>
             </div>

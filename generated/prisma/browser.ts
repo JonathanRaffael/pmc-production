@@ -68,7 +68,17 @@ export type ProductionTarget = Prisma.ProductionTargetModel
  */
 export type ProductionRecord = Prisma.ProductionRecordModel
 /**
+ * Model ProductionAuditLog
+ * 
+ */
+export type ProductionAuditLog = Prisma.ProductionAuditLogModel
+/**
  * Model ProductionMaterialUsage
  * 
  */
 export type ProductionMaterialUsage = Prisma.ProductionMaterialUsageModel
+/**
+ * Model MoldingProduct
+ * 
+ */
+export type MoldingProduct = Prisma.MoldingProductModel

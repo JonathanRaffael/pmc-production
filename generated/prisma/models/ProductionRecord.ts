@@ -66,6 +66,10 @@ export type ProductionRecordMinAggregateOutputType = {
   inputById: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
+  deletedBy: string | null
+  deleteReason: string | null
+  updatedBy: string | null
 }
 
 export type ProductionRecordMaxAggregateOutputType = {
@@ -86,6 +90,10 @@ export type ProductionRecordMaxAggregateOutputType = {
   inputById: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
+  deletedBy: string | null
+  deleteReason: string | null
+  updatedBy: string | null
 }
 
 export type ProductionRecordCountAggregateOutputType = {
@@ -106,6 +114,10 @@ export type ProductionRecordCountAggregateOutputType = {
   inputById: number
   createdAt: number
   updatedAt: number
+  deletedAt: number
+  deletedBy: number
+  deleteReason: number
+  updatedBy: number
   _all: number
 }
 
@@ -150,6 +162,10 @@ export type ProductionRecordMinAggregateInputType = {
   inputById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  deletedBy?: true
+  deleteReason?: true
+  updatedBy?: true
 }
 
 export type ProductionRecordMaxAggregateInputType = {
@@ -170,6 +186,10 @@ export type ProductionRecordMaxAggregateInputType = {
   inputById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  deletedBy?: true
+  deleteReason?: true
+  updatedBy?: true
 }
 
 export type ProductionRecordCountAggregateInputType = {
@@ -190,6 +210,10 @@ export type ProductionRecordCountAggregateInputType = {
   inputById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  deletedBy?: true
+  deleteReason?: true
+  updatedBy?: true
   _all?: true
 }
 
@@ -297,6 +321,10 @@ export type ProductionRecordGroupByOutputType = {
   inputById: number
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date | null
+  deletedBy: string | null
+  deleteReason: string | null
+  updatedBy: string | null
   _count: ProductionRecordCountAggregateOutputType | null
   _avg: ProductionRecordAvgAggregateOutputType | null
   _sum: ProductionRecordSumAggregateOutputType | null
@@ -340,6 +368,10 @@ export type ProductionRecordWhereInput = {
   inputById?: Prisma.IntFilter<"ProductionRecord"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"ProductionRecord"> | Date | string | null
+  deletedBy?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  deleteReason?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  updatedBy?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   area?: Prisma.XOR<Prisma.AreaScalarRelationFilter, Prisma.AreaWhereInput>
   shift?: Prisma.XOR<Prisma.ShiftScalarRelationFilter, Prisma.ShiftWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -365,6 +397,10 @@ export type ProductionRecordOrderByWithRelationInput = {
   inputById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleteReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   area?: Prisma.AreaOrderByWithRelationInput
   shift?: Prisma.ShiftOrderByWithRelationInput
   product?: Prisma.ProductOrderByWithRelationInput
@@ -394,6 +430,10 @@ export type ProductionRecordWhereUniqueInput = Prisma.AtLeast<{
   inputById?: Prisma.IntFilter<"ProductionRecord"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"ProductionRecord"> | Date | string | null
+  deletedBy?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  deleteReason?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  updatedBy?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
   area?: Prisma.XOR<Prisma.AreaScalarRelationFilter, Prisma.AreaWhereInput>
   shift?: Prisma.XOR<Prisma.ShiftScalarRelationFilter, Prisma.ShiftWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -419,6 +459,10 @@ export type ProductionRecordOrderByWithAggregationInput = {
   inputById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleteReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ProductionRecordCountOrderByAggregateInput
   _avg?: Prisma.ProductionRecordAvgOrderByAggregateInput
   _max?: Prisma.ProductionRecordMaxOrderByAggregateInput
@@ -447,6 +491,10 @@ export type ProductionRecordScalarWhereWithAggregatesInput = {
   inputById?: Prisma.IntWithAggregatesFilter<"ProductionRecord"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProductionRecord"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ProductionRecord"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ProductionRecord"> | Date | string | null
+  deletedBy?: Prisma.StringNullableWithAggregatesFilter<"ProductionRecord"> | string | null
+  deleteReason?: Prisma.StringNullableWithAggregatesFilter<"ProductionRecord"> | string | null
+  updatedBy?: Prisma.StringNullableWithAggregatesFilter<"ProductionRecord"> | string | null
 }
 
 export type ProductionRecordCreateInput = {
@@ -462,6 +510,10 @@ export type ProductionRecordCreateInput = {
   status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
   area: Prisma.AreaCreateNestedOneWithoutProductionRecordsInput
   shift: Prisma.ShiftCreateNestedOneWithoutProductionRecordsInput
   product: Prisma.ProductCreateNestedOneWithoutProductionRecordsInput
@@ -487,6 +539,10 @@ export type ProductionRecordUncheckedCreateInput = {
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
   materialUsages?: Prisma.ProductionMaterialUsageUncheckedCreateNestedManyWithoutProductionRecordInput
 }
 
@@ -503,6 +559,10 @@ export type ProductionRecordUpdateInput = {
   status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.AreaUpdateOneRequiredWithoutProductionRecordsNestedInput
   shift?: Prisma.ShiftUpdateOneRequiredWithoutProductionRecordsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutProductionRecordsNestedInput
@@ -528,6 +588,10 @@ export type ProductionRecordUncheckedUpdateInput = {
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   materialUsages?: Prisma.ProductionMaterialUsageUncheckedUpdateManyWithoutProductionRecordNestedInput
 }
 
@@ -549,6 +613,10 @@ export type ProductionRecordCreateManyInput = {
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
 }
 
 export type ProductionRecordUpdateManyMutationInput = {
@@ -564,6 +632,10 @@ export type ProductionRecordUpdateManyMutationInput = {
   status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProductionRecordUncheckedUpdateManyInput = {
@@ -584,6 +656,10 @@ export type ProductionRecordUncheckedUpdateManyInput = {
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProductionRecordListRelationFilter = {
@@ -620,6 +696,10 @@ export type ProductionRecordCountOrderByAggregateInput = {
   inputById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
+  deleteReason?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
 }
 
 export type ProductionRecordAvgOrderByAggregateInput = {
@@ -651,6 +731,10 @@ export type ProductionRecordMaxOrderByAggregateInput = {
   inputById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
+  deleteReason?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
 }
 
 export type ProductionRecordMinOrderByAggregateInput = {
@@ -671,6 +755,10 @@ export type ProductionRecordMinOrderByAggregateInput = {
   inputById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
+  deleteReason?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
 }
 
 export type ProductionRecordSumOrderByAggregateInput = {
@@ -888,6 +976,10 @@ export type ProductionRecordCreateWithoutInputByInput = {
   status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
   area: Prisma.AreaCreateNestedOneWithoutProductionRecordsInput
   shift: Prisma.ShiftCreateNestedOneWithoutProductionRecordsInput
   product: Prisma.ProductCreateNestedOneWithoutProductionRecordsInput
@@ -911,6 +1003,10 @@ export type ProductionRecordUncheckedCreateWithoutInputByInput = {
   status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
   materialUsages?: Prisma.ProductionMaterialUsageUncheckedCreateNestedManyWithoutProductionRecordInput
 }
 
@@ -961,6 +1057,10 @@ export type ProductionRecordScalarWhereInput = {
   inputById?: Prisma.IntFilter<"ProductionRecord"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductionRecord"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"ProductionRecord"> | Date | string | null
+  deletedBy?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  deleteReason?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
+  updatedBy?: Prisma.StringNullableFilter<"ProductionRecord"> | string | null
 }
 
 export type ProductionRecordCreateWithoutAreaInput = {
@@ -976,6 +1076,10 @@ export type ProductionRecordCreateWithoutAreaInput = {
   status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
   shift: Prisma.ShiftCreateNestedOneWithoutProductionRecordsInput
   product: Prisma.ProductCreateNestedOneWithoutProductionRecordsInput
   inputBy: Prisma.UserCreateNestedOneWithoutProductionRecordsInput
@@ -999,6 +1103,10 @@ export type ProductionRecordUncheckedCreateWithoutAreaInput = {
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
   materialUsages?: Prisma.ProductionMaterialUsageUncheckedCreateNestedManyWithoutProductionRecordInput
 }
 
@@ -1041,6 +1149,10 @@ export type ProductionRecordCreateWithoutShiftInput = {
   status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
   area: Prisma.AreaCreateNestedOneWithoutProductionRecordsInput
   product: Prisma.ProductCreateNestedOneWithoutProductionRecordsInput
   inputBy: Prisma.UserCreateNestedOneWithoutProductionRecordsInput
@@ -1064,6 +1176,10 @@ export type ProductionRecordUncheckedCreateWithoutShiftInput = {
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
   materialUsages?: Prisma.ProductionMaterialUsageUncheckedCreateNestedManyWithoutProductionRecordInput
 }
 
@@ -1106,6 +1222,10 @@ export type ProductionRecordCreateWithoutProductInput = {
   status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
   area: Prisma.AreaCreateNestedOneWithoutProductionRecordsInput
   shift: Prisma.ShiftCreateNestedOneWithoutProductionRecordsInput
   inputBy: Prisma.UserCreateNestedOneWithoutProductionRecordsInput
@@ -1129,6 +1249,10 @@ export type ProductionRecordUncheckedCreateWithoutProductInput = {
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
   materialUsages?: Prisma.ProductionMaterialUsageUncheckedCreateNestedManyWithoutProductionRecordInput
 }
 
@@ -1171,6 +1295,10 @@ export type ProductionRecordCreateWithoutMaterialUsagesInput = {
   status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
   area: Prisma.AreaCreateNestedOneWithoutProductionRecordsInput
   shift: Prisma.ShiftCreateNestedOneWithoutProductionRecordsInput
   product: Prisma.ProductCreateNestedOneWithoutProductionRecordsInput
@@ -1195,6 +1323,10 @@ export type ProductionRecordUncheckedCreateWithoutMaterialUsagesInput = {
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
 }
 
 export type ProductionRecordCreateOrConnectWithoutMaterialUsagesInput = {
@@ -1226,6 +1358,10 @@ export type ProductionRecordUpdateWithoutMaterialUsagesInput = {
   status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.AreaUpdateOneRequiredWithoutProductionRecordsNestedInput
   shift?: Prisma.ShiftUpdateOneRequiredWithoutProductionRecordsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutProductionRecordsNestedInput
@@ -1250,6 +1386,10 @@ export type ProductionRecordUncheckedUpdateWithoutMaterialUsagesInput = {
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProductionRecordCreateManyInputByInput = {
@@ -1269,6 +1409,10 @@ export type ProductionRecordCreateManyInputByInput = {
   status?: $Enums.ProductionStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
 }
 
 export type ProductionRecordUpdateWithoutInputByInput = {
@@ -1284,6 +1428,10 @@ export type ProductionRecordUpdateWithoutInputByInput = {
   status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.AreaUpdateOneRequiredWithoutProductionRecordsNestedInput
   shift?: Prisma.ShiftUpdateOneRequiredWithoutProductionRecordsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutProductionRecordsNestedInput
@@ -1307,6 +1455,10 @@ export type ProductionRecordUncheckedUpdateWithoutInputByInput = {
   status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   materialUsages?: Prisma.ProductionMaterialUsageUncheckedUpdateManyWithoutProductionRecordNestedInput
 }
 
@@ -1327,6 +1479,10 @@ export type ProductionRecordUncheckedUpdateManyWithoutInputByInput = {
   status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProductionRecordCreateManyAreaInput = {
@@ -1346,6 +1502,10 @@ export type ProductionRecordCreateManyAreaInput = {
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
 }
 
 export type ProductionRecordUpdateWithoutAreaInput = {
@@ -1361,6 +1521,10 @@ export type ProductionRecordUpdateWithoutAreaInput = {
   status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shift?: Prisma.ShiftUpdateOneRequiredWithoutProductionRecordsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutProductionRecordsNestedInput
   inputBy?: Prisma.UserUpdateOneRequiredWithoutProductionRecordsNestedInput
@@ -1384,6 +1548,10 @@ export type ProductionRecordUncheckedUpdateWithoutAreaInput = {
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   materialUsages?: Prisma.ProductionMaterialUsageUncheckedUpdateManyWithoutProductionRecordNestedInput
 }
 
@@ -1404,6 +1572,10 @@ export type ProductionRecordUncheckedUpdateManyWithoutAreaInput = {
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProductionRecordCreateManyShiftInput = {
@@ -1423,6 +1595,10 @@ export type ProductionRecordCreateManyShiftInput = {
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
 }
 
 export type ProductionRecordUpdateWithoutShiftInput = {
@@ -1438,6 +1614,10 @@ export type ProductionRecordUpdateWithoutShiftInput = {
   status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.AreaUpdateOneRequiredWithoutProductionRecordsNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutProductionRecordsNestedInput
   inputBy?: Prisma.UserUpdateOneRequiredWithoutProductionRecordsNestedInput
@@ -1461,6 +1641,10 @@ export type ProductionRecordUncheckedUpdateWithoutShiftInput = {
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   materialUsages?: Prisma.ProductionMaterialUsageUncheckedUpdateManyWithoutProductionRecordNestedInput
 }
 
@@ -1481,6 +1665,10 @@ export type ProductionRecordUncheckedUpdateManyWithoutShiftInput = {
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProductionRecordCreateManyProductInput = {
@@ -1500,6 +1688,10 @@ export type ProductionRecordCreateManyProductInput = {
   inputById: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: string | null
+  updatedBy?: string | null
 }
 
 export type ProductionRecordUpdateWithoutProductInput = {
@@ -1515,6 +1707,10 @@ export type ProductionRecordUpdateWithoutProductInput = {
   status?: Prisma.EnumProductionStatusFieldUpdateOperationsInput | $Enums.ProductionStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.AreaUpdateOneRequiredWithoutProductionRecordsNestedInput
   shift?: Prisma.ShiftUpdateOneRequiredWithoutProductionRecordsNestedInput
   inputBy?: Prisma.UserUpdateOneRequiredWithoutProductionRecordsNestedInput
@@ -1538,6 +1734,10 @@ export type ProductionRecordUncheckedUpdateWithoutProductInput = {
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   materialUsages?: Prisma.ProductionMaterialUsageUncheckedUpdateManyWithoutProductionRecordNestedInput
 }
 
@@ -1558,6 +1758,10 @@ export type ProductionRecordUncheckedUpdateManyWithoutProductInput = {
   inputById?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1609,6 +1813,10 @@ export type ProductionRecordSelect<ExtArgs extends runtime.Types.Extensions.Inte
   inputById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  deletedBy?: boolean
+  deleteReason?: boolean
+  updatedBy?: boolean
   area?: boolean | Prisma.AreaDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -1637,9 +1845,13 @@ export type ProductionRecordSelectScalar = {
   inputById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  deletedBy?: boolean
+  deleteReason?: boolean
+  updatedBy?: boolean
 }
 
-export type ProductionRecordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productionDate" | "machineNo" | "areaId" | "shiftId" | "productId" | "computerCode" | "operatorName" | "outputQty" | "okQty" | "actualRm" | "otReplace" | "remarks" | "status" | "inputById" | "createdAt" | "updatedAt", ExtArgs["result"]["productionRecord"]>
+export type ProductionRecordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productionDate" | "machineNo" | "areaId" | "shiftId" | "productId" | "computerCode" | "operatorName" | "outputQty" | "okQty" | "actualRm" | "otReplace" | "remarks" | "status" | "inputById" | "createdAt" | "updatedAt" | "deletedAt" | "deletedBy" | "deleteReason" | "updatedBy", ExtArgs["result"]["productionRecord"]>
 export type ProductionRecordInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   area?: boolean | Prisma.AreaDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
@@ -1676,6 +1888,10 @@ export type $ProductionRecordPayload<ExtArgs extends runtime.Types.Extensions.In
     inputById: number
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
+    deletedBy: string | null
+    deleteReason: string | null
+    updatedBy: string | null
   }, ExtArgs["result"]["productionRecord"]>
   composites: {}
 }
@@ -2067,6 +2283,10 @@ export interface ProductionRecordFieldRefs {
   readonly inputById: Prisma.FieldRef<"ProductionRecord", 'Int'>
   readonly createdAt: Prisma.FieldRef<"ProductionRecord", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ProductionRecord", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"ProductionRecord", 'DateTime'>
+  readonly deletedBy: Prisma.FieldRef<"ProductionRecord", 'String'>
+  readonly deleteReason: Prisma.FieldRef<"ProductionRecord", 'String'>
+  readonly updatedBy: Prisma.FieldRef<"ProductionRecord", 'String'>
 }
     
 

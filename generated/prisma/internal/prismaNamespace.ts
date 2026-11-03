@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.10.0
- * Query Engine version: 0edf323efd1d98336f3f0a68684b56f689b900d3
+ * Prisma Client JS version: 7.10.1
+ * Query Engine version: d1b3f377ca835d73fd50954a5e22128b9ebdd6b8
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.10.0",
-  engine: "0edf323efd1d98336f3f0a68684b56f689b900d3"
+  client: "7.10.1",
+  engine: "d1b3f377ca835d73fd50954a5e22128b9ebdd6b8"
 }
 
 /**
@@ -407,7 +407,9 @@ export const ModelName = {
   ProductMaterial: 'ProductMaterial',
   ProductionTarget: 'ProductionTarget',
   ProductionRecord: 'ProductionRecord',
-  ProductionMaterialUsage: 'ProductionMaterialUsage'
+  ProductionAuditLog: 'ProductionAuditLog',
+  ProductionMaterialUsage: 'ProductionMaterialUsage',
+  MoldingProduct: 'MoldingProduct'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -423,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "area" | "shift" | "machine" | "computer" | "rawMaterial" | "product" | "productMaterial" | "productionTarget" | "productionRecord" | "productionMaterialUsage"
+    modelProps: "user" | "area" | "shift" | "machine" | "computer" | "rawMaterial" | "product" | "productMaterial" | "productionTarget" | "productionRecord" | "productionAuditLog" | "productionMaterialUsage" | "moldingProduct"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1087,6 +1089,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProductionAuditLog: {
+      payload: Prisma.$ProductionAuditLogPayload<ExtArgs>
+      fields: Prisma.ProductionAuditLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProductionAuditLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionAuditLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProductionAuditLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionAuditLogPayload>
+        }
+        findFirst: {
+          args: Prisma.ProductionAuditLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionAuditLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProductionAuditLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionAuditLogPayload>
+        }
+        findMany: {
+          args: Prisma.ProductionAuditLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionAuditLogPayload>[]
+        }
+        create: {
+          args: Prisma.ProductionAuditLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionAuditLogPayload>
+        }
+        createMany: {
+          args: Prisma.ProductionAuditLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ProductionAuditLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionAuditLogPayload>
+        }
+        update: {
+          args: Prisma.ProductionAuditLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionAuditLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProductionAuditLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProductionAuditLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ProductionAuditLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProductionAuditLogPayload>
+        }
+        aggregate: {
+          args: Prisma.ProductionAuditLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProductionAuditLog>
+        }
+        groupBy: {
+          args: Prisma.ProductionAuditLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductionAuditLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProductionAuditLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProductionAuditLogCountAggregateOutputType> | number
+        }
+      }
+    }
     ProductionMaterialUsage: {
       payload: Prisma.$ProductionMaterialUsagePayload<ExtArgs>
       fields: Prisma.ProductionMaterialUsageFieldRefs
@@ -1150,6 +1218,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ProductionMaterialUsageCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProductionMaterialUsageCountAggregateOutputType> | number
+        }
+      }
+    }
+    MoldingProduct: {
+      payload: Prisma.$MoldingProductPayload<ExtArgs>
+      fields: Prisma.MoldingProductFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MoldingProductFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MoldingProductFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductPayload>
+        }
+        findFirst: {
+          args: Prisma.MoldingProductFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MoldingProductFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductPayload>
+        }
+        findMany: {
+          args: Prisma.MoldingProductFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductPayload>[]
+        }
+        create: {
+          args: Prisma.MoldingProductCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductPayload>
+        }
+        createMany: {
+          args: Prisma.MoldingProductCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.MoldingProductDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductPayload>
+        }
+        update: {
+          args: Prisma.MoldingProductUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductPayload>
+        }
+        deleteMany: {
+          args: Prisma.MoldingProductDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MoldingProductUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.MoldingProductUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductPayload>
+        }
+        aggregate: {
+          args: Prisma.MoldingProductAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMoldingProduct>
+        }
+        groupBy: {
+          args: Prisma.MoldingProductGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MoldingProductGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MoldingProductCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MoldingProductCountAggregateOutputType> | number
         }
       }
     }
@@ -1333,10 +1467,29 @@ export const ProductionRecordScalarFieldEnum = {
   status: 'status',
   inputById: 'inputById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  deleteReason: 'deleteReason',
+  updatedBy: 'updatedBy'
 } as const
 
 export type ProductionRecordScalarFieldEnum = (typeof ProductionRecordScalarFieldEnum)[keyof typeof ProductionRecordScalarFieldEnum]
+
+
+export const ProductionAuditLogScalarFieldEnum = {
+  id: 'id',
+  recordId: 'recordId',
+  action: 'action',
+  actorId: 'actorId',
+  actorEmail: 'actorEmail',
+  reason: 'reason',
+  beforeData: 'beforeData',
+  afterData: 'afterData',
+  createdAt: 'createdAt'
+} as const
+
+export type ProductionAuditLogScalarFieldEnum = (typeof ProductionAuditLogScalarFieldEnum)[keyof typeof ProductionAuditLogScalarFieldEnum]
 
 
 export const ProductionMaterialUsageScalarFieldEnum = {
@@ -1353,12 +1506,41 @@ export const ProductionMaterialUsageScalarFieldEnum = {
 export type ProductionMaterialUsageScalarFieldEnum = (typeof ProductionMaterialUsageScalarFieldEnum)[keyof typeof ProductionMaterialUsageScalarFieldEnum]
 
 
+export const MoldingProductScalarFieldEnum = {
+  id: 'id',
+  computerCode: 'computerCode',
+  productName: 'productName',
+  productDescription: 'productDescription',
+  hardnessRequirements: 'hardnessRequirements',
+  colorRequirements: 'colorRequirements',
+  rawMaterialRequirements: 'rawMaterialRequirements',
+  bufferPercent: 'bufferPercent',
+  quotaPerHourShot: 'quotaPerHourShot',
+  quotaPerHourPcs: 'quotaPerHourPcs',
+  productionTime: 'productionTime',
+  productionTargetPerDay: 'productionTargetPerDay',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MoldingProductScalarFieldEnum = (typeof MoldingProductScalarFieldEnum)[keyof typeof MoldingProductScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const UserOrderByRelevanceFieldEnum = {
@@ -1435,10 +1617,38 @@ export const ProductionRecordOrderByRelevanceFieldEnum = {
   computerCode: 'computerCode',
   operatorName: 'operatorName',
   otReplace: 'otReplace',
-  remarks: 'remarks'
+  remarks: 'remarks',
+  deletedBy: 'deletedBy',
+  deleteReason: 'deleteReason',
+  updatedBy: 'updatedBy'
 } as const
 
 export type ProductionRecordOrderByRelevanceFieldEnum = (typeof ProductionRecordOrderByRelevanceFieldEnum)[keyof typeof ProductionRecordOrderByRelevanceFieldEnum]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const ProductionAuditLogOrderByRelevanceFieldEnum = {
+  actorEmail: 'actorEmail',
+  reason: 'reason'
+} as const
+
+export type ProductionAuditLogOrderByRelevanceFieldEnum = (typeof ProductionAuditLogOrderByRelevanceFieldEnum)[keyof typeof ProductionAuditLogOrderByRelevanceFieldEnum]
 
 
 export const ProductionMaterialUsageOrderByRelevanceFieldEnum = {
@@ -1446,6 +1656,18 @@ export const ProductionMaterialUsageOrderByRelevanceFieldEnum = {
 } as const
 
 export type ProductionMaterialUsageOrderByRelevanceFieldEnum = (typeof ProductionMaterialUsageOrderByRelevanceFieldEnum)[keyof typeof ProductionMaterialUsageOrderByRelevanceFieldEnum]
+
+
+export const MoldingProductOrderByRelevanceFieldEnum = {
+  computerCode: 'computerCode',
+  productName: 'productName',
+  productDescription: 'productDescription',
+  hardnessRequirements: 'hardnessRequirements',
+  colorRequirements: 'colorRequirements',
+  rawMaterialRequirements: 'rawMaterialRequirements'
+} as const
+
+export type MoldingProductOrderByRelevanceFieldEnum = (typeof MoldingProductOrderByRelevanceFieldEnum)[keyof typeof MoldingProductOrderByRelevanceFieldEnum]
 
 
 
@@ -1514,6 +1736,27 @@ export type EnumQuantityUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'ProductionStatus'
  */
 export type EnumProductionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductionAuditAction'
+ */
+export type EnumProductionAuditActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductionAuditAction'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -1684,7 +1927,9 @@ export type GlobalOmitConfig = {
   productMaterial?: Prisma.ProductMaterialOmit
   productionTarget?: Prisma.ProductionTargetOmit
   productionRecord?: Prisma.ProductionRecordOmit
+  productionAuditLog?: Prisma.ProductionAuditLogOmit
   productionMaterialUsage?: Prisma.ProductionMaterialUsageOmit
+  moldingProduct?: Prisma.MoldingProductOmit
 }
 
 /* Types for Logging */

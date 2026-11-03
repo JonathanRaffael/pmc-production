@@ -39,3 +39,12 @@ export const ProductionStatus = {
 } as const
 
 export type ProductionStatus = (typeof ProductionStatus)[keyof typeof ProductionStatus]
+
+
+export const ProductionAuditAction = {
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  RESTORE: 'RESTORE'
+} as const
+
+export type ProductionAuditAction = (typeof ProductionAuditAction)[keyof typeof ProductionAuditAction]

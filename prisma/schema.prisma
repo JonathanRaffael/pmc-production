@@ -32,6 +32,16 @@ enum ProductionStatus {
 }
 
 // =====================================================
+// PRODUCTION AUDIT ACTION
+// =====================================================
+
+enum ProductionAuditAction {
+  UPDATE
+  DELETE
+  RESTORE
+}
+
+// =====================================================
 // USER
 // =====================================================
 
@@ -44,6 +54,9 @@ model User {
   isActive     Boolean  @default(true)
 
   productionRecords ProductionRecord[]
+
+  // Production Audit Logs
+  productionAuditLogs ProductionAuditLog[] @relation("ProductionAuditActor")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -469,6 +482,20 @@ model ProductionRecord {
   updatedAt DateTime @updatedAt
 
   // ===================================================
+  // SOFT DELETE
+  // ===================================================
+
+  deletedAt    DateTime?
+  deletedBy    String?
+  deleteReason String?
+
+  // ===================================================
+  // AUDIT UPDATE
+  // ===================================================
+
+  updatedBy String?
+
+  // ===================================================
   // INDEX
   // ===================================================
 
@@ -480,11 +507,73 @@ model ProductionRecord {
   @@index([computerCode])
   @@index([inputById])
   @@index([status])
+  @@index([deletedAt])
   @@index([productionDate, productId])
   @@index([productionDate, areaId])
   @@index([productionDate, shiftId])
   @@index([productionDate, machineNo])
   @@index([productionDate, computerCode])
+}
+
+// =====================================================
+// PRODUCTION AUDIT LOG
+// =====================================================
+
+model ProductionAuditLog {
+  id Int @id @default(autoincrement())
+
+  // ===================================================
+  // PRODUCTION RECORD ID
+  // ===================================================
+  // Tidak menggunakan foreign key ke ProductionRecord
+  // agar audit tetap tersimpan secara independen.
+  // ===================================================
+
+  recordId Int
+
+  // ===================================================
+  // ACTION
+  // ===================================================
+
+  action ProductionAuditAction
+
+  // ===================================================
+  // ADMINISTRATOR
+  // ===================================================
+
+  actorId Int
+  actor   User @relation("ProductionAuditActor", fields: [actorId], references: [id], onDelete: Restrict)
+
+  // Snapshot email administrator
+  actorEmail String
+
+  // ===================================================
+  // REASON
+  // ===================================================
+
+  reason String?
+
+  // ===================================================
+  // BEFORE & AFTER DATA
+  // ===================================================
+
+  beforeData Json?
+  afterData  Json?
+
+  // ===================================================
+  // TIMESTAMP
+  // ===================================================
+
+  createdAt DateTime @default(now())
+
+  // ===================================================
+  // INDEX
+  // ===================================================
+
+  @@index([recordId])
+  @@index([actorId])
+  @@index([createdAt])
+  @@index([action])
 }
 
 // =====================================================
@@ -532,4 +621,62 @@ model ProductionMaterialUsage {
   @@unique([productionRecordId, rawMaterialId])
   @@index([productionRecordId])
   @@index([rawMaterialId])
+}
+
+// =====================================================
+// MOLDING PRODUCT MASTER
+// =====================================================
+
+model MoldingProduct {
+  id Int @id @default(autoincrement())
+
+  // ===================================================
+  // PRODUCT INFORMATION
+  // ===================================================
+
+  computerCode String @unique
+
+  productName String
+
+  productDescription String?
+
+  hardnessRequirements String?
+
+  colorRequirements String?
+
+  rawMaterialRequirements String?
+
+  bufferPercent Decimal @db.Decimal(5, 2)
+
+  // ===================================================
+  // PRODUCTION PARAMETERS
+  // ===================================================
+
+  quotaPerHourShot Decimal @db.Decimal(12, 2)
+
+  quotaPerHourPcs Decimal @db.Decimal(12, 2)
+
+  productionTime Decimal @db.Decimal(12, 2)
+
+  productionTargetPerDay Decimal @db.Decimal(12, 2)
+
+  // ===================================================
+  // STATUS
+  // ===================================================
+
+  isActive Boolean @default(true)
+
+  // ===================================================
+  // TIMESTAMP
+  // ===================================================
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ===================================================
+  // INDEX
+  // ===================================================
+
+  @@index([productName])
+  @@index([isActive])
 }
