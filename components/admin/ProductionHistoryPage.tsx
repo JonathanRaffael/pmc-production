@@ -128,6 +128,10 @@ export default function ProductionHistoryPage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Summary data is fetched independently from the paginated table.
+  const [summaryRecords, setSummaryRecords] = useState<ProductionRecord[]>([]);
+  const [summaryLoading, setSummaryLoading] = useState(true);
+
   const [search, setSearch] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
@@ -264,6 +268,76 @@ export default function ProductionHistoryPage({
   }, [fetchHistory]);
 
   // ===================================================
+  // FETCH ALL MATCHING DATA FOR SUMMARY
+  // Independent from table pagination.
+  // ===================================================
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const timeout = setTimeout(async () => {
+      try {
+        setSummaryLoading(true);
+
+        const params = new URLSearchParams();
+        params.set("summary", "true");
+
+        if (search.trim()) {
+          params.set("search", search.trim());
+        }
+
+        if (dateFrom) {
+          params.set("fromDate", dateFrom);
+        }
+
+        if (dateTo) {
+          params.set("toDate", dateTo);
+        }
+
+        const response = await fetch(
+          `/api/production?${params.toString()}`,
+          {
+            method: "GET",
+            cache: "no-store",
+            signal: controller.signal,
+          }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            result?.message || "Gagal mengambil seluruh data summary."
+          );
+        }
+
+        setSummaryRecords(
+          Array.isArray(result?.data) ? result.data : []
+        );
+      } catch (err) {
+        if (
+          err instanceof DOMException &&
+          err.name === "AbortError"
+        ) {
+          return;
+        }
+
+        console.error("Production History Summary Error:", err);
+        setSummaryRecords([]);
+      } finally {
+        if (!controller.signal.aborted) {
+          setSummaryLoading(false);
+        }
+      }
+    }, search ? 400 : 0);
+
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [search, dateFrom, dateTo]);
+
+  // ===================================================
   // RESET PAGE WHEN FILTER CHANGES
   // ===================================================
 
@@ -276,7 +350,7 @@ export default function ProductionHistoryPage({
   // ===================================================
 
   const summary = useMemo(() => {
-    return records.reduce(
+    return summaryRecords.reduce(
       (acc, record) => {
         const output = Number(record.outputQty) || 0;
         const ok = Number(record.okQty) || 0;
@@ -293,7 +367,7 @@ export default function ProductionHistoryPage({
         ng: 0,
       }
     );
-  }, [records]);
+  }, [summaryRecords]);
 
   // ===================================================
   // CLEAR FILTER
@@ -516,7 +590,9 @@ export default function ProductionHistoryPage({
           </p>
 
           <p className="mt-1 text-xs text-gray-400">
-            Data pada halaman ini
+            {summaryLoading
+              ? "Memuat seluruh data..."
+              : `${formatNumber(summaryRecords.length)} records sesuai filter`}
           </p>
         </div>
 
@@ -530,7 +606,9 @@ export default function ProductionHistoryPage({
           </p>
 
           <p className="mt-1 text-xs text-gray-400">
-            Data pada halaman ini
+            {summaryLoading
+              ? "Memuat seluruh data..."
+              : `${formatNumber(summaryRecords.length)} records sesuai filter`}
           </p>
         </div>
 
@@ -544,7 +622,9 @@ export default function ProductionHistoryPage({
           </p>
 
           <p className="mt-1 text-xs text-gray-400">
-            Data pada halaman ini
+            {summaryLoading
+              ? "Memuat seluruh data..."
+              : `${formatNumber(summaryRecords.length)} records sesuai filter`}
           </p>
         </div>
 
