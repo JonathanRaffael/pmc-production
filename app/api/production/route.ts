@@ -125,6 +125,11 @@ export async function GET(request: NextRequest) {
         ? Math.min(limitParam, 100)
         : 25;
 
+    // Summary mode mengambil seluruh data yang cocok dengan filter,
+    // tanpa mengubah pagination untuk request tabel.
+    const summaryMode =
+      searchParams.get("summary") === "true";
+
     const skip = (page - 1) * limit;
 
     // ===================================================
@@ -356,11 +361,16 @@ export async function GET(request: NextRequest) {
 
         // =============================================
         // PAGINATION
+        // Summary mode mengambil seluruh record hasil filter.
+        // Request tabel tetap menggunakan skip dan take.
         // =============================================
 
-        skip,
-
-        take: limit,
+        ...(summaryMode
+          ? {}
+          : {
+              skip,
+              take: limit,
+            }),
 
         // =============================================
         // RELATIONS
@@ -421,7 +431,8 @@ export async function GET(request: NextRequest) {
 
     // ===================================================
     // GET UNIQUE PRODUCT IDS
-    // FROM CURRENT PAGE ONLY
+    // SUMMARY MODE: ALL MATCHING RECORDS
+    // NORMAL MODE: CURRENT PAGE ONLY
     // ===================================================
 
     const productIds = Array.from(
@@ -434,7 +445,7 @@ export async function GET(request: NextRequest) {
 
     // ===================================================
     // GET PRODUCTION TARGETS
-    // ONLY FOR PRODUCTS ON CURRENT PAGE
+    // FOR ALL PRODUCTS IN THE SELECTED DATASET
     // ===================================================
 
     const targets =

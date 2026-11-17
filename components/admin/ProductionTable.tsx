@@ -269,6 +269,13 @@ export default function ProductionTable({
     ProductionRecord[]
   >([]);
 
+  // Dataset khusus KPI Summary: tidak terpengaruh pagination tabel.
+  const [summaryData, setSummaryData] =
+    useState<ProductionRecord[]>([]);
+
+  const [summaryLoading, setSummaryLoading] =
+    useState(false);
+
   const [
     loading,
     setLoading,
@@ -641,6 +648,95 @@ export default function ProductionTable({
   ]);
 
   // ===================================================
+  // FETCH ALL MATCHING DATA FOR KPI SUMMARY
+  // Tidak menggunakan page/limit agar KPI menghitung
+  // seluruh record sesuai filter aktif.
+  // ===================================================
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function fetchSummaryData() {
+      try {
+        setSummaryLoading(true);
+
+        const params = new URLSearchParams();
+        params.set("summary", "true");
+
+        if (debouncedSearch) {
+          params.set("search", debouncedSearch);
+        }
+
+        if (dateFrom) {
+          params.set("fromDate", dateFrom);
+        }
+
+        if (dateTo) {
+          params.set("toDate", dateTo);
+        }
+
+        if (areaFilter !== "ALL") {
+          params.set("areaId", areaFilter);
+        }
+
+        if (shiftFilter !== "ALL") {
+          params.set("shiftId", shiftFilter);
+        }
+
+        const response = await fetch(
+          `/api/production?${params.toString()}`,
+          {
+            method: "GET",
+            cache: "no-store",
+            signal: controller.signal,
+          }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            result?.message ||
+              "Gagal mengambil seluruh data summary."
+          );
+        }
+
+        setSummaryData(
+          Array.isArray(result?.data)
+            ? result.data
+            : []
+        );
+      } catch (err) {
+        if (
+          err instanceof DOMException &&
+          err.name === "AbortError"
+        ) {
+          return;
+        }
+
+        console.error("Summary fetch error:", err);
+        setSummaryData([]);
+      } finally {
+        if (!controller.signal.aborted) {
+          setSummaryLoading(false);
+        }
+      }
+    }
+
+    fetchSummaryData();
+
+    return () => {
+      controller.abort();
+    };
+  }, [
+    debouncedSearch,
+    dateFrom,
+    dateTo,
+    areaFilter,
+    shiftFilter,
+  ]);
+
+  // ===================================================
   // RESET PAGE WHEN FILTER CHANGES
   // ===================================================
 
@@ -778,6 +874,37 @@ export default function ProductionTable({
     ]);
 
   // ===================================================
+  // CALCULATE PMC FOR ALL SUMMARY RECORDS
+  // ===================================================
+
+  const summaryRows = useMemo(() => {
+    return summaryData.map((record) => {
+      const outputQty = Number(record.outputQty) || 0;
+      const okQty = Number(record.okQty) || 0;
+      const actualRm = Number(record.actualRm) || 0;
+      const shotWeight =
+        Number(record.product?.shotWeight) || 0;
+      const target8H = Number(record.target8H) || 0;
+
+      const pmc = calculatePMC({
+        outputQty,
+        okQty,
+        actualRm,
+        shotWeight,
+        target8H,
+      });
+
+      return {
+        outputQty,
+        okQty,
+        actualRm,
+        target8H,
+        pmc,
+      };
+    });
+  }, [summaryData]);
+
+  // ===================================================
   // DASHBOARD SUMMARY
   // ===================================================
 
@@ -785,7 +912,7 @@ export default function ProductionTable({
     useMemo(() => {
 
       const totalOutput =
-        calculatedRows.reduce(
+        summaryRows.reduce(
           (
             sum,
             row
@@ -796,7 +923,7 @@ export default function ProductionTable({
         );
 
       const totalOk =
-        calculatedRows.reduce(
+        summaryRows.reduce(
           (
             sum,
             row
@@ -807,7 +934,7 @@ export default function ProductionTable({
         );
 
       const totalNg =
-        calculatedRows.reduce(
+        summaryRows.reduce(
           (
             sum,
             row
@@ -818,7 +945,7 @@ export default function ProductionTable({
         );
 
       const totalActualRm =
-        calculatedRows.reduce(
+        summaryRows.reduce(
           (
             sum,
             row
@@ -829,7 +956,7 @@ export default function ProductionTable({
         );
 
       const totalRmRequirement =
-        calculatedRows.reduce(
+        summaryRows.reduce(
           (
             sum,
             row
@@ -841,7 +968,7 @@ export default function ProductionTable({
         );
 
       const totalRmVariance =
-        calculatedRows.reduce(
+        summaryRows.reduce(
           (
             sum,
             row
@@ -853,7 +980,7 @@ export default function ProductionTable({
         );
 
       const totalTarget =
-        calculatedRows.reduce(
+        summaryRows.reduce(
           (
             sum,
             row
@@ -901,7 +1028,7 @@ export default function ProductionTable({
       };
 
     }, [
-      calculatedRows,
+      summaryRows,
     ]);
 
   // ===================================================
@@ -1078,7 +1205,9 @@ export default function ProductionTable({
 
             {isLoading
               ? "Loading production data..."
-              : `${productionData.length} of ${totalRecords} records`}
+              : `${productionData.length} of ${totalRecords} records${
+                  summaryLoading ? " • Updating summary..." : ""
+                }`}
 
           </div>
 
