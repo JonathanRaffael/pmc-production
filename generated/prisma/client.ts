@@ -106,3 +106,23 @@ export type ProductionMaterialUsage = Prisma.ProductionMaterialUsageModel
  * 
  */
 export type MoldingProduct = Prisma.MoldingProductModel
+/**
+ * Model MoldingPO
+ * 
+ */
+export type MoldingPO = Prisma.MoldingPOModel
+/**
+ * Model MoldingProduction
+ * 
+ */
+export type MoldingProduction = Prisma.MoldingProductionModel
+/**
+ * Model MoldingProductionRecord
+ * 
+ */
+export type MoldingProductionRecord = Prisma.MoldingProductionRecordModel
+/**
+ * Model MoldingPOAllocation
+ * 
+ */
+export type MoldingPOAllocation = Prisma.MoldingPOAllocationModel

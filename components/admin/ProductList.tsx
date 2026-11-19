@@ -1780,6 +1780,7 @@ export default function ProductList({
                 </button>
               </div>
             </div>
+            
           </div>
         )}
     </>

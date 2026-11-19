@@ -48,3 +48,11 @@ export const ProductionAuditAction = {
 } as const
 
 export type ProductionAuditAction = (typeof ProductionAuditAction)[keyof typeof ProductionAuditAction]
+
+
+export const MoldingShift = {
+  A: 'A',
+  B: 'B'
+} as const
+
+export type MoldingShift = (typeof MoldingShift)[keyof typeof MoldingShift]

@@ -409,7 +409,11 @@ export const ModelName = {
   ProductionRecord: 'ProductionRecord',
   ProductionAuditLog: 'ProductionAuditLog',
   ProductionMaterialUsage: 'ProductionMaterialUsage',
-  MoldingProduct: 'MoldingProduct'
+  MoldingProduct: 'MoldingProduct',
+  MoldingPO: 'MoldingPO',
+  MoldingProduction: 'MoldingProduction',
+  MoldingProductionRecord: 'MoldingProductionRecord',
+  MoldingPOAllocation: 'MoldingPOAllocation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -425,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "area" | "shift" | "machine" | "computer" | "rawMaterial" | "product" | "productMaterial" | "productionTarget" | "productionRecord" | "productionAuditLog" | "productionMaterialUsage" | "moldingProduct"
+    modelProps: "user" | "area" | "shift" | "machine" | "computer" | "rawMaterial" | "product" | "productMaterial" | "productionTarget" | "productionRecord" | "productionAuditLog" | "productionMaterialUsage" | "moldingProduct" | "moldingPO" | "moldingProduction" | "moldingProductionRecord" | "moldingPOAllocation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1287,6 +1291,270 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MoldingPO: {
+      payload: Prisma.$MoldingPOPayload<ExtArgs>
+      fields: Prisma.MoldingPOFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MoldingPOFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MoldingPOFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOPayload>
+        }
+        findFirst: {
+          args: Prisma.MoldingPOFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MoldingPOFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOPayload>
+        }
+        findMany: {
+          args: Prisma.MoldingPOFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOPayload>[]
+        }
+        create: {
+          args: Prisma.MoldingPOCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOPayload>
+        }
+        createMany: {
+          args: Prisma.MoldingPOCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.MoldingPODeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOPayload>
+        }
+        update: {
+          args: Prisma.MoldingPOUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOPayload>
+        }
+        deleteMany: {
+          args: Prisma.MoldingPODeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MoldingPOUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.MoldingPOUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOPayload>
+        }
+        aggregate: {
+          args: Prisma.MoldingPOAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMoldingPO>
+        }
+        groupBy: {
+          args: Prisma.MoldingPOGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MoldingPOGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MoldingPOCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MoldingPOCountAggregateOutputType> | number
+        }
+      }
+    }
+    MoldingProduction: {
+      payload: Prisma.$MoldingProductionPayload<ExtArgs>
+      fields: Prisma.MoldingProductionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MoldingProductionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MoldingProductionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionPayload>
+        }
+        findFirst: {
+          args: Prisma.MoldingProductionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MoldingProductionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionPayload>
+        }
+        findMany: {
+          args: Prisma.MoldingProductionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionPayload>[]
+        }
+        create: {
+          args: Prisma.MoldingProductionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionPayload>
+        }
+        createMany: {
+          args: Prisma.MoldingProductionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.MoldingProductionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionPayload>
+        }
+        update: {
+          args: Prisma.MoldingProductionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionPayload>
+        }
+        deleteMany: {
+          args: Prisma.MoldingProductionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MoldingProductionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.MoldingProductionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionPayload>
+        }
+        aggregate: {
+          args: Prisma.MoldingProductionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMoldingProduction>
+        }
+        groupBy: {
+          args: Prisma.MoldingProductionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MoldingProductionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MoldingProductionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MoldingProductionCountAggregateOutputType> | number
+        }
+      }
+    }
+    MoldingProductionRecord: {
+      payload: Prisma.$MoldingProductionRecordPayload<ExtArgs>
+      fields: Prisma.MoldingProductionRecordFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MoldingProductionRecordFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionRecordPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MoldingProductionRecordFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionRecordPayload>
+        }
+        findFirst: {
+          args: Prisma.MoldingProductionRecordFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionRecordPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MoldingProductionRecordFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionRecordPayload>
+        }
+        findMany: {
+          args: Prisma.MoldingProductionRecordFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionRecordPayload>[]
+        }
+        create: {
+          args: Prisma.MoldingProductionRecordCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionRecordPayload>
+        }
+        createMany: {
+          args: Prisma.MoldingProductionRecordCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.MoldingProductionRecordDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionRecordPayload>
+        }
+        update: {
+          args: Prisma.MoldingProductionRecordUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionRecordPayload>
+        }
+        deleteMany: {
+          args: Prisma.MoldingProductionRecordDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MoldingProductionRecordUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.MoldingProductionRecordUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingProductionRecordPayload>
+        }
+        aggregate: {
+          args: Prisma.MoldingProductionRecordAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMoldingProductionRecord>
+        }
+        groupBy: {
+          args: Prisma.MoldingProductionRecordGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MoldingProductionRecordGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MoldingProductionRecordCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MoldingProductionRecordCountAggregateOutputType> | number
+        }
+      }
+    }
+    MoldingPOAllocation: {
+      payload: Prisma.$MoldingPOAllocationPayload<ExtArgs>
+      fields: Prisma.MoldingPOAllocationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MoldingPOAllocationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOAllocationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MoldingPOAllocationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOAllocationPayload>
+        }
+        findFirst: {
+          args: Prisma.MoldingPOAllocationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOAllocationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MoldingPOAllocationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOAllocationPayload>
+        }
+        findMany: {
+          args: Prisma.MoldingPOAllocationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOAllocationPayload>[]
+        }
+        create: {
+          args: Prisma.MoldingPOAllocationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOAllocationPayload>
+        }
+        createMany: {
+          args: Prisma.MoldingPOAllocationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.MoldingPOAllocationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOAllocationPayload>
+        }
+        update: {
+          args: Prisma.MoldingPOAllocationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOAllocationPayload>
+        }
+        deleteMany: {
+          args: Prisma.MoldingPOAllocationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MoldingPOAllocationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.MoldingPOAllocationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MoldingPOAllocationPayload>
+        }
+        aggregate: {
+          args: Prisma.MoldingPOAllocationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMoldingPOAllocation>
+        }
+        groupBy: {
+          args: Prisma.MoldingPOAllocationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MoldingPOAllocationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MoldingPOAllocationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MoldingPOAllocationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1514,17 +1782,89 @@ export const MoldingProductScalarFieldEnum = {
   hardnessRequirements: 'hardnessRequirements',
   colorRequirements: 'colorRequirements',
   rawMaterialRequirements: 'rawMaterialRequirements',
-  bufferPercent: 'bufferPercent',
-  quotaPerHourShot: 'quotaPerHourShot',
-  quotaPerHourPcs: 'quotaPerHourPcs',
+  shotWeight: 'shotWeight',
+  setupWeight: 'setupWeight',
+  cavity: 'cavity',
+  materialSetup: 'materialSetup',
+  vulcanization: 'vulcanization',
+  materialRemoval: 'materialRemoval',
   productionTime: 'productionTime',
-  productionTargetPerDay: 'productionTargetPerDay',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type MoldingProductScalarFieldEnum = (typeof MoldingProductScalarFieldEnum)[keyof typeof MoldingProductScalarFieldEnum]
+
+
+export const MoldingPOScalarFieldEnum = {
+  id: 'id',
+  moldingProductId: 'moldingProductId',
+  poNumber: 'poNumber',
+  poDate: 'poDate',
+  deliveryDeadline: 'deliveryDeadline',
+  actualPOQty: 'actualPOQty',
+  bufferPercent: 'bufferPercent',
+  bufferQty: 'bufferQty',
+  totalPOQty: 'totalPOQty',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MoldingPOScalarFieldEnum = (typeof MoldingPOScalarFieldEnum)[keyof typeof MoldingPOScalarFieldEnum]
+
+
+export const MoldingProductionScalarFieldEnum = {
+  id: 'id',
+  moldingPOId: 'moldingPOId',
+  shotWeight: 'shotWeight',
+  setupWeight: 'setupWeight',
+  cavity: 'cavity',
+  materialSetup: 'materialSetup',
+  vulcanization: 'vulcanization',
+  materialRemoval: 'materialRemoval',
+  totalDuration: 'totalDuration',
+  quotaPerHourShot: 'quotaPerHourShot',
+  quotaPerHourPcs: 'quotaPerHourPcs',
+  productionTime: 'productionTime',
+  productionTargetPerDay: 'productionTargetPerDay',
+  targetCompleteHours: 'targetCompleteHours',
+  targetCompleteDays: 'targetCompleteDays',
+  totalRawMaterial: 'totalRawMaterial',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MoldingProductionScalarFieldEnum = (typeof MoldingProductionScalarFieldEnum)[keyof typeof MoldingProductionScalarFieldEnum]
+
+
+export const MoldingProductionRecordScalarFieldEnum = {
+  id: 'id',
+  moldingProductId: 'moldingProductId',
+  productionDate: 'productionDate',
+  shift: 'shift',
+  machineNo: 'machineNo',
+  operatorName: 'operatorName',
+  outputQty: 'outputQty',
+  okQty: 'okQty',
+  actualRm: 'actualRm',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MoldingProductionRecordScalarFieldEnum = (typeof MoldingProductionRecordScalarFieldEnum)[keyof typeof MoldingProductionRecordScalarFieldEnum]
+
+
+export const MoldingPOAllocationScalarFieldEnum = {
+  id: 'id',
+  moldingPOId: 'moldingPOId',
+  productionRecordId: 'productionRecordId',
+  allocatedQty: 'allocatedQty',
+  createdAt: 'createdAt'
+} as const
+
+export type MoldingPOAllocationScalarFieldEnum = (typeof MoldingPOAllocationScalarFieldEnum)[keyof typeof MoldingPOAllocationScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1670,6 +2010,22 @@ export const MoldingProductOrderByRelevanceFieldEnum = {
 export type MoldingProductOrderByRelevanceFieldEnum = (typeof MoldingProductOrderByRelevanceFieldEnum)[keyof typeof MoldingProductOrderByRelevanceFieldEnum]
 
 
+export const MoldingPOOrderByRelevanceFieldEnum = {
+  poNumber: 'poNumber'
+} as const
+
+export type MoldingPOOrderByRelevanceFieldEnum = (typeof MoldingPOOrderByRelevanceFieldEnum)[keyof typeof MoldingPOOrderByRelevanceFieldEnum]
+
+
+export const MoldingProductionRecordOrderByRelevanceFieldEnum = {
+  machineNo: 'machineNo',
+  operatorName: 'operatorName',
+  remarks: 'remarks'
+} as const
+
+export type MoldingProductionRecordOrderByRelevanceFieldEnum = (typeof MoldingProductionRecordOrderByRelevanceFieldEnum)[keyof typeof MoldingProductionRecordOrderByRelevanceFieldEnum]
+
+
 
 /**
  * Field references
@@ -1757,6 +2113,13 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'MoldingShift'
+ */
+export type EnumMoldingShiftFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MoldingShift'>
     
 
 
@@ -1930,6 +2293,10 @@ export type GlobalOmitConfig = {
   productionAuditLog?: Prisma.ProductionAuditLogOmit
   productionMaterialUsage?: Prisma.ProductionMaterialUsageOmit
   moldingProduct?: Prisma.MoldingProductOmit
+  moldingPO?: Prisma.MoldingPOOmit
+  moldingProduction?: Prisma.MoldingProductionOmit
+  moldingProductionRecord?: Prisma.MoldingProductionRecordOmit
+  moldingPOAllocation?: Prisma.MoldingPOAllocationOmit
 }
 
 /* Types for Logging */

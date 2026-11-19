@@ -63,7 +63,11 @@ export const ModelName = {
   ProductionRecord: 'ProductionRecord',
   ProductionAuditLog: 'ProductionAuditLog',
   ProductionMaterialUsage: 'ProductionMaterialUsage',
-  MoldingProduct: 'MoldingProduct'
+  MoldingProduct: 'MoldingProduct',
+  MoldingPO: 'MoldingPO',
+  MoldingProduction: 'MoldingProduction',
+  MoldingProductionRecord: 'MoldingProductionRecord',
+  MoldingPOAllocation: 'MoldingPOAllocation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -270,17 +274,89 @@ export const MoldingProductScalarFieldEnum = {
   hardnessRequirements: 'hardnessRequirements',
   colorRequirements: 'colorRequirements',
   rawMaterialRequirements: 'rawMaterialRequirements',
-  bufferPercent: 'bufferPercent',
-  quotaPerHourShot: 'quotaPerHourShot',
-  quotaPerHourPcs: 'quotaPerHourPcs',
+  shotWeight: 'shotWeight',
+  setupWeight: 'setupWeight',
+  cavity: 'cavity',
+  materialSetup: 'materialSetup',
+  vulcanization: 'vulcanization',
+  materialRemoval: 'materialRemoval',
   productionTime: 'productionTime',
-  productionTargetPerDay: 'productionTargetPerDay',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type MoldingProductScalarFieldEnum = (typeof MoldingProductScalarFieldEnum)[keyof typeof MoldingProductScalarFieldEnum]
+
+
+export const MoldingPOScalarFieldEnum = {
+  id: 'id',
+  moldingProductId: 'moldingProductId',
+  poNumber: 'poNumber',
+  poDate: 'poDate',
+  deliveryDeadline: 'deliveryDeadline',
+  actualPOQty: 'actualPOQty',
+  bufferPercent: 'bufferPercent',
+  bufferQty: 'bufferQty',
+  totalPOQty: 'totalPOQty',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MoldingPOScalarFieldEnum = (typeof MoldingPOScalarFieldEnum)[keyof typeof MoldingPOScalarFieldEnum]
+
+
+export const MoldingProductionScalarFieldEnum = {
+  id: 'id',
+  moldingPOId: 'moldingPOId',
+  shotWeight: 'shotWeight',
+  setupWeight: 'setupWeight',
+  cavity: 'cavity',
+  materialSetup: 'materialSetup',
+  vulcanization: 'vulcanization',
+  materialRemoval: 'materialRemoval',
+  totalDuration: 'totalDuration',
+  quotaPerHourShot: 'quotaPerHourShot',
+  quotaPerHourPcs: 'quotaPerHourPcs',
+  productionTime: 'productionTime',
+  productionTargetPerDay: 'productionTargetPerDay',
+  targetCompleteHours: 'targetCompleteHours',
+  targetCompleteDays: 'targetCompleteDays',
+  totalRawMaterial: 'totalRawMaterial',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MoldingProductionScalarFieldEnum = (typeof MoldingProductionScalarFieldEnum)[keyof typeof MoldingProductionScalarFieldEnum]
+
+
+export const MoldingProductionRecordScalarFieldEnum = {
+  id: 'id',
+  moldingProductId: 'moldingProductId',
+  productionDate: 'productionDate',
+  shift: 'shift',
+  machineNo: 'machineNo',
+  operatorName: 'operatorName',
+  outputQty: 'outputQty',
+  okQty: 'okQty',
+  actualRm: 'actualRm',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MoldingProductionRecordScalarFieldEnum = (typeof MoldingProductionRecordScalarFieldEnum)[keyof typeof MoldingProductionRecordScalarFieldEnum]
+
+
+export const MoldingPOAllocationScalarFieldEnum = {
+  id: 'id',
+  moldingPOId: 'moldingPOId',
+  productionRecordId: 'productionRecordId',
+  allocatedQty: 'allocatedQty',
+  createdAt: 'createdAt'
+} as const
+
+export type MoldingPOAllocationScalarFieldEnum = (typeof MoldingPOAllocationScalarFieldEnum)[keyof typeof MoldingPOAllocationScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -424,4 +500,20 @@ export const MoldingProductOrderByRelevanceFieldEnum = {
 } as const
 
 export type MoldingProductOrderByRelevanceFieldEnum = (typeof MoldingProductOrderByRelevanceFieldEnum)[keyof typeof MoldingProductOrderByRelevanceFieldEnum]
+
+
+export const MoldingPOOrderByRelevanceFieldEnum = {
+  poNumber: 'poNumber'
+} as const
+
+export type MoldingPOOrderByRelevanceFieldEnum = (typeof MoldingPOOrderByRelevanceFieldEnum)[keyof typeof MoldingPOOrderByRelevanceFieldEnum]
+
+
+export const MoldingProductionRecordOrderByRelevanceFieldEnum = {
+  machineNo: 'machineNo',
+  operatorName: 'operatorName',
+  remarks: 'remarks'
+} as const
+
+export type MoldingProductionRecordOrderByRelevanceFieldEnum = (typeof MoldingProductionRecordOrderByRelevanceFieldEnum)[keyof typeof MoldingProductionRecordOrderByRelevanceFieldEnum]
 

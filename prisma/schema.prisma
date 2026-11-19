@@ -630,53 +630,196 @@ model ProductionMaterialUsage {
 model MoldingProduct {
   id Int @id @default(autoincrement())
 
-  // ===================================================
   // PRODUCT INFORMATION
-  // ===================================================
-
-  computerCode String @unique
-
-  productName String
-
+  computerCode       String  @unique
+  productName        String
   productDescription String?
 
-  hardnessRequirements String?
-
-  colorRequirements String?
-
+  hardnessRequirements    String?
+  colorRequirements       String?
   rawMaterialRequirements String?
 
-  bufferPercent Decimal @db.Decimal(5, 2)
+  // MATERIAL PARAMETERS
+  // Semua berat disimpan dalam KG
+  shotWeight  Decimal @db.Decimal(12, 6)
+  setupWeight Decimal @default(0) @db.Decimal(12, 6)
 
-  // ===================================================
   // PRODUCTION PARAMETERS
-  // ===================================================
+  cavity          Int
+  materialSetup   Decimal @db.Decimal(12, 2)
+  vulcanization   Decimal @db.Decimal(12, 2)
+  materialRemoval Decimal @db.Decimal(12, 2)
 
-  quotaPerHourShot Decimal @db.Decimal(12, 2)
+  // DEFAULT PRODUCTION TIME PER DAY (HOURS)
+  productionTime Decimal @db.Decimal(5, 2)
 
-  quotaPerHourPcs Decimal @db.Decimal(12, 2)
-
-  productionTime Decimal @db.Decimal(12, 2)
-
-  productionTargetPerDay Decimal @db.Decimal(12, 2)
-
-  // ===================================================
   // STATUS
-  // ===================================================
-
   isActive Boolean @default(true)
 
-  // ===================================================
-  // TIMESTAMP
-  // ===================================================
+  // RELATIONS
+  moldingPOs               MoldingPO[]
+  moldingProductionRecords MoldingProductionRecord[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // ===================================================
-  // INDEX
-  // ===================================================
-
   @@index([productName])
   @@index([isActive])
+}
+
+// =====================================================
+// MOLDING PURCHASE ORDER
+// =====================================================
+
+model MoldingPO {
+  id Int @id @default(autoincrement())
+
+  // PRODUCT RELATION
+  moldingProductId Int
+  moldingProduct   MoldingProduct @relation(fields: [moldingProductId], references: [id], onDelete: Restrict)
+
+  // PO INFORMATION
+  poNumber         String   @unique
+  poDate           DateTime
+  deliveryDeadline DateTime
+
+  // PURCHASE QUANTITY
+  actualPOQty Decimal @db.Decimal(14, 2)
+
+  // BUFFER INPUT BY USER
+  bufferPercent Decimal @default(0) @db.Decimal(5, 2)
+
+  // AUTOMATIC CALCULATION
+  bufferQty  Decimal @default(0) @db.Decimal(14, 2)
+  totalPOQty Decimal @default(0) @db.Decimal(14, 2)
+
+  // RELATIONS
+  productionPlan MoldingProduction?
+  allocations    MoldingPOAllocation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([moldingProductId])
+  @@index([deliveryDeadline])
+  @@index([poDate])
+  @@index([moldingProductId, deliveryDeadline])
+}
+
+// =====================================================
+// MOLDING PRODUCTION PLANNING
+// One PO = One Production Plan
+// =====================================================
+
+model MoldingProduction {
+  id Int @id @default(autoincrement())
+
+  moldingPOId Int       @unique
+  moldingPO   MoldingPO @relation(fields: [moldingPOId], references: [id], onDelete: Cascade)
+
+  // PRODUCTION PARAMETER SNAPSHOT
+  shotWeight  Decimal @db.Decimal(12, 6)
+  setupWeight Decimal @default(0) @db.Decimal(12, 6)
+
+  cavity Int
+
+  materialSetup   Decimal @db.Decimal(12, 2)
+  vulcanization   Decimal @db.Decimal(12, 2)
+  materialRemoval Decimal @db.Decimal(12, 2)
+
+  // PRODUCTION CALCULATION
+  totalDuration Decimal @db.Decimal(12, 2)
+
+  quotaPerHourShot Decimal @db.Decimal(12, 2)
+  quotaPerHourPcs  Decimal @db.Decimal(12, 2)
+
+  productionTime         Decimal @db.Decimal(5, 2)
+  productionTargetPerDay Decimal @db.Decimal(14, 2)
+
+  // COMPLETION ESTIMATION
+  targetCompleteHours Decimal @db.Decimal(14, 2)
+  targetCompleteDays  Decimal @db.Decimal(14, 2)
+
+  // RAW MATERIAL REQUIREMENT (KG)
+  totalRawMaterial Decimal @db.Decimal(14, 3)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// =====================================================
+// MOLDING SHIFT
+// =====================================================
+
+enum MoldingShift {
+  A
+  B
+}
+
+// =====================================================
+// MOLDING PRODUCTION RECORD
+// Independent Actual Production
+// =====================================================
+
+model MoldingProductionRecord {
+  id Int @id @default(autoincrement())
+
+  // PRODUCT RELATION
+  moldingProductId Int
+  moldingProduct   MoldingProduct @relation(fields: [moldingProductId], references: [id], onDelete: Restrict)
+
+  // PRODUCTION INFORMATION
+  productionDate DateTime
+  shift          MoldingShift
+
+  machineNo    String?
+  operatorName String?
+
+  // PRODUCTION QUANTITY
+  outputQty Decimal @db.Decimal(14, 2)
+  okQty     Decimal @db.Decimal(14, 2)
+
+  // ACTUAL RAW MATERIAL (KG)
+  actualRm Decimal? @db.Decimal(14, 3)
+
+  remarks String?
+
+  // PO ALLOCATION
+  allocations MoldingPOAllocation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([moldingProductId])
+  @@index([productionDate])
+  @@index([shift])
+  @@index([machineNo])
+  @@index([productionDate, moldingProductId])
+  @@index([moldingProductId, productionDate, shift])
+}
+
+// =====================================================
+// MOLDING PO ALLOCATION
+// Automatic Allocation Based on Delivery Deadline
+// =====================================================
+
+model MoldingPOAllocation {
+  id Int @id @default(autoincrement())
+
+  // PURCHASE ORDER
+  moldingPOId Int
+  moldingPO   MoldingPO @relation(fields: [moldingPOId], references: [id], onDelete: Restrict)
+
+  // PRODUCTION RECORD
+  productionRecordId Int
+  productionRecord   MoldingProductionRecord @relation(fields: [productionRecordId], references: [id], onDelete: Restrict)
+
+  // ALLOCATED OK QUANTITY
+  allocatedQty Decimal @db.Decimal(14, 2)
+
+  createdAt DateTime @default(now())
+
+  @@unique([moldingPOId, productionRecordId])
+  @@index([moldingPOId])
+  @@index([productionRecordId])
 }

@@ -28,20 +28,24 @@ export type AggregateMoldingProduct = {
 
 export type MoldingProductAvgAggregateOutputType = {
   id: number | null
-  bufferPercent: runtime.Decimal | null
-  quotaPerHourShot: runtime.Decimal | null
-  quotaPerHourPcs: runtime.Decimal | null
+  shotWeight: runtime.Decimal | null
+  setupWeight: runtime.Decimal | null
+  cavity: number | null
+  materialSetup: runtime.Decimal | null
+  vulcanization: runtime.Decimal | null
+  materialRemoval: runtime.Decimal | null
   productionTime: runtime.Decimal | null
-  productionTargetPerDay: runtime.Decimal | null
 }
 
 export type MoldingProductSumAggregateOutputType = {
   id: number | null
-  bufferPercent: runtime.Decimal | null
-  quotaPerHourShot: runtime.Decimal | null
-  quotaPerHourPcs: runtime.Decimal | null
+  shotWeight: runtime.Decimal | null
+  setupWeight: runtime.Decimal | null
+  cavity: number | null
+  materialSetup: runtime.Decimal | null
+  vulcanization: runtime.Decimal | null
+  materialRemoval: runtime.Decimal | null
   productionTime: runtime.Decimal | null
-  productionTargetPerDay: runtime.Decimal | null
 }
 
 export type MoldingProductMinAggregateOutputType = {
@@ -52,11 +56,13 @@ export type MoldingProductMinAggregateOutputType = {
   hardnessRequirements: string | null
   colorRequirements: string | null
   rawMaterialRequirements: string | null
-  bufferPercent: runtime.Decimal | null
-  quotaPerHourShot: runtime.Decimal | null
-  quotaPerHourPcs: runtime.Decimal | null
+  shotWeight: runtime.Decimal | null
+  setupWeight: runtime.Decimal | null
+  cavity: number | null
+  materialSetup: runtime.Decimal | null
+  vulcanization: runtime.Decimal | null
+  materialRemoval: runtime.Decimal | null
   productionTime: runtime.Decimal | null
-  productionTargetPerDay: runtime.Decimal | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -70,11 +76,13 @@ export type MoldingProductMaxAggregateOutputType = {
   hardnessRequirements: string | null
   colorRequirements: string | null
   rawMaterialRequirements: string | null
-  bufferPercent: runtime.Decimal | null
-  quotaPerHourShot: runtime.Decimal | null
-  quotaPerHourPcs: runtime.Decimal | null
+  shotWeight: runtime.Decimal | null
+  setupWeight: runtime.Decimal | null
+  cavity: number | null
+  materialSetup: runtime.Decimal | null
+  vulcanization: runtime.Decimal | null
+  materialRemoval: runtime.Decimal | null
   productionTime: runtime.Decimal | null
-  productionTargetPerDay: runtime.Decimal | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -88,11 +96,13 @@ export type MoldingProductCountAggregateOutputType = {
   hardnessRequirements: number
   colorRequirements: number
   rawMaterialRequirements: number
-  bufferPercent: number
-  quotaPerHourShot: number
-  quotaPerHourPcs: number
+  shotWeight: number
+  setupWeight: number
+  cavity: number
+  materialSetup: number
+  vulcanization: number
+  materialRemoval: number
   productionTime: number
-  productionTargetPerDay: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -102,20 +112,24 @@ export type MoldingProductCountAggregateOutputType = {
 
 export type MoldingProductAvgAggregateInputType = {
   id?: true
-  bufferPercent?: true
-  quotaPerHourShot?: true
-  quotaPerHourPcs?: true
+  shotWeight?: true
+  setupWeight?: true
+  cavity?: true
+  materialSetup?: true
+  vulcanization?: true
+  materialRemoval?: true
   productionTime?: true
-  productionTargetPerDay?: true
 }
 
 export type MoldingProductSumAggregateInputType = {
   id?: true
-  bufferPercent?: true
-  quotaPerHourShot?: true
-  quotaPerHourPcs?: true
+  shotWeight?: true
+  setupWeight?: true
+  cavity?: true
+  materialSetup?: true
+  vulcanization?: true
+  materialRemoval?: true
   productionTime?: true
-  productionTargetPerDay?: true
 }
 
 export type MoldingProductMinAggregateInputType = {
@@ -126,11 +140,13 @@ export type MoldingProductMinAggregateInputType = {
   hardnessRequirements?: true
   colorRequirements?: true
   rawMaterialRequirements?: true
-  bufferPercent?: true
-  quotaPerHourShot?: true
-  quotaPerHourPcs?: true
+  shotWeight?: true
+  setupWeight?: true
+  cavity?: true
+  materialSetup?: true
+  vulcanization?: true
+  materialRemoval?: true
   productionTime?: true
-  productionTargetPerDay?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -144,11 +160,13 @@ export type MoldingProductMaxAggregateInputType = {
   hardnessRequirements?: true
   colorRequirements?: true
   rawMaterialRequirements?: true
-  bufferPercent?: true
-  quotaPerHourShot?: true
-  quotaPerHourPcs?: true
+  shotWeight?: true
+  setupWeight?: true
+  cavity?: true
+  materialSetup?: true
+  vulcanization?: true
+  materialRemoval?: true
   productionTime?: true
-  productionTargetPerDay?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -162,11 +180,13 @@ export type MoldingProductCountAggregateInputType = {
   hardnessRequirements?: true
   colorRequirements?: true
   rawMaterialRequirements?: true
-  bufferPercent?: true
-  quotaPerHourShot?: true
-  quotaPerHourPcs?: true
+  shotWeight?: true
+  setupWeight?: true
+  cavity?: true
+  materialSetup?: true
+  vulcanization?: true
+  materialRemoval?: true
   productionTime?: true
-  productionTargetPerDay?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -267,11 +287,13 @@ export type MoldingProductGroupByOutputType = {
   hardnessRequirements: string | null
   colorRequirements: string | null
   rawMaterialRequirements: string | null
-  bufferPercent: runtime.Decimal
-  quotaPerHourShot: runtime.Decimal
-  quotaPerHourPcs: runtime.Decimal
+  shotWeight: runtime.Decimal
+  setupWeight: runtime.Decimal
+  cavity: number
+  materialSetup: runtime.Decimal
+  vulcanization: runtime.Decimal
+  materialRemoval: runtime.Decimal
   productionTime: runtime.Decimal
-  productionTargetPerDay: runtime.Decimal
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -308,14 +330,18 @@ export type MoldingProductWhereInput = {
   hardnessRequirements?: Prisma.StringNullableFilter<"MoldingProduct"> | string | null
   colorRequirements?: Prisma.StringNullableFilter<"MoldingProduct"> | string | null
   rawMaterialRequirements?: Prisma.StringNullableFilter<"MoldingProduct"> | string | null
-  bufferPercent?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourShot?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourPcs?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeight?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity?: Prisma.IntFilter<"MoldingProduct"> | number
+  materialSetup?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   productionTime?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  productionTargetPerDay?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolFilter<"MoldingProduct"> | boolean
   createdAt?: Prisma.DateTimeFilter<"MoldingProduct"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MoldingProduct"> | Date | string
+  moldingPOs?: Prisma.MoldingPOListRelationFilter
+  moldingProductionRecords?: Prisma.MoldingProductionRecordListRelationFilter
 }
 
 export type MoldingProductOrderByWithRelationInput = {
@@ -326,14 +352,18 @@ export type MoldingProductOrderByWithRelationInput = {
   hardnessRequirements?: Prisma.SortOrderInput | Prisma.SortOrder
   colorRequirements?: Prisma.SortOrderInput | Prisma.SortOrder
   rawMaterialRequirements?: Prisma.SortOrderInput | Prisma.SortOrder
-  bufferPercent?: Prisma.SortOrder
-  quotaPerHourShot?: Prisma.SortOrder
-  quotaPerHourPcs?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  setupWeight?: Prisma.SortOrder
+  cavity?: Prisma.SortOrder
+  materialSetup?: Prisma.SortOrder
+  vulcanization?: Prisma.SortOrder
+  materialRemoval?: Prisma.SortOrder
   productionTime?: Prisma.SortOrder
-  productionTargetPerDay?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  moldingPOs?: Prisma.MoldingPOOrderByRelationAggregateInput
+  moldingProductionRecords?: Prisma.MoldingProductionRecordOrderByRelationAggregateInput
   _relevance?: Prisma.MoldingProductOrderByRelevanceInput
 }
 
@@ -348,14 +378,18 @@ export type MoldingProductWhereUniqueInput = Prisma.AtLeast<{
   hardnessRequirements?: Prisma.StringNullableFilter<"MoldingProduct"> | string | null
   colorRequirements?: Prisma.StringNullableFilter<"MoldingProduct"> | string | null
   rawMaterialRequirements?: Prisma.StringNullableFilter<"MoldingProduct"> | string | null
-  bufferPercent?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourShot?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourPcs?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeight?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity?: Prisma.IntFilter<"MoldingProduct"> | number
+  materialSetup?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   productionTime?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  productionTargetPerDay?: Prisma.DecimalFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolFilter<"MoldingProduct"> | boolean
   createdAt?: Prisma.DateTimeFilter<"MoldingProduct"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MoldingProduct"> | Date | string
+  moldingPOs?: Prisma.MoldingPOListRelationFilter
+  moldingProductionRecords?: Prisma.MoldingProductionRecordListRelationFilter
 }, "id" | "computerCode">
 
 export type MoldingProductOrderByWithAggregationInput = {
@@ -366,11 +400,13 @@ export type MoldingProductOrderByWithAggregationInput = {
   hardnessRequirements?: Prisma.SortOrderInput | Prisma.SortOrder
   colorRequirements?: Prisma.SortOrderInput | Prisma.SortOrder
   rawMaterialRequirements?: Prisma.SortOrderInput | Prisma.SortOrder
-  bufferPercent?: Prisma.SortOrder
-  quotaPerHourShot?: Prisma.SortOrder
-  quotaPerHourPcs?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  setupWeight?: Prisma.SortOrder
+  cavity?: Prisma.SortOrder
+  materialSetup?: Prisma.SortOrder
+  vulcanization?: Prisma.SortOrder
+  materialRemoval?: Prisma.SortOrder
   productionTime?: Prisma.SortOrder
-  productionTargetPerDay?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -392,11 +428,13 @@ export type MoldingProductScalarWhereWithAggregatesInput = {
   hardnessRequirements?: Prisma.StringNullableWithAggregatesFilter<"MoldingProduct"> | string | null
   colorRequirements?: Prisma.StringNullableWithAggregatesFilter<"MoldingProduct"> | string | null
   rawMaterialRequirements?: Prisma.StringNullableWithAggregatesFilter<"MoldingProduct"> | string | null
-  bufferPercent?: Prisma.DecimalWithAggregatesFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourShot?: Prisma.DecimalWithAggregatesFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourPcs?: Prisma.DecimalWithAggregatesFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeight?: Prisma.DecimalWithAggregatesFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: Prisma.DecimalWithAggregatesFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity?: Prisma.IntWithAggregatesFilter<"MoldingProduct"> | number
+  materialSetup?: Prisma.DecimalWithAggregatesFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization?: Prisma.DecimalWithAggregatesFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval?: Prisma.DecimalWithAggregatesFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   productionTime?: Prisma.DecimalWithAggregatesFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  productionTargetPerDay?: Prisma.DecimalWithAggregatesFilter<"MoldingProduct"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolWithAggregatesFilter<"MoldingProduct"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"MoldingProduct"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"MoldingProduct"> | Date | string
@@ -409,14 +447,18 @@ export type MoldingProductCreateInput = {
   hardnessRequirements?: string | null
   colorRequirements?: string | null
   rawMaterialRequirements?: string | null
-  bufferPercent: runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourShot: runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourPcs: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity: number
+  materialSetup: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization: runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval: runtime.Decimal | runtime.DecimalJsLike | number | string
   productionTime: runtime.Decimal | runtime.DecimalJsLike | number | string
-  productionTargetPerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  moldingPOs?: Prisma.MoldingPOCreateNestedManyWithoutMoldingProductInput
+  moldingProductionRecords?: Prisma.MoldingProductionRecordCreateNestedManyWithoutMoldingProductInput
 }
 
 export type MoldingProductUncheckedCreateInput = {
@@ -427,14 +469,18 @@ export type MoldingProductUncheckedCreateInput = {
   hardnessRequirements?: string | null
   colorRequirements?: string | null
   rawMaterialRequirements?: string | null
-  bufferPercent: runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourShot: runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourPcs: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity: number
+  materialSetup: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization: runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval: runtime.Decimal | runtime.DecimalJsLike | number | string
   productionTime: runtime.Decimal | runtime.DecimalJsLike | number | string
-  productionTargetPerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  moldingPOs?: Prisma.MoldingPOUncheckedCreateNestedManyWithoutMoldingProductInput
+  moldingProductionRecords?: Prisma.MoldingProductionRecordUncheckedCreateNestedManyWithoutMoldingProductInput
 }
 
 export type MoldingProductUpdateInput = {
@@ -444,14 +490,18 @@ export type MoldingProductUpdateInput = {
   hardnessRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawMaterialRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bufferPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourShot?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourPcs?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity?: Prisma.IntFieldUpdateOperationsInput | number
+  materialSetup?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   productionTime?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  productionTargetPerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  moldingPOs?: Prisma.MoldingPOUpdateManyWithoutMoldingProductNestedInput
+  moldingProductionRecords?: Prisma.MoldingProductionRecordUpdateManyWithoutMoldingProductNestedInput
 }
 
 export type MoldingProductUncheckedUpdateInput = {
@@ -462,14 +512,18 @@ export type MoldingProductUncheckedUpdateInput = {
   hardnessRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawMaterialRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bufferPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourShot?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourPcs?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity?: Prisma.IntFieldUpdateOperationsInput | number
+  materialSetup?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   productionTime?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  productionTargetPerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  moldingPOs?: Prisma.MoldingPOUncheckedUpdateManyWithoutMoldingProductNestedInput
+  moldingProductionRecords?: Prisma.MoldingProductionRecordUncheckedUpdateManyWithoutMoldingProductNestedInput
 }
 
 export type MoldingProductCreateManyInput = {
@@ -480,11 +534,13 @@ export type MoldingProductCreateManyInput = {
   hardnessRequirements?: string | null
   colorRequirements?: string | null
   rawMaterialRequirements?: string | null
-  bufferPercent: runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourShot: runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourPcs: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity: number
+  materialSetup: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization: runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval: runtime.Decimal | runtime.DecimalJsLike | number | string
   productionTime: runtime.Decimal | runtime.DecimalJsLike | number | string
-  productionTargetPerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -497,11 +553,13 @@ export type MoldingProductUpdateManyMutationInput = {
   hardnessRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawMaterialRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bufferPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourShot?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourPcs?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity?: Prisma.IntFieldUpdateOperationsInput | number
+  materialSetup?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   productionTime?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  productionTargetPerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -515,11 +573,13 @@ export type MoldingProductUncheckedUpdateManyInput = {
   hardnessRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawMaterialRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bufferPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourShot?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  quotaPerHourPcs?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity?: Prisma.IntFieldUpdateOperationsInput | number
+  materialSetup?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   productionTime?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  productionTargetPerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -539,11 +599,13 @@ export type MoldingProductCountOrderByAggregateInput = {
   hardnessRequirements?: Prisma.SortOrder
   colorRequirements?: Prisma.SortOrder
   rawMaterialRequirements?: Prisma.SortOrder
-  bufferPercent?: Prisma.SortOrder
-  quotaPerHourShot?: Prisma.SortOrder
-  quotaPerHourPcs?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  setupWeight?: Prisma.SortOrder
+  cavity?: Prisma.SortOrder
+  materialSetup?: Prisma.SortOrder
+  vulcanization?: Prisma.SortOrder
+  materialRemoval?: Prisma.SortOrder
   productionTime?: Prisma.SortOrder
-  productionTargetPerDay?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -551,11 +613,13 @@ export type MoldingProductCountOrderByAggregateInput = {
 
 export type MoldingProductAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  bufferPercent?: Prisma.SortOrder
-  quotaPerHourShot?: Prisma.SortOrder
-  quotaPerHourPcs?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  setupWeight?: Prisma.SortOrder
+  cavity?: Prisma.SortOrder
+  materialSetup?: Prisma.SortOrder
+  vulcanization?: Prisma.SortOrder
+  materialRemoval?: Prisma.SortOrder
   productionTime?: Prisma.SortOrder
-  productionTargetPerDay?: Prisma.SortOrder
 }
 
 export type MoldingProductMaxOrderByAggregateInput = {
@@ -566,11 +630,13 @@ export type MoldingProductMaxOrderByAggregateInput = {
   hardnessRequirements?: Prisma.SortOrder
   colorRequirements?: Prisma.SortOrder
   rawMaterialRequirements?: Prisma.SortOrder
-  bufferPercent?: Prisma.SortOrder
-  quotaPerHourShot?: Prisma.SortOrder
-  quotaPerHourPcs?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  setupWeight?: Prisma.SortOrder
+  cavity?: Prisma.SortOrder
+  materialSetup?: Prisma.SortOrder
+  vulcanization?: Prisma.SortOrder
+  materialRemoval?: Prisma.SortOrder
   productionTime?: Prisma.SortOrder
-  productionTargetPerDay?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -584,11 +650,13 @@ export type MoldingProductMinOrderByAggregateInput = {
   hardnessRequirements?: Prisma.SortOrder
   colorRequirements?: Prisma.SortOrder
   rawMaterialRequirements?: Prisma.SortOrder
-  bufferPercent?: Prisma.SortOrder
-  quotaPerHourShot?: Prisma.SortOrder
-  quotaPerHourPcs?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  setupWeight?: Prisma.SortOrder
+  cavity?: Prisma.SortOrder
+  materialSetup?: Prisma.SortOrder
+  vulcanization?: Prisma.SortOrder
+  materialRemoval?: Prisma.SortOrder
   productionTime?: Prisma.SortOrder
-  productionTargetPerDay?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -596,13 +664,282 @@ export type MoldingProductMinOrderByAggregateInput = {
 
 export type MoldingProductSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  bufferPercent?: Prisma.SortOrder
-  quotaPerHourShot?: Prisma.SortOrder
-  quotaPerHourPcs?: Prisma.SortOrder
+  shotWeight?: Prisma.SortOrder
+  setupWeight?: Prisma.SortOrder
+  cavity?: Prisma.SortOrder
+  materialSetup?: Prisma.SortOrder
+  vulcanization?: Prisma.SortOrder
+  materialRemoval?: Prisma.SortOrder
   productionTime?: Prisma.SortOrder
-  productionTargetPerDay?: Prisma.SortOrder
 }
 
+export type MoldingProductScalarRelationFilter = {
+  is?: Prisma.MoldingProductWhereInput
+  isNot?: Prisma.MoldingProductWhereInput
+}
+
+export type MoldingProductCreateNestedOneWithoutMoldingPOsInput = {
+  create?: Prisma.XOR<Prisma.MoldingProductCreateWithoutMoldingPOsInput, Prisma.MoldingProductUncheckedCreateWithoutMoldingPOsInput>
+  connectOrCreate?: Prisma.MoldingProductCreateOrConnectWithoutMoldingPOsInput
+  connect?: Prisma.MoldingProductWhereUniqueInput
+}
+
+export type MoldingProductUpdateOneRequiredWithoutMoldingPOsNestedInput = {
+  create?: Prisma.XOR<Prisma.MoldingProductCreateWithoutMoldingPOsInput, Prisma.MoldingProductUncheckedCreateWithoutMoldingPOsInput>
+  connectOrCreate?: Prisma.MoldingProductCreateOrConnectWithoutMoldingPOsInput
+  upsert?: Prisma.MoldingProductUpsertWithoutMoldingPOsInput
+  connect?: Prisma.MoldingProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MoldingProductUpdateToOneWithWhereWithoutMoldingPOsInput, Prisma.MoldingProductUpdateWithoutMoldingPOsInput>, Prisma.MoldingProductUncheckedUpdateWithoutMoldingPOsInput>
+}
+
+export type MoldingProductCreateNestedOneWithoutMoldingProductionRecordsInput = {
+  create?: Prisma.XOR<Prisma.MoldingProductCreateWithoutMoldingProductionRecordsInput, Prisma.MoldingProductUncheckedCreateWithoutMoldingProductionRecordsInput>
+  connectOrCreate?: Prisma.MoldingProductCreateOrConnectWithoutMoldingProductionRecordsInput
+  connect?: Prisma.MoldingProductWhereUniqueInput
+}
+
+export type MoldingProductUpdateOneRequiredWithoutMoldingProductionRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.MoldingProductCreateWithoutMoldingProductionRecordsInput, Prisma.MoldingProductUncheckedCreateWithoutMoldingProductionRecordsInput>
+  connectOrCreate?: Prisma.MoldingProductCreateOrConnectWithoutMoldingProductionRecordsInput
+  upsert?: Prisma.MoldingProductUpsertWithoutMoldingProductionRecordsInput
+  connect?: Prisma.MoldingProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MoldingProductUpdateToOneWithWhereWithoutMoldingProductionRecordsInput, Prisma.MoldingProductUpdateWithoutMoldingProductionRecordsInput>, Prisma.MoldingProductUncheckedUpdateWithoutMoldingProductionRecordsInput>
+}
+
+export type MoldingProductCreateWithoutMoldingPOsInput = {
+  computerCode: string
+  productName: string
+  productDescription?: string | null
+  hardnessRequirements?: string | null
+  colorRequirements?: string | null
+  rawMaterialRequirements?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity: number
+  materialSetup: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization: runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval: runtime.Decimal | runtime.DecimalJsLike | number | string
+  productionTime: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  moldingProductionRecords?: Prisma.MoldingProductionRecordCreateNestedManyWithoutMoldingProductInput
+}
+
+export type MoldingProductUncheckedCreateWithoutMoldingPOsInput = {
+  id?: number
+  computerCode: string
+  productName: string
+  productDescription?: string | null
+  hardnessRequirements?: string | null
+  colorRequirements?: string | null
+  rawMaterialRequirements?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity: number
+  materialSetup: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization: runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval: runtime.Decimal | runtime.DecimalJsLike | number | string
+  productionTime: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  moldingProductionRecords?: Prisma.MoldingProductionRecordUncheckedCreateNestedManyWithoutMoldingProductInput
+}
+
+export type MoldingProductCreateOrConnectWithoutMoldingPOsInput = {
+  where: Prisma.MoldingProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.MoldingProductCreateWithoutMoldingPOsInput, Prisma.MoldingProductUncheckedCreateWithoutMoldingPOsInput>
+}
+
+export type MoldingProductUpsertWithoutMoldingPOsInput = {
+  update: Prisma.XOR<Prisma.MoldingProductUpdateWithoutMoldingPOsInput, Prisma.MoldingProductUncheckedUpdateWithoutMoldingPOsInput>
+  create: Prisma.XOR<Prisma.MoldingProductCreateWithoutMoldingPOsInput, Prisma.MoldingProductUncheckedCreateWithoutMoldingPOsInput>
+  where?: Prisma.MoldingProductWhereInput
+}
+
+export type MoldingProductUpdateToOneWithWhereWithoutMoldingPOsInput = {
+  where?: Prisma.MoldingProductWhereInput
+  data: Prisma.XOR<Prisma.MoldingProductUpdateWithoutMoldingPOsInput, Prisma.MoldingProductUncheckedUpdateWithoutMoldingPOsInput>
+}
+
+export type MoldingProductUpdateWithoutMoldingPOsInput = {
+  computerCode?: Prisma.StringFieldUpdateOperationsInput | string
+  productName?: Prisma.StringFieldUpdateOperationsInput | string
+  productDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hardnessRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  colorRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawMaterialRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity?: Prisma.IntFieldUpdateOperationsInput | number
+  materialSetup?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  productionTime?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  moldingProductionRecords?: Prisma.MoldingProductionRecordUpdateManyWithoutMoldingProductNestedInput
+}
+
+export type MoldingProductUncheckedUpdateWithoutMoldingPOsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  computerCode?: Prisma.StringFieldUpdateOperationsInput | string
+  productName?: Prisma.StringFieldUpdateOperationsInput | string
+  productDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hardnessRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  colorRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawMaterialRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity?: Prisma.IntFieldUpdateOperationsInput | number
+  materialSetup?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  productionTime?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  moldingProductionRecords?: Prisma.MoldingProductionRecordUncheckedUpdateManyWithoutMoldingProductNestedInput
+}
+
+export type MoldingProductCreateWithoutMoldingProductionRecordsInput = {
+  computerCode: string
+  productName: string
+  productDescription?: string | null
+  hardnessRequirements?: string | null
+  colorRequirements?: string | null
+  rawMaterialRequirements?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity: number
+  materialSetup: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization: runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval: runtime.Decimal | runtime.DecimalJsLike | number | string
+  productionTime: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  moldingPOs?: Prisma.MoldingPOCreateNestedManyWithoutMoldingProductInput
+}
+
+export type MoldingProductUncheckedCreateWithoutMoldingProductionRecordsInput = {
+  id?: number
+  computerCode: string
+  productName: string
+  productDescription?: string | null
+  hardnessRequirements?: string | null
+  colorRequirements?: string | null
+  rawMaterialRequirements?: string | null
+  shotWeight: runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity: number
+  materialSetup: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization: runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval: runtime.Decimal | runtime.DecimalJsLike | number | string
+  productionTime: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  moldingPOs?: Prisma.MoldingPOUncheckedCreateNestedManyWithoutMoldingProductInput
+}
+
+export type MoldingProductCreateOrConnectWithoutMoldingProductionRecordsInput = {
+  where: Prisma.MoldingProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.MoldingProductCreateWithoutMoldingProductionRecordsInput, Prisma.MoldingProductUncheckedCreateWithoutMoldingProductionRecordsInput>
+}
+
+export type MoldingProductUpsertWithoutMoldingProductionRecordsInput = {
+  update: Prisma.XOR<Prisma.MoldingProductUpdateWithoutMoldingProductionRecordsInput, Prisma.MoldingProductUncheckedUpdateWithoutMoldingProductionRecordsInput>
+  create: Prisma.XOR<Prisma.MoldingProductCreateWithoutMoldingProductionRecordsInput, Prisma.MoldingProductUncheckedCreateWithoutMoldingProductionRecordsInput>
+  where?: Prisma.MoldingProductWhereInput
+}
+
+export type MoldingProductUpdateToOneWithWhereWithoutMoldingProductionRecordsInput = {
+  where?: Prisma.MoldingProductWhereInput
+  data: Prisma.XOR<Prisma.MoldingProductUpdateWithoutMoldingProductionRecordsInput, Prisma.MoldingProductUncheckedUpdateWithoutMoldingProductionRecordsInput>
+}
+
+export type MoldingProductUpdateWithoutMoldingProductionRecordsInput = {
+  computerCode?: Prisma.StringFieldUpdateOperationsInput | string
+  productName?: Prisma.StringFieldUpdateOperationsInput | string
+  productDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hardnessRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  colorRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawMaterialRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity?: Prisma.IntFieldUpdateOperationsInput | number
+  materialSetup?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  productionTime?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  moldingPOs?: Prisma.MoldingPOUpdateManyWithoutMoldingProductNestedInput
+}
+
+export type MoldingProductUncheckedUpdateWithoutMoldingProductionRecordsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  computerCode?: Prisma.StringFieldUpdateOperationsInput | string
+  productName?: Prisma.StringFieldUpdateOperationsInput | string
+  productDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hardnessRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  colorRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawMaterialRequirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shotWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  setupWeight?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  cavity?: Prisma.IntFieldUpdateOperationsInput | number
+  materialSetup?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vulcanization?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  materialRemoval?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  productionTime?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  moldingPOs?: Prisma.MoldingPOUncheckedUpdateManyWithoutMoldingProductNestedInput
+}
+
+
+/**
+ * Count Type MoldingProductCountOutputType
+ */
+
+export type MoldingProductCountOutputType = {
+  moldingPOs: number
+  moldingProductionRecords: number
+}
+
+export type MoldingProductCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  moldingPOs?: boolean | MoldingProductCountOutputTypeCountMoldingPOsArgs
+  moldingProductionRecords?: boolean | MoldingProductCountOutputTypeCountMoldingProductionRecordsArgs
+}
+
+/**
+ * MoldingProductCountOutputType without action
+ */
+export type MoldingProductCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MoldingProductCountOutputType
+   */
+  select?: Prisma.MoldingProductCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * MoldingProductCountOutputType without action
+ */
+export type MoldingProductCountOutputTypeCountMoldingPOsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MoldingPOWhereInput
+}
+
+/**
+ * MoldingProductCountOutputType without action
+ */
+export type MoldingProductCountOutputTypeCountMoldingProductionRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MoldingProductionRecordWhereInput
+}
 
 
 export type MoldingProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -613,14 +950,19 @@ export type MoldingProductSelect<ExtArgs extends runtime.Types.Extensions.Intern
   hardnessRequirements?: boolean
   colorRequirements?: boolean
   rawMaterialRequirements?: boolean
-  bufferPercent?: boolean
-  quotaPerHourShot?: boolean
-  quotaPerHourPcs?: boolean
+  shotWeight?: boolean
+  setupWeight?: boolean
+  cavity?: boolean
+  materialSetup?: boolean
+  vulcanization?: boolean
+  materialRemoval?: boolean
   productionTime?: boolean
-  productionTargetPerDay?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  moldingPOs?: boolean | Prisma.MoldingProduct$moldingPOsArgs<ExtArgs>
+  moldingProductionRecords?: boolean | Prisma.MoldingProduct$moldingProductionRecordsArgs<ExtArgs>
+  _count?: boolean | Prisma.MoldingProductCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["moldingProduct"]>
 
 
@@ -633,21 +975,31 @@ export type MoldingProductSelectScalar = {
   hardnessRequirements?: boolean
   colorRequirements?: boolean
   rawMaterialRequirements?: boolean
-  bufferPercent?: boolean
-  quotaPerHourShot?: boolean
-  quotaPerHourPcs?: boolean
+  shotWeight?: boolean
+  setupWeight?: boolean
+  cavity?: boolean
+  materialSetup?: boolean
+  vulcanization?: boolean
+  materialRemoval?: boolean
   productionTime?: boolean
-  productionTargetPerDay?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MoldingProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "computerCode" | "productName" | "productDescription" | "hardnessRequirements" | "colorRequirements" | "rawMaterialRequirements" | "bufferPercent" | "quotaPerHourShot" | "quotaPerHourPcs" | "productionTime" | "productionTargetPerDay" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["moldingProduct"]>
+export type MoldingProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "computerCode" | "productName" | "productDescription" | "hardnessRequirements" | "colorRequirements" | "rawMaterialRequirements" | "shotWeight" | "setupWeight" | "cavity" | "materialSetup" | "vulcanization" | "materialRemoval" | "productionTime" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["moldingProduct"]>
+export type MoldingProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  moldingPOs?: boolean | Prisma.MoldingProduct$moldingPOsArgs<ExtArgs>
+  moldingProductionRecords?: boolean | Prisma.MoldingProduct$moldingProductionRecordsArgs<ExtArgs>
+  _count?: boolean | Prisma.MoldingProductCountOutputTypeDefaultArgs<ExtArgs>
+}
 
 export type $MoldingProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "MoldingProduct"
-  objects: {}
+  objects: {
+    moldingPOs: Prisma.$MoldingPOPayload<ExtArgs>[]
+    moldingProductionRecords: Prisma.$MoldingProductionRecordPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     computerCode: string
@@ -656,11 +1008,13 @@ export type $MoldingProductPayload<ExtArgs extends runtime.Types.Extensions.Inte
     hardnessRequirements: string | null
     colorRequirements: string | null
     rawMaterialRequirements: string | null
-    bufferPercent: runtime.Decimal
-    quotaPerHourShot: runtime.Decimal
-    quotaPerHourPcs: runtime.Decimal
+    shotWeight: runtime.Decimal
+    setupWeight: runtime.Decimal
+    cavity: number
+    materialSetup: runtime.Decimal
+    vulcanization: runtime.Decimal
+    materialRemoval: runtime.Decimal
     productionTime: runtime.Decimal
-    productionTargetPerDay: runtime.Decimal
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -1004,6 +1358,8 @@ readonly fields: MoldingProductFieldRefs;
  */
 export interface Prisma__MoldingProductClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  moldingPOs<T extends Prisma.MoldingProduct$moldingPOsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MoldingProduct$moldingPOsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MoldingPOPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  moldingProductionRecords<T extends Prisma.MoldingProduct$moldingProductionRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MoldingProduct$moldingProductionRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MoldingProductionRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1040,11 +1396,13 @@ export interface MoldingProductFieldRefs {
   readonly hardnessRequirements: Prisma.FieldRef<"MoldingProduct", 'String'>
   readonly colorRequirements: Prisma.FieldRef<"MoldingProduct", 'String'>
   readonly rawMaterialRequirements: Prisma.FieldRef<"MoldingProduct", 'String'>
-  readonly bufferPercent: Prisma.FieldRef<"MoldingProduct", 'Decimal'>
-  readonly quotaPerHourShot: Prisma.FieldRef<"MoldingProduct", 'Decimal'>
-  readonly quotaPerHourPcs: Prisma.FieldRef<"MoldingProduct", 'Decimal'>
+  readonly shotWeight: Prisma.FieldRef<"MoldingProduct", 'Decimal'>
+  readonly setupWeight: Prisma.FieldRef<"MoldingProduct", 'Decimal'>
+  readonly cavity: Prisma.FieldRef<"MoldingProduct", 'Int'>
+  readonly materialSetup: Prisma.FieldRef<"MoldingProduct", 'Decimal'>
+  readonly vulcanization: Prisma.FieldRef<"MoldingProduct", 'Decimal'>
+  readonly materialRemoval: Prisma.FieldRef<"MoldingProduct", 'Decimal'>
   readonly productionTime: Prisma.FieldRef<"MoldingProduct", 'Decimal'>
-  readonly productionTargetPerDay: Prisma.FieldRef<"MoldingProduct", 'Decimal'>
   readonly isActive: Prisma.FieldRef<"MoldingProduct", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"MoldingProduct", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"MoldingProduct", 'DateTime'>
@@ -1065,6 +1423,10 @@ export type MoldingProductFindUniqueArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.MoldingProductOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingProductInclude<ExtArgs> | null
+  /**
    * Filter, which MoldingProduct to fetch.
    */
   where: Prisma.MoldingProductWhereUniqueInput
@@ -1083,6 +1445,10 @@ export type MoldingProductFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ex
    */
   omit?: Prisma.MoldingProductOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingProductInclude<ExtArgs> | null
+  /**
    * Filter, which MoldingProduct to fetch.
    */
   where: Prisma.MoldingProductWhereUniqueInput
@@ -1100,6 +1466,10 @@ export type MoldingProductFindFirstArgs<ExtArgs extends runtime.Types.Extensions
    * Omit specific fields from the MoldingProduct
    */
   omit?: Prisma.MoldingProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingProductInclude<ExtArgs> | null
   /**
    * Filter, which MoldingProduct to fetch.
    */
@@ -1149,6 +1519,10 @@ export type MoldingProductFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ext
    */
   omit?: Prisma.MoldingProductOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingProductInclude<ExtArgs> | null
+  /**
    * Filter, which MoldingProduct to fetch.
    */
   where?: Prisma.MoldingProductWhereInput
@@ -1196,6 +1570,10 @@ export type MoldingProductFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the MoldingProduct
    */
   omit?: Prisma.MoldingProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingProductInclude<ExtArgs> | null
   /**
    * Filter, which MoldingProducts to fetch.
    */
@@ -1245,6 +1623,10 @@ export type MoldingProductCreateArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.MoldingProductOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingProductInclude<ExtArgs> | null
+  /**
    * The data needed to create a MoldingProduct.
    */
   data: Prisma.XOR<Prisma.MoldingProductCreateInput, Prisma.MoldingProductUncheckedCreateInput>
@@ -1273,6 +1655,10 @@ export type MoldingProductUpdateArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the MoldingProduct
    */
   omit?: Prisma.MoldingProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingProductInclude<ExtArgs> | null
   /**
    * The data needed to update a MoldingProduct.
    */
@@ -1314,6 +1700,10 @@ export type MoldingProductUpsertArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.MoldingProductOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingProductInclude<ExtArgs> | null
+  /**
    * The filter to search for the MoldingProduct to update in case it exists.
    */
   where: Prisma.MoldingProductWhereUniqueInput
@@ -1340,6 +1730,10 @@ export type MoldingProductDeleteArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.MoldingProductOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingProductInclude<ExtArgs> | null
+  /**
    * Filter which MoldingProduct to delete.
    */
   where: Prisma.MoldingProductWhereUniqueInput
@@ -1360,6 +1754,54 @@ export type MoldingProductDeleteManyArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
+ * MoldingProduct.moldingPOs
+ */
+export type MoldingProduct$moldingPOsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MoldingPO
+   */
+  select?: Prisma.MoldingPOSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MoldingPO
+   */
+  omit?: Prisma.MoldingPOOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingPOInclude<ExtArgs> | null
+  where?: Prisma.MoldingPOWhereInput
+  orderBy?: Prisma.MoldingPOOrderByWithRelationInput | Prisma.MoldingPOOrderByWithRelationInput[]
+  cursor?: Prisma.MoldingPOWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MoldingPOScalarFieldEnum | Prisma.MoldingPOScalarFieldEnum[]
+}
+
+/**
+ * MoldingProduct.moldingProductionRecords
+ */
+export type MoldingProduct$moldingProductionRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MoldingProductionRecord
+   */
+  select?: Prisma.MoldingProductionRecordSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MoldingProductionRecord
+   */
+  omit?: Prisma.MoldingProductionRecordOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingProductionRecordInclude<ExtArgs> | null
+  where?: Prisma.MoldingProductionRecordWhereInput
+  orderBy?: Prisma.MoldingProductionRecordOrderByWithRelationInput | Prisma.MoldingProductionRecordOrderByWithRelationInput[]
+  cursor?: Prisma.MoldingProductionRecordWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MoldingProductionRecordScalarFieldEnum | Prisma.MoldingProductionRecordScalarFieldEnum[]
+}
+
+/**
  * MoldingProduct without action
  */
 export type MoldingProductDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1371,4 +1813,8 @@ export type MoldingProductDefaultArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the MoldingProduct
    */
   omit?: Prisma.MoldingProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoldingProductInclude<ExtArgs> | null
 }

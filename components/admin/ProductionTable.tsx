@@ -276,6 +276,8 @@ export default function ProductionTable({
   const [summaryLoading, setSummaryLoading] =
     useState(false);
 
+  const [exporting, setExporting] = useState(false);
+
   const [
     loading,
     setLoading,
@@ -1032,6 +1034,353 @@ export default function ProductionTable({
     ]);
 
   // ===================================================
+  // EXPORT ALL FILTERED PRODUCTION DATA TO EXCEL
+  // Menggunakan summaryData agar tidak terpengaruh pagination.
+  // ===================================================
+
+  const handleExportExcel = async () => {
+    if (summaryLoading || summaryData.length === 0 || invalidDateRange) {
+      return;
+    }
+
+    try {
+      setExporting(true);
+
+      // ExcelJS dipanggil secara dinamis agar tidak menambah beban awal halaman.
+      const ExcelJS = await import("exceljs");
+      const workbook = new ExcelJS.Workbook();
+      workbook.creator = "PMC Production Monitoring System";
+      workbook.lastModifiedBy = "PMC Production Monitoring System";
+      workbook.created = new Date();
+      workbook.modified = new Date();
+      workbook.subject = "Production Data Report";
+      workbook.title = "PMC Production Report";
+
+      const worksheet = workbook.addWorksheet("Production Data", {
+        views: [{ state: "frozen", ySplit: 9, showGridLines: false }],
+        pageSetup: {
+          paperSize: 9,
+          orientation: "landscape",
+          fitToPage: true,
+          fitToWidth: 1,
+          fitToHeight: 0,
+          margins: {
+            left: 0.25,
+            right: 0.25,
+            top: 0.5,
+            bottom: 0.5,
+            header: 0.2,
+            footer: 0.2,
+          },
+        },
+      });
+
+      const exportRows = summaryData.map((record, index) => {
+        const outputQty = Number(record.outputQty) || 0;
+        const okQty = Number(record.okQty) || 0;
+        const actualRm = Number(record.actualRm) || 0;
+        const shotWeight = Number(record.product?.shotWeight) || 0;
+        const target8H = Number(record.target8H) || 0;
+
+        const pmc = calculatePMC({
+          outputQty,
+          okQty,
+          actualRm,
+          shotWeight,
+          target8H,
+        });
+
+        const productionDate = new Date(record.productionDate);
+        const validDate = !Number.isNaN(productionDate.getTime());
+
+        return {
+          No: index + 1,
+          "Date Production": validDate
+            ? normalizeDate(record.productionDate)
+            : "",
+          Month: validDate
+            ? productionDate.toLocaleDateString("id-ID", { month: "long" })
+            : "-",
+          Days: validDate ? productionDate.getDate() : "-",
+          "Machine No.": record.machineNo?.trim() || "-",
+          "Production Area": record.area?.name || record.area?.code || "-",
+          Shift: record.shift?.name || record.shift?.code || "-",
+          Operator: record.operatorName || "-",
+          "Computer Code": record.computerCode || "-",
+          "Product Name": record.product?.productName || "-",
+          "Product Description": record.product?.description || "-",
+          "Output Production": outputQty,
+          "Quantity Product OK": okQty,
+          "Total NG Product": pmc.ngQty,
+          "Product Rate NG (%)": pmc.ngRate,
+          "Total Actual Raw Material Usage": actualRm,
+          "Raw Material Requirement": pmc.rmRequirement,
+          "Variance Raw Material": pmc.rmVariance,
+          "Percentage (%)": pmc.rmPercentage,
+          "Target Qty Production /8H": target8H,
+          "Variance Product": pmc.productVariance,
+          "Achievement (%)": target8H > 0 ? pmc.achievement : 0,
+          "OT / REPLACE": record.otReplace || "-",
+          Remarks: record.remarks || "-",
+          "Quantity Unit": record.product?.quantityUnit || "",
+          "Raw Material Unit": record.product?.shotWeightUnit || "KG",
+        };
+      });
+
+      const totalOutput = exportRows.reduce((sum, row) => sum + Number(row["Output Production"] || 0), 0);
+      const totalOk = exportRows.reduce((sum, row) => sum + Number(row["Quantity Product OK"] || 0), 0);
+      const totalNg = exportRows.reduce((sum, row) => sum + Number(row["Total NG Product"] || 0), 0);
+      const totalActualRm = exportRows.reduce((sum, row) => sum + Number(row["Total Actual Raw Material Usage"] || 0), 0);
+      const totalRmRequirement = exportRows.reduce((sum, row) => sum + Number(row["Raw Material Requirement"] || 0), 0);
+      const totalTarget = exportRows.reduce((sum, row) => sum + Number(row["Target Qty Production /8H"] || 0), 0);
+      const ngRate = totalOutput > 0 ? (totalNg / totalOutput) * 100 : 0;
+      const achievement = totalTarget > 0 ? (totalOutput / totalTarget) * 100 : 0;
+
+      const columnDefinitions = [
+        { header: "No", key: "No", width: 7 },
+        { header: "Date Production", key: "Date Production", width: 16 },
+        { header: "Month", key: "Month", width: 14 },
+        { header: "Days", key: "Days", width: 8 },
+        { header: "Machine No.", key: "Machine No.", width: 14 },
+        { header: "Production Area", key: "Production Area", width: 19 },
+        { header: "Shift", key: "Shift", width: 13 },
+        { header: "Operator", key: "Operator", width: 22 },
+        { header: "Computer Code", key: "Computer Code", width: 20 },
+        { header: "Product Name", key: "Product Name", width: 24 },
+        { header: "Product Description", key: "Product Description", width: 30 },
+        { header: "Output Production", key: "Output Production", width: 19 },
+        { header: "Quantity Product OK", key: "Quantity Product OK", width: 19 },
+        { header: "Total NG Product", key: "Total NG Product", width: 17 },
+        { header: "Product Rate NG (%)", key: "Product Rate NG (%)", width: 19 },
+        { header: "Total Actual Raw Material Usage", key: "Total Actual Raw Material Usage", width: 28 },
+        { header: "Raw Material Requirement", key: "Raw Material Requirement", width: 23 },
+        { header: "Variance Raw Material", key: "Variance Raw Material", width: 21 },
+        { header: "Percentage (%)", key: "Percentage (%)", width: 16 },
+        { header: "Target Qty Production /8H", key: "Target Qty Production /8H", width: 23 },
+        { header: "Variance Product", key: "Variance Product", width: 18 },
+        { header: "Achievement (%)", key: "Achievement (%)", width: 17 },
+        { header: "OT / REPLACE", key: "OT / REPLACE", width: 20 },
+        { header: "Remarks", key: "Remarks", width: 32 },
+        { header: "Quantity Unit", key: "Quantity Unit", width: 15 },
+        { header: "Raw Material Unit", key: "Raw Material Unit", width: 18 },
+      ];
+      worksheet.columns = columnDefinitions;
+
+      const lastColumn = columnDefinitions.length;
+      const lastColumnLetter = worksheet.getColumn(lastColumn).letter;
+      const navy = "17365D";
+      const blue = "1F4E78";
+      const lightBlue = "D9EAF7";
+      const paleBlue = "EEF4FA";
+      const white = "FFFFFF";
+      const gray = "F3F6F9";
+
+      // Header dan identitas laporan.
+      worksheet.mergeCells(`A1:${lastColumnLetter}1`);
+      const titleCell = worksheet.getCell("A1");
+      titleCell.value = "PMC PRODUCTION REPORT";
+      titleCell.font = { name: "Aptos Display", size: 20, bold: true, color: { argb: white } };
+      titleCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: navy } };
+      titleCell.alignment = { vertical: "middle", horizontal: "left", indent: 1 };
+      worksheet.getRow(1).height = 38;
+
+      worksheet.mergeCells(`A2:${lastColumnLetter}2`);
+      const subtitleCell = worksheet.getCell("A2");
+      subtitleCell.value = "PRODUCTION MONITORING CONTROL | PRODUCTION DATA";
+      subtitleCell.font = { name: "Aptos", size: 10, bold: true, color: { argb: blue } };
+      subtitleCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "EAF1F8" } };
+      subtitleCell.alignment = { vertical: "middle", indent: 1 };
+      worksheet.getRow(2).height = 22;
+
+      const periodLabel = dateFrom || dateTo
+        ? `${dateFrom || "Beginning"} s/d ${dateTo || "Latest"}`
+        : "All available dates";
+      worksheet.mergeCells(`A3:M3`);
+      worksheet.getCell("A3").value = `Periode Data: ${periodLabel}`;
+      worksheet.getCell("A3").font = { name: "Aptos", size: 10, color: { argb: "404040" } };
+      worksheet.mergeCells(`N3:${lastColumnLetter}3`);
+      worksheet.getCell("N3").value = `Exported: ${new Date().toLocaleString("id-ID")}`;
+      worksheet.getCell("N3").font = { name: "Aptos", size: 10, color: { argb: "666666" }, italic: true };
+      worksheet.getCell("N3").alignment = { horizontal: "right" };
+
+      // KPI summary cards (label + value).
+      const kpis = [
+        { label: "TOTAL OUTPUT", value: totalOutput, format: "#,##0" },
+        { label: "PRODUCT OK", value: totalOk, format: "#,##0" },
+        { label: "TOTAL NG", value: totalNg, format: "#,##0" },
+        { label: "NG RATE", value: ngRate, format: "0.00\\%" },
+        { label: "ACTUAL RM USAGE", value: totalActualRm, format: "#,##0.000" },
+        { label: "ACHIEVEMENT", value: achievement, format: "0.00\\%" },
+      ];
+      const cardWidth = Math.floor(lastColumn / kpis.length);
+      kpis.forEach((kpi, index) => {
+        const startCol = index * cardWidth + 1;
+        const endCol = index === kpis.length - 1 ? lastColumn : (index + 1) * cardWidth;
+        const startLetter = worksheet.getColumn(startCol).letter;
+        const endLetter = worksheet.getColumn(endCol).letter;
+        worksheet.mergeCells(`${startLetter}5:${endLetter}5`);
+        worksheet.mergeCells(`${startLetter}6:${endLetter}6`);
+        const label = worksheet.getCell(`${startLetter}5`);
+        label.value = kpi.label;
+        label.font = { name: "Aptos", size: 9, bold: true, color: { argb: white } };
+        label.fill = { type: "pattern", pattern: "solid", fgColor: { argb: blue } };
+        label.alignment = { horizontal: "center", vertical: "middle" };
+        const value = worksheet.getCell(`${startLetter}6`);
+        value.value = kpi.value;
+        value.numFmt = kpi.format;
+        value.font = { name: "Aptos Display", size: 16, bold: true, color: { argb: navy } };
+        value.fill = { type: "pattern", pattern: "solid", fgColor: { argb: lightBlue } };
+        value.alignment = { horizontal: "center", vertical: "middle" };
+        [label, value].forEach((cell) => {
+          cell.border = {
+            top: { style: "thin", color: { argb: white } },
+            left: { style: "thin", color: { argb: white } },
+            bottom: { style: "thin", color: { argb: white } },
+            right: { style: "thin", color: { argb: white } },
+          };
+        });
+      });
+      worksheet.getRow(5).height = 20;
+      worksheet.getRow(6).height = 32;
+      worksheet.mergeCells(`A7:${lastColumnLetter}7`);
+      worksheet.getCell("A7").value = `Total Records: ${exportRows.length.toLocaleString("id-ID")} | Raw Material Requirement: ${totalRmRequirement.toLocaleString("id-ID", { maximumFractionDigits: 3 })}`;
+      worksheet.getCell("A7").font = { name: "Aptos", size: 9, italic: true, color: { argb: "666666" } };
+      worksheet.getCell("A7").alignment = { vertical: "middle", indent: 1 };
+      worksheet.getRow(7).height = 20;
+
+      // Spacer rows, then formatted data table.
+      worksheet.addRow([]);
+      const headerRow = worksheet.addRow(columnDefinitions.map((column) => column.header));
+      headerRow.height = 32;
+      headerRow.eachCell((cell) => {
+        cell.font = { name: "Aptos", size: 10, bold: true, color: { argb: white } };
+        cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: navy } };
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+        cell.border = {
+          top: { style: "thin", color: { argb: white } },
+          left: { style: "thin", color: { argb: white } },
+          bottom: { style: "thin", color: { argb: white } },
+          right: { style: "thin", color: { argb: white } },
+        };
+      });
+
+      exportRows.forEach((record, index) => {
+        const rowValues = columnDefinitions.map((column) =>
+          (record as Record<string, string | number>)[column.key] ?? ""
+        );
+        const row = worksheet.addRow(rowValues);
+        row.height = 20;
+        row.eachCell((cell, colNumber) => {
+          cell.font = { name: "Aptos", size: 9, color: { argb: "262626" } };
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: index % 2 === 0 ? white : gray },
+          };
+          cell.alignment = {
+            vertical: "middle",
+            horizontal: colNumber === 1 || colNumber === 4 ? "center" : "left",
+          };
+          cell.border = {
+            bottom: { style: "hair", color: { argb: "D9E1F2" } },
+          };
+        });
+
+        // Kolom numerik dan persentase.
+        [12, 13, 14, 16, 17, 18, 20, 21].forEach((columnNumber) => {
+          row.getCell(columnNumber).numFmt = "#,##0.00;[Red](#,##0.00);-";
+          row.getCell(columnNumber).alignment = { horizontal: "right", vertical: "middle" };
+        });
+        [15, 19, 22].forEach((columnNumber) => {
+          row.getCell(columnNumber).numFmt = "0.00\\%";
+          row.getCell(columnNumber).alignment = { horizontal: "right", vertical: "middle" };
+        });
+        [1, 4].forEach((columnNumber) => {
+          row.getCell(columnNumber).alignment = { horizontal: "center", vertical: "middle" };
+        });
+
+        // Warna indikator untuk variance dan achievement.
+        const rmVarianceCell = row.getCell(18);
+        rmVarianceCell.font = {
+          name: "Aptos",
+          size: 9,
+          color: { argb: Number(record["Variance Raw Material"]) > 0 ? "C00000" : "008000" },
+        };
+        const productVarianceCell = row.getCell(21);
+        productVarianceCell.font = {
+          name: "Aptos",
+          size: 9,
+          color: { argb: Number(record["Variance Product"]) < 0 ? "C00000" : "008000" },
+        };
+        const achievementCell = row.getCell(22);
+        achievementCell.font = {
+          name: "Aptos",
+          size: 9,
+          bold: true,
+          color: { argb: Number(record["Achievement (%)"]) >= 100 ? "008000" : "C00000" },
+        };
+      });
+
+      const tableHeaderRow = 9;
+      const lastDataRow = tableHeaderRow + exportRows.length;
+      worksheet.autoFilter = {
+        from: { row: tableHeaderRow, column: 1 },
+        to: { row: Math.max(tableHeaderRow, lastDataRow), column: lastColumn },
+      };
+      worksheet.getRow(tableHeaderRow).hidden = false;
+
+// HAPUS deklarasi worksheet yang kedua di sini.
+
+worksheet.pageSetup.printArea = `A1:${lastColumnLetter}${Math.max(lastDataRow, 10)}`;
+worksheet.headerFooter.oddFooter = "PMC Production Report | Page &P of &N";
+
+// Highlight ringan untuk area judul tabel dan atur format angka.
+worksheet.getRow(tableHeaderRow).eachCell((cell) => {
+  cell.alignment = {
+    horizontal: "center",
+    vertical: "middle",
+    wrapText: true,
+  };
+});
+      worksheet.pageSetup.printArea = `A1:${lastColumnLetter}${Math.max(lastDataRow, 10)}`;
+      worksheet.headerFooter.oddFooter = "PMC Production Report | Page &P of &N";
+
+      // Highlight ringan untuk area judul tabel dan atur format angka.
+      worksheet.getRow(tableHeaderRow).eachCell((cell) => {
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+      });
+
+      const now = new Date();
+      const dateStamp = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getDate()).padStart(2, "0"),
+      ].join("-");
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `PMC_Production_Report_${dateStamp}.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Export production Excel error:", err);
+      window.alert(
+        err instanceof Error
+          ? `Gagal export Excel: ${err.message}`
+          : "Gagal export data production ke Excel."
+      );
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  // ===================================================
   // CLEAR FILTER
   // ===================================================
 
@@ -1201,14 +1550,50 @@ export default function ProductionTable({
 
           </div>
 
-          <div className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-500">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-500">
+              {isLoading
+                ? "Loading production data..."
+                : `${productionData.length} of ${totalRecords} records${
+                    summaryLoading ? " • Updating summary..." : ""
+                  }`}
+            </div>
 
-            {isLoading
-              ? "Loading production data..."
-              : `${productionData.length} of ${totalRecords} records${
-                  summaryLoading ? " • Updating summary..." : ""
-                }`}
-
+            <button
+              type="button"
+              onClick={handleExportExcel}
+              disabled={
+                exporting ||
+                summaryLoading ||
+                summaryData.length === 0 ||
+                invalidDateRange
+              }
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {exporting ? (
+                <>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                  Exporting...
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <path d="m7 10 5 5 5-5" />
+                    <path d="M12 15V3" />
+                  </svg>
+                  Export Excel
+                </>
+              )}
+            </button>
           </div>
 
         </div>
