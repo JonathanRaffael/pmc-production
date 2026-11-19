@@ -1,51 +1,41 @@
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 // =====================================================
 // GET
-// GET /api/molding-products
 // =====================================================
 
 export async function GET() {
   try {
-    const moldingProducts =
-      await prisma.moldingProduct.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
+    const moldingProducts = await prisma.moldingProduct.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
     return NextResponse.json({
       success: true,
       data: moldingProducts,
     });
   } catch (error) {
-    console.error(
-      "GET /api/molding-products error:",
-      error
-    );
+    console.error("GET /api/molding-products error:", error);
 
     return NextResponse.json(
       {
         success: false,
-        message:
-          "Gagal mengambil data molding product",
+        message: "Gagal mengambil data molding product",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }
 
 // =====================================================
 // POST
-// POST /api/molding-products
 // =====================================================
 
-export async function POST(
-  request: NextRequest
-) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
@@ -56,46 +46,42 @@ export async function POST(
       hardnessRequirements,
       colorRequirements,
       rawMaterialRequirements,
-      bufferPercent,
-      quotaPerHourShot,
-      quotaPerHourPcs,
+      shotWeight,
+      setupWeight = 0,
+      cavity,
+      materialSetup,
+      vulcanization,
+      materialRemoval,
       productionTime,
-      productionTargetPerDay,
     } = body;
 
     // ===================================================
-    // REQUIRED VALIDATION
+    // REQUIRED STRING VALIDATION
     // ===================================================
 
     if (
-      !computerCode ||
-      typeof computerCode !== "string"
+      typeof computerCode !== "string" ||
+      !computerCode.trim()
     ) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Computer Code wajib diisi",
+          message: "Computer Code wajib diisi",
         },
-        {
-          status: 400,
-        }
+        { status: 400 }
       );
     }
 
     if (
-      !productName ||
-      typeof productName !== "string"
+      typeof productName !== "string" ||
+      !productName.trim()
     ) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Product Name wajib diisi",
+          message: "Product Name wajib diisi",
         },
-        {
-          status: 400,
-        }
+        { status: 400 }
       );
     }
 
@@ -103,100 +89,90 @@ export async function POST(
     // NUMBER VALIDATION
     // ===================================================
 
-    const parsedBufferPercent =
-      Number(bufferPercent);
+    const parsedShotWeight = Number(shotWeight);
+    const parsedSetupWeight = Number(setupWeight);
+    const parsedCavity = Number(cavity);
+    const parsedMaterialSetup = Number(materialSetup);
+    const parsedVulcanization = Number(vulcanization);
+    const parsedMaterialRemoval = Number(materialRemoval);
+    const parsedProductionTime = Number(productionTime);
 
-    const parsedQuotaPerHourShot =
-      Number(quotaPerHourShot);
+    const numericFields = [
+      { name: "Shot Weight", value: parsedShotWeight },
+      { name: "Setup Weight", value: parsedSetupWeight },
+      { name: "Cavity", value: parsedCavity },
+      { name: "Material Setup", value: parsedMaterialSetup },
+      { name: "Vulcanization", value: parsedVulcanization },
+      { name: "Material Removal", value: parsedMaterialRemoval },
+      { name: "Production Time", value: parsedProductionTime },
+    ];
 
-    const parsedQuotaPerHourPcs =
-      Number(quotaPerHourPcs);
+    for (const field of numericFields) {
+      if (!Number.isFinite(field.value)) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: `${field.name} harus berupa angka yang valid`,
+          },
+          { status: 400 }
+        );
+      }
+    }
 
-    const parsedProductionTime =
-      Number(productionTime);
-
-    const parsedProductionTargetPerDay =
-      Number(productionTargetPerDay);
-
-    if (
-      Number.isNaN(parsedBufferPercent) ||
-      parsedBufferPercent < 0
-    ) {
+    if (parsedShotWeight <= 0) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Buffer (%) harus berupa angka yang valid",
+          message: "Shot Weight harus lebih besar dari 0",
         },
+        { status: 400 }
+      );
+    }
+
+    if (parsedSetupWeight < 0) {
+      return NextResponse.json(
         {
-          status: 400,
-        }
+          success: false,
+          message: "Setup Weight tidak boleh negatif",
+        },
+        { status: 400 }
       );
     }
 
     if (
-      Number.isNaN(parsedQuotaPerHourShot) ||
-      parsedQuotaPerHourShot < 0
+      !Number.isInteger(parsedCavity) ||
+      parsedCavity <= 0
     ) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Quota/Hour (Shot) harus berupa angka yang valid",
+          message: "Cavity harus berupa bilangan bulat lebih dari 0",
         },
-        {
-          status: 400,
-        }
+        { status: 400 }
       );
     }
 
     if (
-      Number.isNaN(parsedQuotaPerHourPcs) ||
-      parsedQuotaPerHourPcs < 0
+      parsedMaterialSetup < 0 ||
+      parsedVulcanization < 0 ||
+      parsedMaterialRemoval < 0
     ) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Quota/Hour (PCS) harus berupa angka yang valid",
+          message: "Parameter material dan proses tidak boleh negatif",
         },
-        {
-          status: 400,
-        }
+        { status: 400 }
       );
     }
 
-    if (
-      Number.isNaN(parsedProductionTime) ||
-      parsedProductionTime < 0
-    ) {
+    if (parsedProductionTime <= 0) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Production Time harus berupa angka yang valid",
+          message: "Production Time harus lebih besar dari 0",
         },
-        {
-          status: 400,
-        }
-      );
-    }
-
-    if (
-      Number.isNaN(
-        parsedProductionTargetPerDay
-      ) ||
-      parsedProductionTargetPerDay < 0
-    ) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            "Production Target/Day harus berupa angka yang valid",
-        },
-        {
-          status: 400,
-        }
+        { status: 400 }
       );
     }
 
@@ -204,38 +180,12 @@ export async function POST(
     // NORMALIZE STRING DATA
     // ===================================================
 
-    const normalizedComputerCode =
-      computerCode.trim();
+    const normalizedComputerCode = computerCode.trim();
+    const normalizedProductName = productName.trim();
 
-    const normalizedProductName =
-      productName.trim();
-
-    const normalizedProductDescription =
-      typeof productDescription ===
-        "string" &&
-      productDescription.trim() !== ""
-        ? productDescription.trim()
-        : null;
-
-    const normalizedHardness =
-      typeof hardnessRequirements ===
-        "string" &&
-      hardnessRequirements.trim() !== ""
-        ? hardnessRequirements.trim()
-        : null;
-
-    const normalizedColor =
-      typeof colorRequirements ===
-        "string" &&
-      colorRequirements.trim() !== ""
-        ? colorRequirements.trim()
-        : null;
-
-    const normalizedRawMaterial =
-      typeof rawMaterialRequirements ===
-        "string" &&
-      rawMaterialRequirements.trim() !== ""
-        ? rawMaterialRequirements.trim()
+    const normalizeOptionalString = (value: unknown) =>
+      typeof value === "string" && value.trim()
+        ? value.trim()
         : null;
 
     // ===================================================
@@ -245,8 +195,7 @@ export async function POST(
     const existingProduct =
       await prisma.moldingProduct.findUnique({
         where: {
-          computerCode:
-            normalizedComputerCode,
+          computerCode: normalizedComputerCode,
         },
       });
 
@@ -254,12 +203,9 @@ export async function POST(
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Computer Code sudah digunakan",
+          message: "Computer Code sudah digunakan",
         },
-        {
-          status: 409,
-        }
+        { status: 409 }
       );
     }
 
@@ -270,98 +216,64 @@ export async function POST(
     const moldingProduct =
       await prisma.moldingProduct.create({
         data: {
-          computerCode:
-            normalizedComputerCode,
-
-          productName:
-            normalizedProductName,
+          computerCode: normalizedComputerCode,
+          productName: normalizedProductName,
 
           productDescription:
-            normalizedProductDescription,
+            normalizeOptionalString(productDescription),
 
           hardnessRequirements:
-            normalizedHardness,
+            normalizeOptionalString(hardnessRequirements),
 
           colorRequirements:
-            normalizedColor,
+            normalizeOptionalString(colorRequirements),
 
           rawMaterialRequirements:
-            normalizedRawMaterial,
+            normalizeOptionalString(rawMaterialRequirements),
 
-          bufferPercent:
-            parsedBufferPercent,
+          shotWeight: parsedShotWeight,
+          setupWeight: parsedSetupWeight,
 
-          quotaPerHourShot:
-            parsedQuotaPerHourShot,
+          cavity: parsedCavity,
 
-          quotaPerHourPcs:
-            parsedQuotaPerHourPcs,
+          materialSetup: parsedMaterialSetup,
+          vulcanization: parsedVulcanization,
+          materialRemoval: parsedMaterialRemoval,
 
-          productionTime:
-            parsedProductionTime,
-
-          productionTargetPerDay:
-            parsedProductionTargetPerDay,
+          productionTime: parsedProductionTime,
         },
       });
 
     return NextResponse.json(
       {
         success: true,
-        message:
-          "Molding Product berhasil ditambahkan",
+        message: "Molding Product berhasil ditambahkan",
         data: moldingProduct,
       },
-      {
-        status: 201,
-      }
+      { status: 201 }
     );
   } catch (error) {
-    console.error(
-      "POST /api/molding-products error:",
-      error
-    );
-
-    const errorMessage =
-      error instanceof Error
-        ? error.message
-        : "Unknown error";
-
-    console.error(
-      "Error detail:",
-      errorMessage
-    );
-
-    // ===================================================
-    // UNIQUE CONSTRAINT
-    // ===================================================
+    console.error("POST /api/molding-products error:", error);
 
     if (
-      errorMessage.includes(
-        "Unique constraint"
-      )
+      error instanceof Error &&
+      error.message.includes("Unique constraint")
     ) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Computer Code sudah digunakan",
+          message: "Computer Code sudah digunakan",
         },
-        {
-          status: 409,
-        }
+        { status: 409 }
       );
     }
 
     return NextResponse.json(
       {
         success: false,
-        message:
-          "Gagal menambahkan molding product",
+        message: "Gagal menambahkan molding product",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }
